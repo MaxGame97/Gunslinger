@@ -15,7 +15,7 @@ public class HandleObstruction : MonoBehaviour
 
     private void Awake ()
     {
-        cameraTransform = Camera.main.transform;
+        cameraTransform = gameObject.transform.Find ("Player Camera");
     }
 
     private void Start ()
@@ -38,12 +38,12 @@ public class HandleObstruction : MonoBehaviour
 
         if (Physics.Linecast (transform.position, cameraTransform.position, out hit))
         {
-            //print ("Obstructed");
+            print ("Obstructed");
             // desiredDistance to the new z-position.
         }
         else
         {
-            //print ("Not obstructed");
+            print ("Not obstructed");
             desiredDistance = maxDistance;
         }
     }
