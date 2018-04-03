@@ -516,7 +516,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4249952673351248}
   - component: {fileID: 114366532935492660}
-  - component: {fileID: 114657346858709306}
   m_Layer: 0
   m_Name: Camera Rig
   m_TagString: Untagged
@@ -1949,17 +1948,6 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
---- !u!114 &114657346858709306
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1632011068075766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d969a4cbf65c5d04aa6d5f0a393b9369, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114749515325593518
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2034,7 +2022,7 @@ MonoBehaviour:
   componentsToDisable:
   - {fileID: 114859416114308548}
   - {fileID: 114256505670529704}
-  - {fileID: 0}
+  - {fileID: 114366532935492660}
   - {fileID: 20406750080565802}
   - {fileID: 81796575048932428}
 --- !u!114 &114985234845539898
