@@ -362,7 +362,7 @@ GameObject:
   - component: {fileID: 114047091688735922}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1809,7 +1809,6 @@ Camera:
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
@@ -1913,11 +1912,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27f796df11ecf564ca59bb66fd0a3e05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0.8, y: 0.8, z: -1.2}
-  sensitivity: 1
+  offset: {x: 0.8, y: 0.8, z: -1.7}
+  sensitivity: 2
   damping: 2
-  minAngle: -50
-  maxAngle: 50
+  minAngle: -90
+  maxAngle: 90
 --- !u!114 &114504658468808142
 MonoBehaviour:
   m_ObjectHideFlags: 1
