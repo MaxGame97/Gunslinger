@@ -5,8 +5,9 @@ public class PlayerConnect : NetworkBehaviour {
 
     public Behaviour[] componentsToDisable;
     Camera sceneCamera;
-    
-	void OnEnabled () {
+
+    // Use this for initialization
+    void Start () {
 		if(!isLocalPlayer)
         {
             for(int i = 0; i < componentsToDisable.Length; i++)
@@ -24,6 +25,7 @@ public class PlayerConnect : NetworkBehaviour {
         }
 	}
 
+    // OnDisable is run when this object is disabled
     void OnDisable()
     {
         if (sceneCamera != null)
