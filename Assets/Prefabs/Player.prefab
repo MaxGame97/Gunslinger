@@ -362,7 +362,7 @@ GameObject:
   - component: {fileID: 114047091688735922}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -516,7 +516,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4249952673351248}
   - component: {fileID: 114366532935492660}
-  - component: {fileID: 114657346858709306}
   m_Layer: 0
   m_Name: Camera Rig
   m_TagString: Untagged
@@ -1809,7 +1808,6 @@ Camera:
   m_TargetEye: 3
   m_HDR: 1
   m_AllowMSAA: 1
-  m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
@@ -1913,11 +1911,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27f796df11ecf564ca59bb66fd0a3e05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0.8, y: 0.8, z: -1.2}
-  sensitivity: 1
+  offset: {x: 0.8, y: 0.8, z: -1.7}
+  sensitivity: 2
   damping: 2
-  minAngle: -50
-  maxAngle: 50
+  minAngle: -90
+  maxAngle: 90
 --- !u!114 &114504658468808142
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1950,17 +1948,6 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
---- !u!114 &114657346858709306
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1632011068075766}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d969a4cbf65c5d04aa6d5f0a393b9369, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114749515325593518
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1985,9 +1972,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c70e52590a97c545a352d6b31e7087b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2.25
+  movementSpeed: 2.5
   jumpSpeed: 8
   gravity: 20
+  smoothing: 0.25
 --- !u!114 &114873662150768416
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2034,7 +2022,7 @@ MonoBehaviour:
   componentsToDisable:
   - {fileID: 114859416114308548}
   - {fileID: 114256505670529704}
-  - {fileID: 0}
+  - {fileID: 114366532935492660}
   - {fileID: 20406750080565802}
   - {fileID: 81796575048932428}
 --- !u!114 &114985234845539898
