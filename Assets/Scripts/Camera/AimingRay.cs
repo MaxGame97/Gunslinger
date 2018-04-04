@@ -30,7 +30,7 @@ public class AimingRay : MonoBehaviour
         Debug.DrawRay (cameraTransform.position, cameraTransform.forward * 100, Color.green);
         if (Physics.Raycast (cameraTransform.position, cameraTransform.forward, out hit))
         {
-            print ("Found an object - coordinates: " + hit.point);
+           // print ("Found an object - coordinates: " + hit.point);
             aimingCoordinate = hit.point;
         }
     }
