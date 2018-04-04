@@ -381,12 +381,12 @@ GameObject:
   - component: {fileID: 4529358627422694}
   - component: {fileID: 136342429744382802}
   - component: {fileID: 143421707083349668}
-  - component: {fileID: 114468364729091640}
   - component: {fileID: 23273142525471984}
   - component: {fileID: 95262491515647102}
   - component: {fileID: 114859416114308548}
   - component: {fileID: 114256505670529704}
   - component: {fileID: 114350652109551926}
+  - component: {fileID: 114468364729091640}
   - component: {fileID: 114981059444622746}
   - component: {fileID: 114873662150768416}
   - component: {fileID: 114506857591944522}
@@ -537,7 +537,6 @@ GameObject:
   - component: {fileID: 124152399472456112}
   - component: {fileID: 81796575048932428}
   - component: {fileID: 114504658468808142}
-  - component: {fileID: 114906637504521752}
   m_Layer: 0
   m_Name: Player Camera
   m_TagString: Untagged
@@ -1190,7 +1189,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4249952673351248}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4202718932534752
 Transform:
@@ -1257,8 +1256,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4845390885844482}
   - {fileID: 4193281727022492}
+  - {fileID: 4845390885844482}
   m_Father: {fileID: 4529358627422694}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1781,7 +1780,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4249952673351248}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4847641319494280
 Transform:
@@ -2120,10 +2119,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91bad73c9b0a7dc4db2e6881c5289862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  controller: {fileID: 0}
-  animator: {fileID: 0}
-  currentVelocity: {x: 0, y: 0, z: 0}
 --- !u!114 &114350652109551926
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2158,6 +2153,7 @@ MonoBehaviour:
   damping: 2
   minAngle: -90
   maxAngle: 90
+  raycastDistance: 50
 --- !u!114 &114468364729091640
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2286,7 +2282,7 @@ MonoBehaviour:
   movementSpeed: 2.5
   jumpSpeed: 8
   gravity: 20
-  smoothing: 0.25
+  smoothing: 0.1
 --- !u!114 &114873662150768416
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2319,18 +2315,6 @@ MonoBehaviour:
     i15: 216
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
---- !u!114 &114906637504521752
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1595015581082818}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d969a4cbf65c5d04aa6d5f0a393b9369, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  aimingCoordinate: {x: 0, y: 0, z: 0}
 --- !u!114 &114981059444622746
 MonoBehaviour:
   m_ObjectHideFlags: 1
