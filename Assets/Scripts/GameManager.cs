@@ -35,4 +35,17 @@ public class GameManager
             return inputHandler;
         }
     }
+
+    private AimingRay aimingRay;
+    public AimingRay AimingRay
+    {
+        get
+        {
+            if(aimingRay == null)
+            {
+                aimingRay = gameObject.GetComponent<AimingRay> ();
+            }
+            return aimingRay;
+        }
+    }
 }
