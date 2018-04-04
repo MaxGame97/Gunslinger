@@ -27,7 +27,6 @@ public class CameraController : MonoBehaviour
         mouseInput = new Vector2 (Input.GetAxisRaw ("Mouse X"), Input.GetAxisRaw ("Mouse Y"));
         mouseInput = Vector2.Scale (mouseInput, new Vector2 (sensitivity * damping, sensitivity * damping));
 
-        // Rotation.
         smoothV.x = Mathf.Lerp (smoothV.x, mouseInput.x, 1.0f / damping);
         smoothV.y = Mathf.Lerp (smoothV.y, mouseInput.y, 1.0f / damping);
 
