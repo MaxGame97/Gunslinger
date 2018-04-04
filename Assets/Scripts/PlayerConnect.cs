@@ -5,6 +5,7 @@ public class PlayerConnect : NetworkBehaviour {
 
     public Behaviour[] componentsToDisable;
     Camera sceneCamera;
+    Camera playerCamera;
 
     // Use this for initialization
     void Start () {
@@ -18,6 +19,7 @@ public class PlayerConnect : NetworkBehaviour {
         else
         {
             sceneCamera = Camera.main;
+            playerCamera = GetComponentInChildren<Camera>();
             if(sceneCamera != null)
             {
                 sceneCamera.gameObject.SetActive(false);
@@ -31,6 +33,16 @@ public class PlayerConnect : NetworkBehaviour {
         if (sceneCamera != null)
         {
             sceneCamera.gameObject.SetActive(true);
+        }
+    }
+
+    // OnEnable is run when this object is enabled
+    void OnEnable()
+    {
+        if (sceneCamera != null && sceneCamera.gameObject.activeSelf)
+        {
+            sceneCamera.gameObject.SetActive(false);
+            playerCamera.gameObject.SetActive(true);
         }
     }
 }
