@@ -398,7 +398,7 @@ GameObject:
   - component: {fileID: 114762188122320840}
   - component: {fileID: 114047091688735922}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Player_Mattias
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -598,6 +598,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4249952673351248}
   - component: {fileID: 114366532935492660}
+  - component: {fileID: 114580659753995616}
   m_Layer: 0
   m_Name: Camera Rig
   m_TagString: Untagged
@@ -2197,6 +2198,21 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
+--- !u!114 &114580659753995616
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1632011068075766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b682dc5d552ec864da6f6559881af2c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  zoomSpeed: 10
+  minDistance: 0.3
+  maxDistance: 0
+  desiredDistance: 0
 --- !u!114 &114630876652989650
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2296,22 +2312,22 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 83
-    i1: 189
-    i2: 148
-    i3: 157
-    i4: 136
-    i5: 34
-    i6: 197
-    i7: 244
-    i8: 11
-    i9: 15
-    i10: 250
-    i11: 36
-    i12: 6
-    i13: 58
-    i14: 125
-    i15: 216
+    i0: 207
+    i1: 147
+    i2: 93
+    i3: 47
+    i4: 113
+    i5: 140
+    i6: 229
+    i7: 84
+    i8: 185
+    i9: 174
+    i10: 14
+    i11: 60
+    i12: 163
+    i13: 19
+    i14: 182
+    i15: 36
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 1
 --- !u!114 &114981059444622746
