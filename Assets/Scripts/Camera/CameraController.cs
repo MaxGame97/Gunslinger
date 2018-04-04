@@ -75,7 +75,7 @@ public class CameraController : MonoBehaviour
             Debug.DrawRay(cameraChild.position, cameraChild.forward * raycastDistance, Color.red);
 
             // Set the aiming coordinate to the point of the longest raycast
-            aimingPosition = cameraChild.forward * raycastDistance;
+            aimingPosition = cameraChild.position + cameraChild.forward * raycastDistance;
         }
     }
 }
