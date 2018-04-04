@@ -7,6 +7,8 @@ public class PlayerAnimator : MonoBehaviour {
     private Animator animator;              // Defines the player's Animator
     private Vector3 currentVelocity;        // Defines the player's current velocity
 
+    //private GameObject lookTarget;          // Defines the player's IK look target
+
     // Use this for initialization
     void Start ()
     {
@@ -22,6 +24,9 @@ public class PlayerAnimator : MonoBehaviour {
             Debug.LogError("No Player Controller, Character Controller or Animator found");
             this.enabled = false;
         }
+
+        // Get the attached IK look target
+        //lookTarget = transform.GetChild(2).GetChild(0).gameObject;
     }
 
     // Update is called once per frame
@@ -38,5 +43,7 @@ public class PlayerAnimator : MonoBehaviour {
         animator.SetFloat("Y Movement", currentVelocity.y);
         animator.SetFloat("Z Movement", currentVelocity.z);
         animator.SetBool("Is Grounded", controller.isGrounded);
+
+        //lookTarget.transform.position = transform.GetChild(0).GetChild(1).GetComponent<AimingRay>().aimingCoordinate;
     }
 }

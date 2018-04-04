@@ -24,7 +24,7 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate ()
     {
-        mouseInput = GameManager.Instance.InputHandler.MouseInput;
+        mouseInput = new Vector2 (Input.GetAxisRaw ("Mouse X"), Input.GetAxisRaw ("Mouse Y"));
         mouseInput = Vector2.Scale (mouseInput, new Vector2 (sensitivity * damping, sensitivity * damping));
 
         // Rotation.
