@@ -9,10 +9,6 @@ public class SetOffset : MonoBehaviour
     private void Awake ()
     {
         cameraOffset = GetComponentInParent<CameraController> ().offset;
-    }
-
-    private void Start ()
-    {
         transform.localPosition = new Vector3 (cameraOffset.x, cameraOffset.y, cameraOffset.z);
     }
 }

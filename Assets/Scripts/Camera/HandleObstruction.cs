@@ -20,8 +20,9 @@ public class HandleObstruction : MonoBehaviour
 
     private void Start ()
     {
-        maxDistance = cameraTransform.position.z;
-        minDistance = Mathf.Clamp (-minDistance, 0.0f, maxDistance);
+        maxDistance = cameraTransform.localPosition.z;
+        minDistance = Mathf.Clamp (minDistance, 0.0f, Mathf.Abs (maxDistance));
+        minDistance *= -1;
     }
 
     private void LateUpdate ()
@@ -29,22 +30,32 @@ public class HandleObstruction : MonoBehaviour
         // Position.
         TestIfObstructed ();
 
-        // Lerp between current localPosition.z and the new desired position.
+        //print ("Min: " + minDistance);
+        //print ("Max: " + maxDistance);
+        //print ("Desired: " + desiredDistance);
+
+        cameraTransform.localPosition = new Vector3 (cameraTransform.localPosition.x, cameraTransform.localPosition.y, Mathf.Lerp (cameraTransform.localPosition.z, desiredDistance, Time.deltaTime * 10));
+
+        // Lerp between current localPosition.z and the new desired local position.
     }
 
     private void TestIfObstructed ()
     {
         RaycastHit hit;
 
-        if (Physics.Linecast (transform.position, cameraTransform.position, out hit))
+        if (Physics.SphereCast (transform.position, 2, -transform.forward, out hit, 3))
+        //    if (Physics.Linecast (transform.position, cameraTransform.position, out hit))
         {
-            print ("Obstructed");
-            // desiredDistance to the new z-position.
+            //print ("Obstructed");
+            desiredDistance = cameraTransform.localPosition.z - (cameraTransform.position.z - hit.point.z);
         }
         else
         {
-            print ("Not obstructed");
+            //print ("Not obstructed");
             desiredDistance = maxDistance;
         }
     }
 }
+
+// Player -- hit.point.z -- cameraTransform.position.z
+// 
