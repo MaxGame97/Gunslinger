@@ -10,7 +10,7 @@ public class PlayerConnect : NetworkBehaviour {
     // Use this for initialization
     void Start () {
         // If this player is not the local player
-		if(!isLocalPlayer)
+		if(!hasAuthority)
         {
             // Disable all assigned components
             for(int i = 0; i < componentsToDisable.Length; i++)
