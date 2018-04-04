@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -53,9 +51,9 @@ public class PlayerController : MonoBehaviour
             desiredVelocity = transform.TransformDirection(desiredVelocity);
             desiredVelocity *= movementSpeed;
 
-            // ------------------------------------------------------------------------
-            // --- DEBUG - Double the desired velocity if the sprint key is pressed ---
-            // ------------------------------------------------------------------------
+            // --------------------------------------------------------------------------
+            // --- DEBUG - Double the desired velocity when the sprint key is pressed ---
+            // --------------------------------------------------------------------------
             if (Input.GetButton("Fire3"))
                 desiredVelocity *= 2.0f;
 

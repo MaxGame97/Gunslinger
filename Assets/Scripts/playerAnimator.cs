@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class playerAnimator : MonoBehaviour {
+public class PlayerAnimator : MonoBehaviour {
 
     private PlayerController player;        // Defines the player's Player Controller
     private CharacterController controller; // Defines the player's Character Controller
