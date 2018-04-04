@@ -6,6 +6,7 @@ public class SetOffset : MonoBehaviour
 {
     private Vector3 cameraOffset;
 
+
     private void Awake ()
     {
         cameraOffset = GetComponentInParent<CameraController> ().offset;
