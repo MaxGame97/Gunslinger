@@ -36,6 +36,8 @@ public class GameManager
         }
     }
 
+    // Is this still used?
+    /*
     private AimingRay aimingRay;
     public AimingRay AimingRay
     {
@@ -48,4 +50,5 @@ public class GameManager
             return aimingRay;
         }
     }
+    */
 }

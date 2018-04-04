@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerHealth : NetworkBehaviour {
 
     private int maxHealth = 100;                    //The players maximum health
-    [SyncVar] public int currentHealth;            //The players current health
+    [SyncVar] private int currentHealth;            //The players current health
      
 
     private void Start()

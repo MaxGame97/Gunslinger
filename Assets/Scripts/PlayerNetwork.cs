@@ -1,5 +1,6 @@
 ﻿using UnityEngine.Networking;
 using UnityEngine;
+using System.Collections;
 
 public class PlayerNetwork : NetworkBehaviour {
 
@@ -21,7 +22,15 @@ public class PlayerNetwork : NetworkBehaviour {
         Debug.Log("Connection to client: " + connectionToClient);
 
         //Spawn my player object
-        Invoke("CmdSpawnPlayerObject", 1f);
+        StartCoroutine(LateStart(0.1f));
+    }
+
+    IEnumerator LateStart(float waitTime) //This allows the network to complete set-up before attempting to spawn player.
+    {
+        yield return new WaitForSeconds(waitTime);
+
+        //Spawn my player object
+        CmdSpawnPlayerObject(GetComponent<NetworkIdentity>());
     }
 
     public void AssignPlayerName(string _name)
@@ -50,7 +59,7 @@ public class PlayerNetwork : NetworkBehaviour {
     /// </summary>
 
     [Command]   //Perfom function on the server
-    private void CmdSpawnPlayerObject()
+    private void CmdSpawnPlayerObject(NetworkIdentity id)
     {
         //Instantiate the player object on this client
         playerObject = Instantiate(playerObjectPrefab);
@@ -59,7 +68,7 @@ public class PlayerNetwork : NetworkBehaviour {
 
         //player object now exists on the server, propogate it to all the clients.
         //Since we also set this client to have authority of it! (tells it who owns it)
-        NetworkServer.SpawnWithClientAuthority(playerObject, connectionToClient);
+        NetworkServer.SpawnWithClientAuthority(playerObject, id.connectionToClient);
     }
 
     [Command]
