@@ -1884,6 +1884,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e0407ffe371d9e4eb3efe05b905719f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inventorySprites:
+  - {fileID: 21300000, guid: a2042797b9d6aa940b1f2ac79412ab82, type: 3}
+  - {fileID: 21300000, guid: f819069fd45c51e46909f6b2d311b9fc, type: 3}
+  - {fileID: 21300000, guid: 2c8f143cf469532438f8a490b17c96cc, type: 3}
+  - {fileID: 21300000, guid: c9ea59f9d27e0de4f88ac0a3719bd6ec, type: 3}
 --- !u!114 &114267332009846476
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1901,6 +1906,7 @@ MonoBehaviour:
   - {fileID: 114408208725259684}
   - {fileID: 20576450530640518}
   - {fileID: 81661758458212198}
+  - {fileID: 114169346386707350}
 --- !u!114 &114408208725259684
 MonoBehaviour:
   m_ObjectHideFlags: 1
