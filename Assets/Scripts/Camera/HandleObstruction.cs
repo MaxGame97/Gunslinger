@@ -31,12 +31,11 @@ public class HandleObstruction : MonoBehaviour
     private void LateUpdate ()
     {
         TestIfObstructed ();
+        
+        //print ("Desired: " + desiredDistance);
 
-        print ("Min: " + minDistance);
-        print ("Max: " + maxDistance);
-        print ("Desired: " + desiredDistance);
-
-        //cameraTransform.localPosition = Vector3.Lerp ();
+        cameraTransform.localPosition = Vector3.Lerp (cameraTransform.localPosition, 
+                                        new Vector3 (cameraTransform.localPosition.x, cameraTransform.localPosition.y, desiredDistance), Time.deltaTime * zoomSpeed);
     }
 
     private void TestIfObstructed ()
@@ -46,14 +45,15 @@ public class HandleObstruction : MonoBehaviour
         //if (Physics.SphereCast (transform.position, 2, -transform.forward, out hit, 3))
         if (Physics.Linecast (transform.position, cameraTransform.position, out hit))
         {
-            //print ("Obstructed");
+            print ("Obstructed");
 
-            desiredDistance = maxDistance - (cameraTransform.position.z - hit.transform.position.z);
-            //desiredDistance = Mathf.Clamp (hit.transform.position.z, minDistance, maxDistance);
+            Vector3 desiredVector = cameraTransform.position - hit.point;
+            desiredVector = cameraTransform.localPosition - desiredVector;
+            desiredDistance = Mathf.Clamp (Mathf.Abs (desiredVector.z) * -1, maxDistance, minDistance);
         }
         else
         {
-            //print ("Not obstructed");
+            print ("Not obstructed");
 
             desiredDistance = maxDistance;
         }
