@@ -39,7 +39,7 @@ public class PlayerWeapon : NetworkBehaviour {
 
     void Update () {
 
-        if (!isLocalPlayer)
+        if (!isLocalPlayer && !hasAuthority)
         {
             return;
         }

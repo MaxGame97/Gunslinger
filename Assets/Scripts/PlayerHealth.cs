@@ -8,7 +8,7 @@ public class PlayerHealth : NetworkBehaviour {
     private bool[] wasEnabled;
 
     private int maxHealth = 100;                                            //The players maximum health
-    [SyncVar(hook = "OnHealthChanged")] public int currentHealth;           //The players current health
+    [SyncVar] public int currentHealth;                                     //The players current health
 
     Text healthText;
 
@@ -29,45 +29,43 @@ public class PlayerHealth : NetworkBehaviour {
         }
     }
 
-    [ClientRpc]
-    public void RpcTakeDamage(int _damage, GameObject shooter)
-    {
-        currentHealth -= _damage;
-        if (currentHealth <= 0)
-        {
-            //Die, killed by shooter
-            if (isServer)
-                RpcDisablePlayerObject();
-
-            if (currentHealth < 0)
-                currentHealth = 0;
-        }
- 
-        UpdateHealthText();
-    }
-
-    void UpdateHealthText()
+    private void Update()
     {
         if(hasAuthority)
             healthText.text = "Health: " + currentHealth;
     }
 
-    void OnHealthChanged(int newHealth)
+    [ClientRpc]
+    public void RpcTakeDamage(int _damage, NetworkIdentity shooter)
     {
-        currentHealth = newHealth;
-        UpdateHealthText();
+        if (!hasAuthority)
+            return;
 
+        currentHealth -= _damage;
         if (currentHealth <= 0)
+        {
+            //Die, killed by shooter
             if (isServer)
-                RpcDisablePlayerObject();
+                RpcDisablePlayerObject(shooter.gameObject.name);
 
+            if (currentHealth < 0)
+                currentHealth = 0;
+        }
     }
 
+    //void OnHealthChanged(int newHealth)
+    //{
+    //    currentHealth = newHealth;
+
+    //    if (currentHealth <= 0)
+    //        if (isServer)
+    //            RpcDisablePlayerObject();
+    //}
+
     [ClientRpc]
-    void RpcDisablePlayerObject()
+    void RpcDisablePlayerObject(string killer)
     {
         currentHealth = 0;
-        UpdateHealthText();
 
         for (int i = 0; i < disableOnDeath.Length; i++)
         {
@@ -78,13 +76,14 @@ public class PlayerHealth : NetworkBehaviour {
         Collider _col = GetComponent<Collider>();
         if (_col != null)
             _col.enabled = false;
+
+        Debug.Log(gameObject.name + " died");
     }
 
     [ClientRpc]
     void RpcRespawnPlayerObject()
     {
         currentHealth = maxHealth;
-        UpdateHealthText();
 
         for (int i = 0; i < disableOnDeath.Length; i++)
         {
@@ -103,6 +102,5 @@ public class PlayerHealth : NetworkBehaviour {
         currentHealth += _amount;
         if (currentHealth > maxHealth)
             currentHealth = maxHealth;
-        UpdateHealthText();
     }
 }

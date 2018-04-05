@@ -15,7 +15,6 @@ public class PlayerNetwork : NetworkBehaviour {
     {
         if (!isLocalPlayer)
         {
-            //Disable scripts, cameras, etc.
             return;
         }
 
@@ -36,36 +35,6 @@ public class PlayerNetwork : NetworkBehaviour {
     public void AssignPlayerName(string _name)
     {
         playerName = _name;
-    }
-
-    private void Update()
-    {
-        if(isLocalPlayer)
-        {
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                CmdDamagePlayer(playerObject.name, gameObject);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Backspace))
-            {
-                CmdHealPlayer(playerObject.name);
-            }
-        }
-    }
-
-    [Command]   ///ENDAST FÖR TESTNING
-    void CmdDamagePlayer(string _player, GameObject killer)
-    {
-        GameObject go = GameObject.Find(_player);
-        go.GetComponent<PlayerHealth>().RpcTakeDamage(10, killer);
-    }
-
-    [Command]   ///ENDAST FÖR TESTNING
-    void CmdHealPlayer(string _player)
-    {
-        GameObject go = GameObject.Find(_player);
-        go.GetComponent<PlayerHealth>().GainHealth(10);
     }
 
     /// <summary>
