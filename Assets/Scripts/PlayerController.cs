@@ -39,14 +39,17 @@ public class PlayerController : MonoBehaviour
         if (controller.isGrounded)
         {
             // Get the desired velocity from input
-            desiredVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            desiredVelocity = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
+
+            // Calculate the magnitude of the desired velocity
+            float magnitude = Mathf.Abs(desiredVelocity.x) + Mathf.Abs(desiredVelocity.z);
 
             // Normalize the desired velocity when necessary
-            if(desiredVelocity.magnitude > 1.0f)
+            if (magnitude > 1f)
             {
-                desiredVelocity.Normalize();
+                desiredVelocity /= magnitude;
             }
-
+            
             // Apply movement to the desired velocity (in world space)
             desiredVelocity = transform.TransformDirection(desiredVelocity);
             desiredVelocity *= movementSpeed;

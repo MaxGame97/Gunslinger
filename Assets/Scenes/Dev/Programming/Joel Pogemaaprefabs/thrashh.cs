@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class thrashh : MonoBehaviour {
+public class thrashh : NetworkBehaviour {
 
     public GameObject boxes;
 	
@@ -10,8 +11,14 @@ public class thrashh : MonoBehaviour {
 	void Update () {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            Instantiate(boxes);
+            CmdspawnBoxes();
         }
+    }
 
+    [Command]
+    private void CmdspawnBoxes()
+    {
+        var boxs = Instantiate(boxes);
+        NetworkServer.Spawn(boxs);
     }
 }

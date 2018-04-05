@@ -7,6 +7,9 @@ public class HandleObstruction : MonoBehaviour
     //-------------------------
     private Transform cameraTransform;
 
+    [SerializeField]
+    private float zoomSpeed;
+
     // Change protection level.
     public float minDistance;
     public float maxDistance;
@@ -27,31 +30,31 @@ public class HandleObstruction : MonoBehaviour
 
     private void LateUpdate ()
     {
-        // Position.
         TestIfObstructed ();
-
-        //print ("Min: " + minDistance);
-        //print ("Max: " + maxDistance);
+        
         //print ("Desired: " + desiredDistance);
 
-        cameraTransform.localPosition = new Vector3 (cameraTransform.localPosition.x, cameraTransform.localPosition.y, Mathf.Lerp (cameraTransform.localPosition.z, desiredDistance, Time.deltaTime * 10));
-
-        // Lerp between current localPosition.z and the new desired local position.
+        cameraTransform.localPosition = Vector3.Lerp (cameraTransform.localPosition, 
+                                        new Vector3 (cameraTransform.localPosition.x, cameraTransform.localPosition.y, desiredDistance), Time.deltaTime * zoomSpeed);
     }
 
     private void TestIfObstructed ()
     {
         RaycastHit hit;
 
-        if (Physics.SphereCast (transform.position, 2, -transform.forward, out hit, 3))
-        //    if (Physics.Linecast (transform.position, cameraTransform.position, out hit))
+        //if (Physics.SphereCast (transform.position, 2, -transform.forward, out hit, 3))
+        if (Physics.Linecast (transform.position, cameraTransform.position, out hit))
         {
-            //print ("Obstructed");
-            desiredDistance = cameraTransform.localPosition.z - (cameraTransform.position.z - hit.point.z);
+            print ("Obstructed");
+
+            Vector3 desiredVector = cameraTransform.position - hit.point;
+            desiredVector = cameraTransform.localPosition - desiredVector;
+            desiredDistance = Mathf.Clamp (Mathf.Abs (desiredVector.z) * -1, maxDistance, minDistance);
         }
         else
         {
-            //print ("Not obstructed");
+            print ("Not obstructed");
+
             desiredDistance = maxDistance;
         }
     }
