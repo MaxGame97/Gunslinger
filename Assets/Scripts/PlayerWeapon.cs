@@ -72,7 +72,7 @@ public class PlayerWeapon : NetworkBehaviour {
     void CmdShoot()
     {
         GameObject bullet = Instantiate(bulletPrefab, muzzle.transform.position, muzzle.transform.rotation);
-        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward*20;
+        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward*40;
         NetworkServer.Spawn(bullet);
     }
 

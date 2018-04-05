@@ -43,15 +43,15 @@ public class PlayerIKController : MonoBehaviour
                 // Set the look target position, if one has been assigned
                 if (lookTarget != null)
                 {
-                    animator.SetLookAtWeight(1.0f);
+                    animator.SetLookAtWeight(1f);
                     animator.SetLookAtPosition(lookTarget.position + positionOffset);
                 }
 
                 // Set the right hand target position and rotation, if one has been assigned
                 if (rightHandTarget != null)
                 {
-                    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1.0f);
-                    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1.0f);
+                    animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 1f);
+                    animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 1f);
                     animator.SetIKPosition(AvatarIKGoal.RightHand, rightHandTarget.position + positionOffset);
                     animator.SetIKRotation(AvatarIKGoal.RightHand, rightHandTarget.rotation);
                 }
@@ -59,8 +59,8 @@ public class PlayerIKController : MonoBehaviour
                 // Set the left hand target position and rotation, if one has been assigned
                 if (leftHandTarget != null)
                 {
-                    animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1.0f);
-                    animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1.0f);
+                    animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1f);
+                    animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 1f);
                     animator.SetIKPosition(AvatarIKGoal.LeftHand, leftHandTarget.position + positionOffset);
                     animator.SetIKRotation(AvatarIKGoal.LeftHand, leftHandTarget.rotation);
                 }
@@ -68,8 +68,8 @@ public class PlayerIKController : MonoBehaviour
                 // Set the right foot target position and rotation, if one has been assigned
                 if (rightFootTarget != null)
                 {
-                    animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1.0f);
-                    animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 1.0f);
+                    animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1f);
+                    animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 1f);
                     animator.SetIKPosition(AvatarIKGoal.RightFoot, rightFootTarget.position + positionOffset);
                     animator.SetIKRotation(AvatarIKGoal.RightFoot, rightFootTarget.rotation);
                 }
@@ -77,8 +77,8 @@ public class PlayerIKController : MonoBehaviour
                 // Set the left foot target position and rotation, if one has been assigned
                 if (leftFootTarget != null)
                 {
-                    animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1.0f);
-                    animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1.0f);
+                    animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1f);
+                    animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1f);
                     animator.SetIKPosition(AvatarIKGoal.LeftFoot, leftFootTarget.position + positionOffset);
                     animator.SetIKRotation(AvatarIKGoal.LeftFoot, leftFootTarget.rotation);
                 }
@@ -87,15 +87,15 @@ public class PlayerIKController : MonoBehaviour
             // If IK is not active, reset the head, hands and feet back to their original position
             else
             {
-                animator.SetLookAtWeight(0.0f);
-                animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0.0f);
-                animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0.0f);
-                animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0.0f);
-                animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 0.0f);
-                animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 0.0f);
-                animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 0.0f);
-                animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 0.0f);
-                animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 0.0f);
+                animator.SetLookAtWeight(0f);
+                animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0f);
+                animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0f);
+                animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 0f);
+                animator.SetIKRotationWeight(AvatarIKGoal.LeftHand, 0f);
+                animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 0f);
+                animator.SetIKRotationWeight(AvatarIKGoal.RightFoot, 0f);
+                animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 0f);
+                animator.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 0f);
             }
         }
     }
