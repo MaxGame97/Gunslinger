@@ -456,6 +456,8 @@ GameObject:
   - component: {fileID: 114873662150768416}
   - component: {fileID: 114506857591944522}
   - component: {fileID: 114985234845539898}
+  - component: {fileID: 114287316361713262}
+  - component: {fileID: 114266300425866246}
   - component: {fileID: 114647528494517966}
   - component: {fileID: 114630876652989650}
   - component: {fileID: 114096604893102984}
@@ -2790,7 +2792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Target: {fileID: 4387038216547090}
-  m_ChildIndex: 3
+  m_ChildIndex: 5
   m_SendInterval: 0.1
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
@@ -2809,7 +2811,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Target: {fileID: 4710805442646908}
-  m_ChildIndex: 4
+  m_ChildIndex: 6
   m_SendInterval: 0.1
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
@@ -2848,6 +2850,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   revolverPositionOffset: {x: 0.05, y: 0.3, z: -0.25}
   revolverRotationOffset: {x: 15, y: 0, z: -90}
+--- !u!114 &114266300425866246
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1474508151921844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1267208747, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Target: {fileID: 4749793532936952}
+  m_ChildIndex: 2
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_MovementThreshold: 0.001
+  m_InterpolateRotation: 0.5
+  m_InterpolateMovement: 0.5
+--- !u!114 &114287316361713262
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1474508151921844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1267208747, guid: 870353891bb340e2b2a9c8707e7419ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Target: {fileID: 4515104383826120}
+  m_ChildIndex: 1
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_MovementThreshold: 0.001
+  m_InterpolateRotation: 0.5
+  m_InterpolateMovement: 0.5
 --- !u!114 &114350652109551926
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2877,7 +2917,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27f796df11ecf564ca59bb66fd0a3e05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0.8, y: 0.8, z: -1.7}
+  offset: {x: 0.5, y: 1.1, z: -2.2}
   sensitivity: 2
   damping: 2
   minAngle: -70
@@ -2938,7 +2978,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Target: {fileID: 4588319918103084}
-  m_ChildIndex: 2
+  m_ChildIndex: 4
   m_SendInterval: 0.1
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
@@ -2957,7 +2997,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Target: {fileID: 4351729327596954}
-  m_ChildIndex: 1
+  m_ChildIndex: 3
   m_SendInterval: 0.1
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
@@ -2989,7 +3029,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Target: {fileID: 4391433239925302}
-  m_ChildIndex: 5
+  m_ChildIndex: 7
   m_SendInterval: 0.1
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
@@ -3007,7 +3047,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c70e52590a97c545a352d6b31e7087b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 2.5
+  movementSpeed: 5
   jumpSpeed: 8
   gravity: 20
   smoothing: 0.1
