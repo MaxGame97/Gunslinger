@@ -15,7 +15,6 @@ public class PlayerNetwork : NetworkBehaviour {
     {
         if (!isLocalPlayer)
         {
-            //Disable scripts, cameras, etc.
             return;
         }
 
@@ -36,22 +35,6 @@ public class PlayerNetwork : NetworkBehaviour {
     public void AssignPlayerName(string _name)
     {
         playerName = _name;
-    }
-
-    private void Update()
-    {
-        if(isLocalPlayer)
-        {
-            if(Input.GetKeyDown(KeyCode.Space))
-            {
-                playerObject.GetComponent<PlayerHealth>().CmdTakeDamage(10, this.gameObject);
-            }
-
-            if (Input.GetKeyDown(KeyCode.Backspace))
-            {
-                playerObject.GetComponent<PlayerHealth>().CmdGainHealth(10);
-            }
-        }
     }
 
     /// <summary>
