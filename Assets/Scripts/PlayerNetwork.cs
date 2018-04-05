@@ -44,14 +44,28 @@ public class PlayerNetwork : NetworkBehaviour {
         {
             if(Input.GetKeyDown(KeyCode.Space))
             {
-                playerObject.GetComponent<PlayerHealth>().CmdTakeDamage(10, this.gameObject);
+                CmdDamagePlayer(playerObject.name, gameObject);
             }
 
             if (Input.GetKeyDown(KeyCode.Backspace))
             {
-                playerObject.GetComponent<PlayerHealth>().CmdGainHealth(10);
+                CmdHealPlayer(playerObject.name);
             }
         }
+    }
+
+    [Command]   ///ENDAST FÖR TESTNING
+    void CmdDamagePlayer(string _player, GameObject killer)
+    {
+        GameObject go = GameObject.Find(_player);
+        go.GetComponent<PlayerHealth>().RpcTakeDamage(10, killer);
+    }
+
+    [Command]   ///ENDAST FÖR TESTNING
+    void CmdHealPlayer(string _player)
+    {
+        GameObject go = GameObject.Find(_player);
+        go.GetComponent<PlayerHealth>().GainHealth(10);
     }
 
     /// <summary>

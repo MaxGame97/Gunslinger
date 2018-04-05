@@ -5,7 +5,7 @@ public class PlayerConnect : NetworkBehaviour {
 
     [SerializeField] private Behaviour[] componentsToDisable;   // Assigned components will be disabled
 
-    private Camera sceneCamera;                                 // Defines the scene camera
+    private GameObject sceneCamera;                             // Defines the scene camera
 
     // Use this for initialization
     void Start () {
@@ -22,14 +22,16 @@ public class PlayerConnect : NetworkBehaviour {
         else
         {
             // Get the scene camera
-            sceneCamera = Camera.main;
-
+            sceneCamera = Camera.main.gameObject;
             // If the scene camera exists, disable it
             if(sceneCamera != null)
             {
-                sceneCamera.gameObject.SetActive(false);
+                sceneCamera.SetActive(false);
             }
         }
+
+        if (GetComponent<PlayerHealth>())
+            GetComponent<PlayerHealth>().Setup();
 	}
 
     // OnDisable is run when this object is disabled
@@ -38,7 +40,16 @@ public class PlayerConnect : NetworkBehaviour {
         // If the scene camera exists, enable it
         if (sceneCamera != null)
         {
-            sceneCamera.gameObject.SetActive(true);
+            sceneCamera.SetActive(true);
+        }
+    }
+
+    private void OnEnable()
+    {
+        // If the scene camera exists, disable it
+        if (sceneCamera != null)
+        {
+            sceneCamera.SetActive(false);
         }
     }
 }
