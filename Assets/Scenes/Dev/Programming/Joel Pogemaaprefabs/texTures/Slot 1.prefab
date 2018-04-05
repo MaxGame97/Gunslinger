@@ -9,18 +9,18 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1462956015987422}
+  m_RootGameObject: {fileID: 1046760281348174}
   m_IsPrefabParent: 1
---- !u!1 &1462956015987422
+--- !u!1 &1046760281348174
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 224547023617866136}
-  - component: {fileID: 222826420160256842}
-  - component: {fileID: 114495876531004924}
+  - component: {fileID: 224033356070063374}
+  - component: {fileID: 222484579667744948}
+  - component: {fileID: 114998194337990780}
   m_Layer: 0
   m_Name: Slot 1
   m_TagString: Untagged
@@ -28,12 +28,12 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &114495876531004924
+--- !u!114 &114998194337990780
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1462956015987422}
+  m_GameObject: {fileID: 1046760281348174}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: -765806418, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
@@ -55,18 +55,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!222 &222826420160256842
+--- !u!222 &222484579667744948
 CanvasRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1462956015987422}
---- !u!224 &224547023617866136
+  m_GameObject: {fileID: 1046760281348174}
+--- !u!224 &224033356070063374
 RectTransform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1462956015987422}
+  m_GameObject: {fileID: 1046760281348174}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 50, y: 47.698486, z: 0.0558002}
   m_LocalScale: {x: 1, y: 1, z: 1}

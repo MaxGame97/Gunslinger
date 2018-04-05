@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 public class InventoryScript : MonoBehaviour {
 
@@ -13,13 +14,16 @@ public class InventoryScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        Debug.Log("something");
         for (int i = 0; i < inventorySize; i++)
         {
-            slots.Add(Instantiate(clean, new Vector3((i*100)+50, 50, 0), Quaternion.identity, this.gameObject.transform));
+            slots.Add(Instantiate(clean, new Vector3((i * 100) + 50, 50, 0), Quaternion.identity, this.gameObject.transform));
         }
+        Debug.Log("something2");
     }
 
-    public void Pick(int type, Sprite bulletImage)
+    
+    public void CmdPick(int type, Sprite bulletImage)
     {
         if (type != 0)
         {

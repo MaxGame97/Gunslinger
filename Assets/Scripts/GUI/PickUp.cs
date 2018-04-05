@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PickUp : MonoBehaviour {
+public class PickUp : NetworkBehaviour {
 
     public int type = 0;
 
@@ -12,26 +13,25 @@ public class PickUp : MonoBehaviour {
 
     public Sprite bulletImage;
 
-    private GameObject inventory;
+    public GameObject inventory;
 
-    private InventoryScript inventoryScript;
+    public InventoryScript inventoryScript;
 
-    private void Start()
+    private void Awake()
     {
+        //varför fungerar inte get component eller någon verision av find
+        inventory = GameObject.FindGameObjectWithTag("Inventory");
         inventoryScript = GameObject.FindGameObjectWithTag("Inventory").GetComponent<InventoryScript>();
     }
 
+
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.tag);
         if (other.tag == "Player")
         {
-            PickerUpper p = other.gameObject.GetComponent<PickerUpper>();
-            if (p != null)
-            {
-                p.Pick(type,index);
-                inventoryScript.Pick(type, bulletImage);
-                Destroy(this.gameObject);
-            }
+            inventoryScript.CmdPick(type, bulletImage);
+            Destroy(this.gameObject);
         }
     }
 }
