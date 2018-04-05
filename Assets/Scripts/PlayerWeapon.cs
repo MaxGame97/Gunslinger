@@ -46,7 +46,7 @@ public class PlayerWeapon : NetworkBehaviour {
         // If player has ammo and is not in reload state: Fire revolver and decrease ammoCount.
         if (Input.GetButtonDown("Fire1") && ammoCount >= 1 && isReloading == false)
         {
-            CmdShoot();
+            CmdShoot(muzzle.transform.position, muzzle.transform.rotation);
             ammoCount--;
         }
 
@@ -56,6 +56,7 @@ public class PlayerWeapon : NetworkBehaviour {
             Reload();
             
         }
+        // Start reload timer until isReload is false again. 
         if(isReloading == true)
         {
             reloadTimer += Time.deltaTime;
@@ -69,10 +70,10 @@ public class PlayerWeapon : NetworkBehaviour {
 
     // Create the bullet object relative to the muzzle position and add velocity. 
     [Command]
-    void CmdShoot()
+    void CmdShoot(Vector3 _position, Quaternion _rotation)
     {
-        GameObject bullet = Instantiate(bulletPrefab, muzzle.transform.position, muzzle.transform.rotation);
-        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward*40;
+        GameObject bullet = Instantiate(bulletPrefab, _position, _rotation);
+        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 40;
         NetworkServer.Spawn(bullet);
     }
 
