@@ -16,7 +16,8 @@ public class PlayerHealth : NetworkBehaviour {
     {
         healthText = GameObject.Find("Health Text").GetComponent<Text>();   // Get reference to the health text
         currentHealth = maxHealth;                                          // Initialize the current health
-        healthText.text = "Health: " + currentHealth;                       // Initialize the health text
+        if (healthText != null)
+            healthText.text = "Health: " + currentHealth;                   // Initialize the health text
     }
 
     public void Setup()
@@ -31,7 +32,7 @@ public class PlayerHealth : NetworkBehaviour {
 
     private void Update()
     {
-        if(hasAuthority)
+        if(hasAuthority && healthText != null)
             healthText.text = "Health: " + currentHealth;
     }
 
@@ -53,16 +54,7 @@ public class PlayerHealth : NetworkBehaviour {
         }
     }
 
-    //void OnHealthChanged(int newHealth)
-    //{
-    //    currentHealth = newHealth;
-
-    //    if (currentHealth <= 0)
-    //        if (isServer)
-    //            RpcDisablePlayerObject();
-    //}
-
-    [ClientRpc]
+    [ClientRpc] //Performed on every client
     void RpcDisablePlayerObject(string killer)
     {
         currentHealth = 0;
@@ -77,10 +69,10 @@ public class PlayerHealth : NetworkBehaviour {
         if (_col != null)
             _col.enabled = false;
 
-        Debug.Log(gameObject.name + " died");
+        Debug.Log(killer + " killed " + gameObject.name);
     }
 
-    [ClientRpc]
+    [ClientRpc] //Performed on every client
     void RpcRespawnPlayerObject()
     {
         currentHealth = maxHealth;
@@ -97,7 +89,8 @@ public class PlayerHealth : NetworkBehaviour {
     }
 
    
-    public void GainHealth(int _amount)
+    [ClientRpc] //Performed on every client
+    public void RpcGainHealth(int _amount)
     {
         currentHealth += _amount;
         if (currentHealth > maxHealth)

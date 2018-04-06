@@ -20,7 +20,6 @@ public class Bullet : NetworkBehaviour {
 
     void OnCollisionEnter(Collision other)
     {
-        Debug.Log("Collided");
         if (other.gameObject.CompareTag("Player"))
             CmdPlayerHit(bulletDamage, other.gameObject, owner);
 
