@@ -1552,6 +1552,8 @@ GameObject:
   - component: {fileID: 114873662150768416}
   - component: {fileID: 114506857591944522}
   - component: {fileID: 114985234845539898}
+  - component: {fileID: 114085569276128522}
+  - component: {fileID: 114029150365209802}
   - component: {fileID: 114647528494517966}
   - component: {fileID: 114630876652989650}
   - component: {fileID: 114096604893102984}
@@ -4887,7 +4889,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1937772597434168}
-  m_LocalRotation: {x: 0.74532545, y: 0.00039545415, z: -0.66670066, w: 0.00044231996}
+  m_LocalRotation: {x: 0.7453254, y: 0.00039545403, z: -0.6667006, w: 0.00044231984}
   m_LocalPosition: {x: -0.10819455, y: 0.0484242, z: 0.06866191}
   m_LocalScale: {x: 0.9999997, y: 1, z: 1.0000001}
   m_Children:
@@ -7355,6 +7357,25 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!114 &114029150365209802
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1474508151921844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1267208747, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Target: {fileID: 4749793532936952}
+  m_ChildIndex: 2
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_MovementThreshold: 0.001
+  m_InterpolateRotation: 0.5
+  m_InterpolateMovement: 0.5
 --- !u!114 &114047091688735922
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7374,6 +7395,25 @@ MonoBehaviour:
   param3: 
   param4: 
   param5: 
+--- !u!114 &114085569276128522
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1474508151921844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1267208747, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Target: {fileID: 4515104383826120}
+  m_ChildIndex: 1
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_MovementThreshold: 0.001
+  m_InterpolateRotation: 0.5
+  m_InterpolateMovement: 0.5
 --- !u!114 &114096604893102984
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7386,7 +7426,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Target: {fileID: 4387038216547090}
-  m_ChildIndex: 3
+  m_ChildIndex: 5
   m_SendInterval: 0.1
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
@@ -7405,7 +7445,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Target: {fileID: 4710805442646908}
-  m_ChildIndex: 4
+  m_ChildIndex: 6
   m_SendInterval: 0.1
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
@@ -7442,8 +7482,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91bad73c9b0a7dc4db2e6881c5289862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  revolverPositionOffset: {x: 0, y: 0, z: 0}
-  revolverRotationOffset: {x: 0, y: 0, z: 0}
+  revolverPositionOffset: {x: 0.05, y: 0.325, z: -0.225}
+  revolverRotationOffset: {x: 30, y: 0, z: -90}
+  smoothing: 0.5
 --- !u!114 &114350652109551926
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7491,7 +7532,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   owner: {fileID: 0}
-  disableOnDeath: []
   currentHealth: 0
 --- !u!114 &114504658468808142
 MonoBehaviour:
@@ -7537,7 +7577,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Target: {fileID: 4588319918103084}
-  m_ChildIndex: 2
+  m_ChildIndex: 4
   m_SendInterval: 0.1
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
@@ -7556,7 +7596,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Target: {fileID: 4351729327596954}
-  m_ChildIndex: 1
+  m_ChildIndex: 3
   m_SendInterval: 0.1
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
@@ -7588,7 +7628,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Target: {fileID: 4391433239925302}
-  m_ChildIndex: 5
+  m_ChildIndex: 7
   m_SendInterval: 0.1
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
@@ -7812,7 +7852,7 @@ SkinnedMeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 61b26ac05becf0043ad85cc75df7c51e, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7836,7 +7876,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 4300000, guid: 5092fb2409d91bb41a01f3eeee81d17e, type: 2}
+  m_Mesh: {fileID: 0}
   m_Bones:
   - {fileID: 4428522014323250}
   - {fileID: 4285290969492418}
