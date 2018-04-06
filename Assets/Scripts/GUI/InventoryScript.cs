@@ -12,6 +12,8 @@ public class InventoryScript : MonoBehaviour {
 
     List<Image> slots = new List<Image>();
 
+    public RevolverUIscript revUI;
+
 	// Use this for initialization
 	void Start () {
         //mayby change the spawn method into something more dynamic
@@ -21,7 +23,23 @@ public class InventoryScript : MonoBehaviour {
         }
     }
 
-    
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            revUI.LoadBullet(slots[0].sprite);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            revUI.LoadBullet(slots[1].sprite);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            revUI.LoadBullet(slots[2].sprite);
+        }
+    }
+
+
     public void CmdPick(int type, Sprite bulletImage)
     {
         if (type != 0)

@@ -20,7 +20,6 @@ public class tempscript: NetworkBehaviour
             for (int i = 0; i < componentsToDisable.Length; i++)
             {
                 componentsToDisable[i].enabled = false;
-                
             }
             for (int i = 0; i < gameObjectsToDisable.Length; i++)
             {
