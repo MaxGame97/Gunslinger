@@ -14,10 +14,13 @@ public class PlayerHealth : NetworkBehaviour {
 
     private void Start()
     {
-        healthText = GameObject.Find("Health Text").GetComponent<Text>();   // Get reference to the health text
+        GameObject health = GameObject.Find("Health Text");   // Get reference to the health text
         currentHealth = maxHealth;                                          // Initialize the current health
-        if (healthText != null)
+        if (health != null)
+        {
+            healthText = health.GetComponent<Text>();
             healthText.text = "Health: " + currentHealth;                   // Initialize the health text
+        }
     }
 
     public void Setup()
