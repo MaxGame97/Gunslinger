@@ -61,7 +61,7 @@ public class PlayerWeapon : NetworkBehaviour {
         }
 
         // Reload revolver if not already reloading. 
-        if (Input.GetButtonDown("Fire2") && isReloading == false)
+        if (Input.GetButtonDown("Fire2") && isReloading == false && ammoCount != magSize)
         {
             Reload();
             
@@ -69,8 +69,7 @@ public class PlayerWeapon : NetworkBehaviour {
         // Start reload timer until isReload is false again. 
         if(isReloading == true)
         {
-            reloadTimer += Time.deltaTime;
-            if(reloadTimer >= reloadTime)
+            if(Time.time >= reloadTimer)
             {
                 isReloading = false;
                 reloadTimer = 0f;
@@ -95,6 +94,7 @@ public class PlayerWeapon : NetworkBehaviour {
     void Reload()
     {
         isReloading = true;
+        reloadTimer = Time.time + reloadTime;
         ammoCount = magSize;
 
         if (reloadText != null)

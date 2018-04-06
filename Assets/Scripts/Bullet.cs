@@ -3,29 +3,46 @@ using UnityEngine;
 
 public class Bullet : NetworkBehaviour {
 
-    public NetworkInstanceId owner;
+    private NetworkIdentity owner;
     [SerializeField] private int bulletDamage;
+    [SerializeField] private GameObject bloodEffectPrefab;
+    [SerializeField] private GameObject dustEffectPrefab;
+    private Quaternion particleRotation;
     
-    public void SetOwner(NetworkInstanceId id)
+    public void SetOwner(NetworkIdentity id)
     {
         owner = id;
+    }
+
+    void Update()
+    {
+        Destroy(gameObject, 5f);
     }
 
     [Command]
     void CmdPlayerHit(int _damage, GameObject _player)
     {
         _player.GetComponent<PlayerHealth>().RpcTakeDamage(_damage);
-        Debug.Log("dealt " + _damage + " to " + _player);
     }
 
     void OnCollisionEnter(Collision other)
     {
-        Debug.Log("Collided: " + other.gameObject.name);
-
+        particleRotation = Quaternion.FromToRotation(transform.right, other.contacts[0].normal);
+         
         if (other.gameObject.CompareTag("Player"))
+        {
+            GameObject effect = Instantiate(bloodEffectPrefab, transform.position, particleRotation);
+            NetworkServer.Spawn(effect);
             CmdPlayerHit(bulletDamage, other.gameObject);
-
-        //Play hit particles at other.contacts[0].point? 
-        Destroy(this.gameObject);
+            Destroy(gameObject);
+            Destroy(effect, 0.5f);
+        }
+        else //Play hit particles at other.contacts[0].point? 
+        {
+            GameObject effect = Instantiate(dustEffectPrefab, transform.position, particleRotation);
+            NetworkServer.Spawn(effect);
+            Destroy(gameObject);
+            Destroy(effect, 0.5f);
+        }
     }
 }
