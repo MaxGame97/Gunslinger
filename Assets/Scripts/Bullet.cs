@@ -3,25 +3,27 @@ using UnityEngine;
 
 public class Bullet : NetworkBehaviour {
 
-    private NetworkIdentity owner;
+    public NetworkInstanceId owner;
     [SerializeField] private int bulletDamage;
     
-    public void SetOwner(NetworkIdentity id)
+    public void SetOwner(NetworkInstanceId id)
     {
         owner = id;
     }
 
     [Command]
-    void CmdPlayerHit(int _damage, GameObject _player, NetworkIdentity shooter)
+    void CmdPlayerHit(int _damage, GameObject _player)
     {
-        _player.GetComponent<PlayerHealth>().RpcTakeDamage(_damage, owner);
-        Debug.Log(shooter + " dealt " + _damage + " to " + _player);
+        _player.GetComponent<PlayerHealth>().RpcTakeDamage(_damage);
+        Debug.Log("dealt " + _damage + " to " + _player);
     }
 
     void OnCollisionEnter(Collision other)
     {
+        Debug.Log("Collided: " + other.gameObject.name);
+
         if (other.gameObject.CompareTag("Player"))
-            CmdPlayerHit(bulletDamage, other.gameObject, owner);
+            CmdPlayerHit(bulletDamage, other.gameObject);
 
         //Play hit particles at other.contacts[0].point? 
         Destroy(this.gameObject);

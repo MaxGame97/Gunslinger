@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class PlayerHealth : NetworkBehaviour {
 
-    [SerializeField] private Behaviour[] disableOnDeath;
-    private bool[] wasEnabled;
+    [HideInInspector] public PlayerNetwork owner;
 
     private int maxHealth = 100;                                            //The players maximum health
     [SyncVar] public int currentHealth;                                     //The players current health
@@ -14,22 +13,12 @@ public class PlayerHealth : NetworkBehaviour {
 
     private void Start()
     {
-        GameObject health = GameObject.Find("Health Text");   // Get reference to the health text
+        GameObject health = GameObject.Find("Health Text");                 // Get reference to the health text
         currentHealth = maxHealth;                                          // Initialize the current health
         if (health != null)
         {
             healthText = health.GetComponent<Text>();
             healthText.text = "Health: " + currentHealth;                   // Initialize the health text
-        }
-    }
-
-    public void Setup()
-    {
-        wasEnabled = new bool[disableOnDeath.Length];
-
-        for (int i = 0; i < wasEnabled.Length; i++)
-        {
-            wasEnabled[i] = disableOnDeath[i].enabled;
         }
     }
 
@@ -40,7 +29,7 @@ public class PlayerHealth : NetworkBehaviour {
     }
 
     [ClientRpc]
-    public void RpcTakeDamage(int _damage, NetworkIdentity shooter)
+    public void RpcTakeDamage(int _damage)
     {
         if (!hasAuthority)
             return;
@@ -49,49 +38,22 @@ public class PlayerHealth : NetworkBehaviour {
         if (currentHealth <= 0)
         {
             //Die, killed by shooter
-            if (isServer)
-                RpcDisablePlayerObject(shooter.gameObject.name);
+            CmdDie();
 
             if (currentHealth < 0)
                 currentHealth = 0;
         }
     }
 
-    [ClientRpc] //Performed on every client
-    void RpcDisablePlayerObject(string killer)
+    [Command] //Performed on every client
+    void CmdDie()
     {
         currentHealth = 0;
 
-        for (int i = 0; i < disableOnDeath.Length; i++)
-        {
-            disableOnDeath[i].enabled = false;
-        }
-
-        //Get collider seperately and disable if one is found.
-        Collider _col = GetComponent<Collider>();
-        if (_col != null)
-            _col.enabled = false;
-
-        Debug.Log(killer + " killed " + gameObject.name);
+        owner.RpcPlayerDied(gameObject);
+       // Debug.Log(killer + " killed " + gameObject.name);   //Display who killed who here?
     }
 
-    [ClientRpc] //Performed on every client
-    void RpcRespawnPlayerObject()
-    {
-        currentHealth = maxHealth;
-
-        for (int i = 0; i < disableOnDeath.Length; i++)
-        {
-            disableOnDeath[i].enabled = wasEnabled[i];
-        }
-
-        //Get collider seperately and enable if one is found.
-        Collider _col = GetComponent<Collider>();
-        if (_col != null)
-            _col.enabled = true;
-    }
-
-   
     [ClientRpc] //Performed on every client
     public void RpcGainHealth(int _amount)
     {

@@ -4,11 +4,18 @@ using System.Collections;
 
 public class PlayerNetwork : NetworkBehaviour {
 
-
-    [SerializeField] private GameObject playerObjectPrefab;             //The player object to spawn (the one the player controls
     private string playerName;                                          //The players nickname
+    [SyncVar] private int kills;
+    [SyncVar] private int deaths;
+    [SyncVar] private int ping;
+    [SerializeField] private float respawnTime = 3f;
+
+    [SerializeField] private GameObject playerObjectPrefab;             //The player object to spawn
     private GameObject playerObject;                                    //Reference to the spawned player object                 
     [SyncVar] bool playerObjectState;                                   //Keeps track of the player objects state. 
+
+    private bool playerIsDead = false;
+    private float _timer = 0f;
 
 
     private void Start()
@@ -17,8 +24,6 @@ public class PlayerNetwork : NetworkBehaviour {
         {
             return;
         }
-
-        Debug.Log("Connection to client: " + connectionToClient);
 
         //Spawn my player object
         StartCoroutine(LateStart(0.1f));
@@ -37,6 +42,28 @@ public class PlayerNetwork : NetworkBehaviour {
         playerName = _name;
     }
 
+
+    private void Update()
+    {
+        if (!hasAuthority)
+            return;
+
+        if(playerIsDead)
+        {
+            if(_timer > respawnTime)
+            {
+                CmdRespawn(playerObject);
+                playerIsDead = false;
+                _timer = 0;
+            }
+            else
+            {
+                _timer += Time.deltaTime;
+            }
+        }
+    }
+
+
     /// <summary>
     /// COMMANDS ONLY GET EXECUTED ON THE SERVER
     /// </summary>
@@ -48,21 +75,38 @@ public class PlayerNetwork : NetworkBehaviour {
         playerObject = Instantiate(playerObjectPrefab);
         playerObject.name = "PlayerObject: " + playerName;
         playerObjectState = true;
+        playerObject.GetComponent<PlayerHealth>().owner = this;
+       // playerObject.GetComponent<PlayerWeapon>().SetOwner(GetComponent<NetworkIdentity>().netId);
+
 
         //player object now exists on the server, propogate it to all the clients.
         //Since we also set this client to have authority of it! (tells it who owns it)
         NetworkServer.SpawnWithClientAuthority(playerObject, id.connectionToClient);
+
+        // If we find the scoreboard in the scene, add this player to it.
+       // if (FindObjectOfType<Scoreboard>())
+       //     FindObjectOfType<Scoreboard>().RpcAddPlayer(GetComponent<NetworkIdentity>());
     }
 
-    [Command]
-    private void CmdDisablePlayerObject()
+    [ClientRpc] //tell clients we died
+    public void RpcPlayerDied(GameObject _player)
     {
-        playerObjectState = false;
+        _player.SetActive(false);
+
+        if(hasAuthority)    //If this is the local player, then set the value
+            playerIsDead = true;
     }
 
-    [Command]
-    private void CmdEnablePlayerObject()
+    [Command]   //tell server we respawned
+    private void CmdRespawn(GameObject _player)
     {
-        playerObjectState = true;
+        RpcRespawn(_player);
+    }
+
+    [ClientRpc] //tell clients we respawned
+    private void RpcRespawn(GameObject _player)
+    {
+        //Give player a new position?
+        _player.SetActive(true);
     }
 }
