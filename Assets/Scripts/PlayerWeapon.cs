@@ -80,7 +80,7 @@ public class PlayerWeapon : NetworkBehaviour {
     void CmdShoot(Vector3 _position, Quaternion _rotation)
     {
         GameObject bullet = Instantiate(bulletPrefab, _position, _rotation);
-        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 40;
+        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 250f;
         NetworkServer.Spawn(bullet);
     }
 

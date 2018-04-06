@@ -7,10 +7,9 @@ public class HandleObstruction : MonoBehaviour
     //-------------------------
     private Transform cameraTransform;
 
-    [SerializeField]
-    private float zoomSpeed;
+    public float zoomSpeed;
 
-    // Change protection level.
+    // Change protection level!!
     public float minDistance;
     public float maxDistance;
     public float desiredDistance;
@@ -23,18 +22,18 @@ public class HandleObstruction : MonoBehaviour
 
     private void Start ()
     {
+        // Set the maximum distance allowed to the offset on the z-axis.
         maxDistance = cameraTransform.localPosition.z;
-        minDistance = Mathf.Clamp (minDistance, 0.0f, Mathf.Abs (maxDistance));
-        minDistance *= -1;
+        // Set the minimum distance allowed to the negative value decided in the inspector.
+        minDistance = Mathf.Clamp (minDistance, maxDistance, minDistance) * -1;
     }
 
     private void LateUpdate ()
     {
         TestIfObstructed ();
-        
-        //print ("Desired: " + desiredDistance);
 
-        cameraTransform.localPosition = Vector3.Lerp (cameraTransform.localPosition, 
+        // Interpolate between the cameras current local transform and the transform with the desired z-distance.
+        cameraTransform.localPosition = Vector3.Lerp (cameraTransform.localPosition,
                                         new Vector3 (cameraTransform.localPosition.x, cameraTransform.localPosition.y, desiredDistance), Time.deltaTime * zoomSpeed);
     }
 
@@ -42,23 +41,75 @@ public class HandleObstruction : MonoBehaviour
     {
         RaycastHit hit;
 
-        //if (Physics.SphereCast (transform.position, 2, -transform.forward, out hit, 3))
+        // Shoot a ray between the player and the camera to look for an obstruction.
+        //if (Physics.SphereCast (transform.position, 2, -transform.forward, out hit, -maxDistance))
         if (Physics.Linecast (transform.position, cameraTransform.position, out hit))
         {
             print ("Obstructed");
 
-            Vector3 desiredVector = cameraTransform.position - hit.point;
-            desiredVector = cameraTransform.localPosition - desiredVector;
-            desiredDistance = Mathf.Clamp (Mathf.Abs (desiredVector.z) * -1, maxDistance, minDistance);
+            // If an obstruction is found, calculate the distance the camera has to move on the z-axis.
+            Vector3 difference = cameraTransform.position - hit.point;
+            Vector3 desiredPosition = cameraTransform.localPosition - difference;
+            desiredDistance = Mathf.Clamp (Mathf.Abs (desiredPosition.z) * -1, maxDistance, minDistance);
         }
         else
         {
             print ("Not obstructed");
 
             desiredDistance = maxDistance;
+            // Otherwise, interpolate between the local position and the max distance allowed.
+            desiredDistance = Mathf.Lerp (cameraTransform.localPosition.z, maxDistance, Time.deltaTime * zoomSpeed);
         }
     }
 }
 
-// Player -- hit.point.z -- cameraTransform.position.z
-// 
+/*
+private void Start ()
+    {
+        // Set the maximum distance allowed to the offset on the z-axis.
+        maxDistance = cameraTransform.localPosition.z;
+        // Set the minimum distance allowed to the negative value decided in the inspector.
+        minDistance = Mathf.Clamp (minDistance, maxDistance, minDistance) * -1;
+    }
+
+    private void LateUpdate ()
+    {
+        TestIfObstructed ();
+
+        //print ("Desired: " + desiredDistance);
+
+        // Interpolate between the cameras current local transform and the transform with the desired z-distance.
+        cameraTransform.localPosition = Vector3.Lerp (cameraTransform.localPosition,
+                                        new Vector3 (cameraTransform.localPosition.x, cameraTransform.localPosition.y, desiredDistance), Time.deltaTime * zoomSpeed);
+    }
+
+    private void TestIfObstructed ()
+    {
+        RaycastHit hit;
+
+        // Shoot a ray between the player and the camera to look for an obstruction.
+        //if (Physics.SphereCast (transform.position, 2, -transform.forward, out hit, -maxDistance))
+        if (Physics.Linecast (transform.position, cameraTransform.position, out hit))
+        {
+            print ("Obstructed");
+
+            zoomSpeed = 10f;
+            // If an obstruction is found, calculate the distance the camera has to move on the z-axis.
+            Vector3 difference = cameraTransform.position - hit.point;
+            desiredPosition = cameraTransform.localPosition - difference;
+            desiredDistance = Mathf.Clamp (Mathf.Abs (desiredPosition.z) * -1, maxDistance, minDistance);
+            //desiredPosition = new Vector3 (hit.point.x, hit.point.y, hit.point.z + hit.normal.z * 0.5f);
+        }
+        else
+        {
+            print ("Not obstructed");
+
+            zoomSpeed = 4f;
+
+            //desiredDistance = maxDistance;
+            // Otherwise, interpolate between the local position and the max distance allowed.
+            desiredDistance = Mathf.Lerp (cameraTransform.localPosition.z, maxDistance, Time.deltaTime * zoomSpeed);
+        }
+    }
+} 
+*/

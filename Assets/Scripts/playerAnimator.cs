@@ -105,6 +105,43 @@ public class PlayerAnimator : MonoBehaviour {
         }
     }
 
+    // Updates the rotation of a given IK target
+    public void SetNewTarget(int index, Quaternion rotation)
+    {
+        switch (index)
+        {
+            // Look target
+            case 0:
+                lookTarget.transform.rotation = rotation;
+                break;
+
+            // Left hand target
+            case 1:
+                leftHandTarget.transform.rotation = rotation;
+                break;
+
+            // Right hand target
+            case 2:
+                rightHandTarget.transform.rotation = rotation;
+                break;
+
+            // Left foot target
+            case 3:
+                leftFootTarget.transform.rotation = rotation;
+                break;
+
+            // Right foot target
+            case 4:
+                rightFootTarget.transform.rotation = rotation;
+                break;
+
+            default:
+                // If index is not between 0 and 4, throw a warning
+                Debug.LogWarning(index + "is not a valid target index");
+                break;
+        }
+    }
+
     // Updates the position and rotation of a given IK target
     public void SetNewTarget(int index, Vector3 position, Quaternion rotation)
     {
