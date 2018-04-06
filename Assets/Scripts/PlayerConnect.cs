@@ -29,9 +29,6 @@ public class PlayerConnect : NetworkBehaviour {
                 sceneCamera.SetActive(false);
             }
         }
-
-        if (GetComponent<PlayerHealth>())
-            GetComponent<PlayerHealth>().Setup();
 	}
 
     // OnDisable is run when this object is disabled

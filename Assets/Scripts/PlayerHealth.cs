@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerHealth : NetworkBehaviour {
 
+    [HideInInspector] public PlayerNetwork owner;
     [SerializeField] private Behaviour[] disableOnDeath;
     private bool[] wasEnabled;
 
@@ -18,16 +19,6 @@ public class PlayerHealth : NetworkBehaviour {
         currentHealth = maxHealth;                                          // Initialize the current health
         if (healthText != null)
             healthText.text = "Health: " + currentHealth;                   // Initialize the health text
-    }
-
-    public void Setup()
-    {
-        wasEnabled = new bool[disableOnDeath.Length];
-
-        for (int i = 0; i < wasEnabled.Length; i++)
-        {
-            wasEnabled[i] = disableOnDeath[i].enabled;
-        }
     }
 
     private void Update()
@@ -47,29 +38,20 @@ public class PlayerHealth : NetworkBehaviour {
         {
             //Die, killed by shooter
             if (isServer)
-                RpcDisablePlayerObject(shooter.gameObject.name);
+                CmdDie(shooter.gameObject.name);
 
             if (currentHealth < 0)
                 currentHealth = 0;
         }
     }
 
-    [ClientRpc] //Performed on every client
-    void RpcDisablePlayerObject(string killer)
+    [Command] //Performed on every client
+    void CmdDie(string killer)
     {
         currentHealth = 0;
 
-        for (int i = 0; i < disableOnDeath.Length; i++)
-        {
-            disableOnDeath[i].enabled = false;
-        }
-
-        //Get collider seperately and disable if one is found.
-        Collider _col = GetComponent<Collider>();
-        if (_col != null)
-            _col.enabled = false;
-
-        Debug.Log(killer + " killed " + gameObject.name);
+        owner.RpcPlayerDied();
+        Debug.Log(killer + " killed " + gameObject.name);   //Display who killed who here?
     }
 
     [ClientRpc] //Performed on every client
@@ -88,7 +70,6 @@ public class PlayerHealth : NetworkBehaviour {
             _col.enabled = true;
     }
 
-   
     [ClientRpc] //Performed on every client
     public void RpcGainHealth(int _amount)
     {

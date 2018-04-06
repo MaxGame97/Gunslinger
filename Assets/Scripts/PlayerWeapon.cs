@@ -38,7 +38,8 @@ public class PlayerWeapon : NetworkBehaviour {
         }
 
         reloadText = GameObject.Find("Reloading Text");
-        reloadText.SetActive(false);
+        if(reloadText != null)
+            reloadText.SetActive(false);
     }
 
     void Update () {
