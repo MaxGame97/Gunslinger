@@ -17,12 +17,14 @@ public class GameManager
             {
                 instance = new GameManager ();
                 instance.gameObject = new GameObject ("Game Manager");
-                instance.gameObject.AddComponent<InputHandler_Mattias> ();
+                //instance.gameObject.AddComponent<InputHandler_Mattias> ();
             }
             return instance;
         }
     }
 
+    // Will probably remove.
+    /*
     private InputHandler_Mattias inputHandler;
     public InputHandler_Mattias InputHandler
     {
@@ -33,21 +35,6 @@ public class GameManager
                 inputHandler = gameObject.GetComponent<InputHandler_Mattias> ();
             }
             return inputHandler;
-        }
-    }
-
-    // Is this still used?
-    /*
-    private AimingRay aimingRay;
-    public AimingRay AimingRay
-    {
-        get
-        {
-            if(aimingRay == null)
-            {
-                aimingRay = gameObject.GetComponent<AimingRay> ();
-            }
-            return aimingRay;
         }
     }
     */

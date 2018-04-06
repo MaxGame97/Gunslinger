@@ -51,6 +51,39 @@ public class CameraController : MonoBehaviour
 
         // Update the current aiming position
         UpdateAimingPosition();
+
+
+
+        // -----------------------------------------------------------------------------
+        // --- Example of how obstruction can be managed within the CameraController ---
+        // -----------------------------------------------------------------------------
+
+        // Enable by disabling the SetOffset component in the camera child, and removing the /* ... */ markings
+
+        // Currently has some limitations:
+        //
+        // * The offsetting has no smoothing
+        // * The raycast intersects with the player's collider
+
+        /*
+        RaycastHit ray;
+
+        // Position the camera on the correct offset besides the player
+        cameraChild.localPosition = new Vector3(offset.x, offset.y, 0f);
+
+        // If there is an obstruction behind the camera
+        if(Physics.Raycast(cameraChild.position, -cameraChild.forward, out ray, Mathf.Abs(offset.z)))
+        {
+            // Move the camera in front of the obstruction
+            cameraChild.localPosition += new Vector3(0f, 0f, -ray.distance);
+        }
+        // Else - If there is no obstruction behind the camera
+        else
+        {
+            // Move the camera to the preferred position
+            cameraChild.localPosition += new Vector3(0f, 0f, -Mathf.Abs(offset.z));
+        }
+        */
     }
 
     // Updates the current aiming position

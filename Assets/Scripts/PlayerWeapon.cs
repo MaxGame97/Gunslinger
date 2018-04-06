@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Networking;
+﻿using UnityEngine.Networking;
 using UnityEngine;
+
 
 public class PlayerWeapon : NetworkBehaviour {
 
@@ -19,6 +18,9 @@ public class PlayerWeapon : NetworkBehaviour {
     [SerializeField]
     private int magSize = 6;
 
+    private GameObject reloadText;
+    public NetworkInstanceId owner;  //Identity of the owner
+
 
     void Start () {
 
@@ -35,6 +37,14 @@ public class PlayerWeapon : NetworkBehaviour {
             Debug.LogError("No bulletPrefab detected for Firing Script.");
             this.enabled = false;
         }
+
+        reloadText = GameObject.Find("Reloading Text");
+        if(reloadText != null)
+            reloadText.SetActive(false);
+    }
+    public void SetOwner(NetworkInstanceId id)
+    {
+        owner = id;
     }
 
     void Update () {
@@ -46,7 +56,7 @@ public class PlayerWeapon : NetworkBehaviour {
         // If player has ammo and is not in reload state: Fire revolver and decrease ammoCount.
         if (Input.GetButtonDown("Fire1") && ammoCount >= 1 && isReloading == false)
         {
-            CmdShoot(muzzle.transform.position, muzzle.transform.rotation);
+            CmdShoot(muzzle.transform.position, muzzle.transform.rotation, owner);
             ammoCount--;
         }
 
@@ -64,16 +74,20 @@ public class PlayerWeapon : NetworkBehaviour {
             {
                 isReloading = false;
                 reloadTimer = 0f;
+
+                if (reloadText != null)
+                    reloadText.SetActive(false);
             }
         }
 	}
 
     // Create the bullet object relative to the muzzle position and add velocity. 
     [Command]
-    void CmdShoot(Vector3 _position, Quaternion _rotation)
+    void CmdShoot(Vector3 _position, Quaternion _rotation, NetworkInstanceId shooter)
     {
         GameObject bullet = Instantiate(bulletPrefab, _position, _rotation);
-        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 40;
+        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 250f;
+        //bullet.GetComponent<Bullet>().SetOwner(shooter);
         NetworkServer.Spawn(bullet);
     }
 
@@ -82,5 +96,8 @@ public class PlayerWeapon : NetworkBehaviour {
     {
         isReloading = true;
         ammoCount = magSize;
+
+        if (reloadText != null)
+            reloadText.SetActive(true);
     }
 }

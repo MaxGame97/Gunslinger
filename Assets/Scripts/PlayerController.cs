@@ -38,6 +38,9 @@ public class PlayerController : MonoBehaviour
         // If the Character Controller is grounded
         if (controller.isGrounded)
         {
+            // Set the vertical movement to zero
+            currentVelocity.y = 0f;
+
             // Get the desired velocity from input
             desiredVelocity = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
 
@@ -54,21 +57,17 @@ public class PlayerController : MonoBehaviour
             desiredVelocity = transform.TransformDirection(desiredVelocity);
             desiredVelocity *= movementSpeed;
 
-            // --------------------------------------------------------------------------
-            // --- DEBUG - Double the desired velocity when the sprint key is pressed ---
-            // --------------------------------------------------------------------------
-            if (Input.GetButton("Fire3"))
-                desiredVelocity *= 2.0f;
-
             // Lerp between the current velocity and the desired velocity
             currentVelocity = Vector3.Lerp(currentVelocity, desiredVelocity, smoothing);
 
+            /*
             // If the jump buttom was pressed
             if (Input.GetButtonDown("Jump"))
             {
                 // Apply jumping to the current velocity
                 currentVelocity.y = jumpSpeed;
             }
+            */
         }
 
         // Apply gravity to the current velocity
