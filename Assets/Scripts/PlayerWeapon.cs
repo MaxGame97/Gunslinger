@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.Networking;
+﻿using UnityEngine.Networking;
 using UnityEngine;
+
 
 public class PlayerWeapon : NetworkBehaviour {
 
@@ -19,6 +18,8 @@ public class PlayerWeapon : NetworkBehaviour {
     [SerializeField]
     private int magSize = 6;
 
+    private GameObject reloadText;
+
 
     void Start () {
 
@@ -35,11 +36,14 @@ public class PlayerWeapon : NetworkBehaviour {
             Debug.LogError("No bulletPrefab detected for Firing Script.");
             this.enabled = false;
         }
+
+        reloadText = GameObject.Find("Reloading Text");
+        //reloadText.SetActive(false);
     }
 
     void Update () {
 
-        if (!isLocalPlayer)
+        if (!isLocalPlayer && !hasAuthority)
         {
             return;
         }
@@ -64,6 +68,9 @@ public class PlayerWeapon : NetworkBehaviour {
             {
                 isReloading = false;
                 reloadTimer = 0f;
+
+                if (reloadText != null)
+                    reloadText.SetActive(false);
             }
         }
 	}
@@ -73,7 +80,7 @@ public class PlayerWeapon : NetworkBehaviour {
     void CmdShoot(Vector3 _position, Quaternion _rotation)
     {
         GameObject bullet = Instantiate(bulletPrefab, _position, _rotation);
-        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 40;
+        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 250f;
         NetworkServer.Spawn(bullet);
     }
 
@@ -82,5 +89,8 @@ public class PlayerWeapon : NetworkBehaviour {
     {
         isReloading = true;
         ammoCount = magSize;
+
+        if (reloadText != null)
+            reloadText.SetActive(true);
     }
 }
