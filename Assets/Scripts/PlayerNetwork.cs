@@ -14,7 +14,7 @@ public class PlayerNetwork : NetworkBehaviour {
     private GameObject playerObject;                                    //Reference to the spawned player object                 
     [SyncVar] bool playerObjectState;                                   //Keeps track of the player objects state. 
 
-    private bool playerIsDead = false;
+    [SyncVar] private bool playerIsDead = false;
     private float _timer = 0f;
 
 
@@ -45,14 +45,17 @@ public class PlayerNetwork : NetworkBehaviour {
 
     private void Update()
     {
-        if (!hasAuthority)
-            return;
-
-        if(playerIsDead)
+        if (playerIsDead)
         {
-            if(_timer > respawnTime)
+            if (_timer > respawnTime)
             {
-                CmdRespawn(playerObject);
+                //  CmdRespawn(playerObject);
+
+                if (!isClient)
+                    RpcRespawn(playerObject);
+                else
+                    CmdRespawn(playerObject);
+
                 playerIsDead = false;
                 _timer = 0;
             }
@@ -93,20 +96,26 @@ public class PlayerNetwork : NetworkBehaviour {
     {
         _player.SetActive(false);
 
-        if(hasAuthority)    //If this is the local player, then set the value
+       // if(hasAuthority)    //If this is the local player, then set the value
             playerIsDead = true;
     }
 
     [Command]   //tell server we respawned
     private void CmdRespawn(GameObject _player)
     {
+        //_player.SetActive(true);
         RpcRespawn(_player);
     }
 
     [ClientRpc] //tell clients we respawned
     private void RpcRespawn(GameObject _player)
     {
+        if(!isClient)
+            _player.SetActive(true);
         //Give player a new position?
-        _player.SetActive(true);
+        if (hasAuthority)
+        {
+            playerIsDead = false;
+        }
     }
 }

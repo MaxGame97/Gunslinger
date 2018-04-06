@@ -38,7 +38,7 @@ public class PlayerHealth : NetworkBehaviour {
         if (currentHealth <= 0)
         {
             //Die, killed by shooter
-            CmdDie();
+            CmdDie(gameObject);
 
             if (currentHealth < 0)
                 currentHealth = 0;
@@ -46,11 +46,10 @@ public class PlayerHealth : NetworkBehaviour {
     }
 
     [Command] //Performed on every client
-    void CmdDie()
+    void CmdDie(GameObject go)
     {
         currentHealth = 0;
-
-        owner.RpcPlayerDied(gameObject);
+        owner.RpcPlayerDied(go);
        // Debug.Log(killer + " killed " + gameObject.name);   //Display who killed who here?
     }
 

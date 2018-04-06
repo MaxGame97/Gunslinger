@@ -37,10 +37,12 @@ public class PlayerWeapon : NetworkBehaviour {
             Debug.LogError("No bulletPrefab detected for Firing Script.");
             this.enabled = false;
         }
-
-        reloadText = GameObject.Find("Reloading Text");
-        if(reloadText != null)
-            reloadText.SetActive(false);
+        
+        GameObject go = GameObject.Find("Health - Canvas");
+        if(go != null)
+        {
+            reloadText = go.transform.GetChild(1).gameObject;
+        }
     }
     public void SetOwner(NetworkInstanceId id)
     {
