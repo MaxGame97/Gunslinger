@@ -4887,7 +4887,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1937772597434168}
-  m_LocalRotation: {x: 0.7453254, y: 0.00039545412, z: -0.6667006, w: 0.00044231993}
+  m_LocalRotation: {x: 0.74532545, y: 0.00039545406, z: -0.66670066, w: 0.00044231987}
   m_LocalPosition: {x: -0.10819455, y: 0.0484242, z: 0.06866191}
   m_LocalScale: {x: 0.9999997, y: 1, z: 1.0000001}
   m_Children:
@@ -5399,7 +5399,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1468342467957958}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.35, y: 0.3, z: 0.4}
+  m_LocalPosition: {x: 0.35, y: 0.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4749793532936952}
@@ -6209,7 +6209,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1774672918332566}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.2, z: 0.45}
+  m_LocalPosition: {x: 0, y: 0.2, z: 0.8}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children:
   - {fileID: 4460071296147902}
@@ -7442,8 +7442,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91bad73c9b0a7dc4db2e6881c5289862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  revolverPositionOffset: {x: 0, y: 0, z: 0}
-  revolverRotationOffset: {x: 0, y: 0, z: 0}
+  revolverPositionOffset: {x: 0.05, y: 0.325, z: -0.225}
+  revolverRotationOffset: {x: 30, y: 0, z: -90}
+  smoothing: 100
 --- !u!114 &114350652109551926
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7812,7 +7813,7 @@ SkinnedMeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 61b26ac05becf0043ad85cc75df7c51e, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7836,7 +7837,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: 4300000, guid: 5092fb2409d91bb41a01f3eeee81d17e, type: 2}
+  m_Mesh: {fileID: 0}
   m_Bones:
   - {fileID: 4428522014323250}
   - {fileID: 4285290969492418}

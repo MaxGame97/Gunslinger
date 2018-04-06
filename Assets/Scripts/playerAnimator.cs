@@ -4,11 +4,14 @@ public class PlayerAnimator : MonoBehaviour {
 
     [SerializeField] private Vector3 revolverPositionOffset;    // Defines the revolver target's position offset
     [SerializeField] private Vector3 revolverRotationOffset;    // Defines the revolver target's rotation offset
+    [SerializeField] private float smoothing;                   // Deines the amount of aim smoothing
 
     private PlayerController player;                            // Defines the player's Player Controller
     private CharacterController controller;                     // Defines the player's Character Controller
     private Animator animator;                                  // Defines the player's Animator
+    private CameraController cameraController;                  // Defines the player's Camera Controller
     private Vector3 currentVelocity;                            // Defines the player's current velocity
+    private Quaternion currentAimingRotation;                   // Defines the player's current aiming rotation
 
     private GameObject lookTarget;                              // Defines the player's look IK target
     private GameObject leftHandTarget;                          // Defines the player's left hand IK target
@@ -19,16 +22,17 @@ public class PlayerAnimator : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
-        // Get the attached Player Controller, Character Controller and Animator
+        // Get the attached Player Controller, Character Controller, Animator and Camera Controller
         player = GetComponent<PlayerController>();
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        cameraController = GetComponentInChildren<CameraController>();
 
-        // If no Player Controller, Character Controller of Animator was found
+        // If no Player Controller, Character Controller, Animator or Camera Controller was found
         if (player == null || controller == null || animator == null)
         {
             // Throw an error message and deactivate this object
-            Debug.LogError("No Player Controller, Character Controller or Animator found");
+            Debug.LogError("No Player Controller, Character Controller, Animator or Camera Controller found");
             this.enabled = false;
         }
 
@@ -55,17 +59,28 @@ public class PlayerAnimator : MonoBehaviour {
         animator.SetFloat("Z Movement", currentVelocity.z);
         animator.SetBool("Is Grounded", controller.isGrounded);
 
+
+        Vector3 offsetPoint = transform.GetChild(1).GetChild(0).GetChild(1).GetChild(0).position;
+
+        // Lerp between the current aiming rotation and the desired aiming rotation
+        currentAimingRotation = Quaternion.Lerp(currentAimingRotation, Quaternion.LookRotation(cameraController.AimingPosition - offsetPoint), smoothing);
+
+        // Rotate the weapon rig based on the current aiming position
+        transform.GetChild(1).rotation = currentAimingRotation;
+
+        RaycastHit hit;
+
+        if(Physics.Raycast(offsetPoint, transform.GetChild(1).forward, out hit, Mathf.Infinity))
+        {
+            Debug.DrawLine(offsetPoint, hit.point, Color.yellow);
+        }
+
+
         // Update the look IK target based on the aiming position
-        SetNewTarget(0, transform.GetChild(0).GetComponent<CameraController>().AimingPosition);
-
-        // Rotate the weapon rig based on the camera rotation
-        transform.GetChild(1).rotation = transform.GetChild(0).rotation;
-
-        // Rotate the weapon based on the aiming position
-        transform.GetChild(1).GetChild(0).LookAt(transform.GetChild(0).GetComponent<CameraController>().AimingPosition);
+        SetNewTarget(0, cameraController.AimingPosition);
 
         // Update the right hand IK target based on the position of the revolver
-        SetNewTarget(2, transform.GetChild(1).GetChild(0).transform.position + transform.GetChild(1).GetChild(0).rotation * revolverPositionOffset, Quaternion.Euler(transform.GetChild(1).GetChild(0).transform.eulerAngles + revolverRotationOffset));
+        SetNewTarget(2, transform.GetChild(1).GetChild(0).position + transform.GetChild(1).GetChild(0).rotation * revolverPositionOffset, Quaternion.Euler(transform.GetChild(1).GetChild(0).eulerAngles + revolverRotationOffset));
     }
 
     // Updates the position of a given IK target
