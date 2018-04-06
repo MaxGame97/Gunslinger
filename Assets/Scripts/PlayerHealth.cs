@@ -5,8 +5,6 @@ using UnityEngine;
 public class PlayerHealth : NetworkBehaviour {
 
     [HideInInspector] public PlayerNetwork owner;
-    [SerializeField] private Behaviour[] disableOnDeath;
-    private bool[] wasEnabled;
 
     private int maxHealth = 100;                                            //The players maximum health
     [SyncVar] public int currentHealth;                                     //The players current health
@@ -15,7 +13,7 @@ public class PlayerHealth : NetworkBehaviour {
 
     private void Start()
     {
-        GameObject health = GameObject.Find("Health Text");   // Get reference to the health text
+        GameObject health = GameObject.Find("Health Text");                 // Get reference to the health text
         currentHealth = maxHealth;                                          // Initialize the current health
         if (health != null)
         {
@@ -31,7 +29,7 @@ public class PlayerHealth : NetworkBehaviour {
     }
 
     [ClientRpc]
-    public void RpcTakeDamage(int _damage, NetworkIdentity shooter)
+    public void RpcTakeDamage(int _damage)
     {
         if (!hasAuthority)
             return;
@@ -40,8 +38,7 @@ public class PlayerHealth : NetworkBehaviour {
         if (currentHealth <= 0)
         {
             //Die, killed by shooter
-            if (isServer)
-                CmdDie(shooter.gameObject.name);
+            CmdDie();
 
             if (currentHealth < 0)
                 currentHealth = 0;
@@ -49,28 +46,12 @@ public class PlayerHealth : NetworkBehaviour {
     }
 
     [Command] //Performed on every client
-    void CmdDie(string killer)
+    void CmdDie()
     {
         currentHealth = 0;
 
-        owner.RpcPlayerDied();
-        Debug.Log(killer + " killed " + gameObject.name);   //Display who killed who here?
-    }
-
-    [ClientRpc] //Performed on every client
-    void RpcRespawnPlayerObject()
-    {
-        currentHealth = maxHealth;
-
-        for (int i = 0; i < disableOnDeath.Length; i++)
-        {
-            disableOnDeath[i].enabled = wasEnabled[i];
-        }
-
-        //Get collider seperately and enable if one is found.
-        Collider _col = GetComponent<Collider>();
-        if (_col != null)
-            _col.enabled = true;
+        owner.RpcPlayerDied(gameObject);
+       // Debug.Log(killer + " killed " + gameObject.name);   //Display who killed who here?
     }
 
     [ClientRpc] //Performed on every client

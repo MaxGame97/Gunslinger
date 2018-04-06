@@ -52,6 +52,7 @@ public class PlayerNetwork : NetworkBehaviour {
         playerObject.name = "PlayerObject: " + playerName;
         playerObjectState = true;
         playerObject.GetComponent<PlayerHealth>().owner = this;
+       // playerObject.GetComponent<PlayerWeapon>().SetOwner(GetComponent<NetworkIdentity>().netId);
 
 
         //player object now exists on the server, propogate it to all the clients.
@@ -59,25 +60,25 @@ public class PlayerNetwork : NetworkBehaviour {
         NetworkServer.SpawnWithClientAuthority(playerObject, id.connectionToClient);
 
         // If we find the scoreboard in the scene, add this player to it.
-        if (FindObjectOfType<Scoreboard>())
-            FindObjectOfType<Scoreboard>().RpcAddPlayer(GetComponent<NetworkIdentity>());
+       // if (FindObjectOfType<Scoreboard>())
+       //     FindObjectOfType<Scoreboard>().RpcAddPlayer(GetComponent<NetworkIdentity>());
     }
 
     [ClientRpc] //tell clients we died
-    public void RpcPlayerDied()
+    public void RpcPlayerDied(GameObject _player)
     {
-        playerObject.SetActive(false);
+        _player.SetActive(false);
     }
 
     [Command]   //tell server we respawned
-    private void CmdRespawn()
+    private void CmdRespawn(GameObject _player)
     {
-        Invoke("RpcRespawn", respawnTime);
+        RpcRespawn(_player);
     }
 
     [ClientRpc] //tell clients we respawned
-    private void RpcRespawn()
+    private void RpcRespawn(GameObject _player)
     {
-        playerObject.SetActive(true);
+        _player.SetActive(true);
     }
 }
