@@ -8,9 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Dev/Main.unity
     guid: f139a2a7be005ac47ab8475c865ff537
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Dev/Lobby Scene.unity
     guid: 16036a2f12d55dc41aa0a251c8429a58
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Dev/Programming/Erik Rodriguez.unity
     guid: b96f78e51d8963c4581f3e3ca8256e0f
