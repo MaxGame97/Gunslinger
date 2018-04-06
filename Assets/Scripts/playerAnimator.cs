@@ -42,6 +42,8 @@ public class PlayerAnimator : MonoBehaviour {
         rightHandTarget = transform.GetChild(2).GetChild(2).gameObject;
         leftFootTarget = transform.GetChild(2).GetChild(3).gameObject;
         rightFootTarget = transform.GetChild(2).GetChild(4).gameObject;
+
+        currentAimingRotation = Quaternion.Euler(transform.forward);
     }
 
     // Update is called once per frame
