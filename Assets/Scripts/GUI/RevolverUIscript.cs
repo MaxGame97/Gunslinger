@@ -26,19 +26,25 @@ public class RevolverUIscript : MonoBehaviour
 
     private bool loaded = true;
 
+    public float scale = 1.0f;
+
+    public Vector3 relativePosition = new Vector3(-150, 150, 0);
+
     // Use this for initialization
     void Start()
     {
+        transform.position += relativePosition;
         Vector3 center = transform.position;
         for (int i = 0; i < revolverSize; i++)
         {
             int a = (360 / revolverSize) * i;
             Vector3 pos = Circle(center, radiusen, a);
             bullets.Add(Instantiate(startingBullet, pos, Quaternion.Euler(0,0,-a), transform));
+            bullets[i].transform.localScale *= scale;
         }
     }
 
-    Vector3 Circle(Vector3 center, float radius, int a)
+    private Vector3 Circle(Vector3 center, float radius, int a)
     {
         float ang = a;
         Vector3 pos;

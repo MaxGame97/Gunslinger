@@ -14,12 +14,19 @@ public class InventoryScript : MonoBehaviour {
 
     public RevolverUIscript revUI;
 
+    public float scale = 1.0f;
+
+    public Vector3 relativePosition = new Vector3(0, 0, 0);
+
+    public float inventorySpread = 100;
+
 	// Use this for initialization
 	void Start () {
         //mayby change the spawn method into something more dynamic
         for (int i = 0; i < inventorySize; i++)
         {
-            slots.Add(Instantiate(clean, new Vector3((i * 100) + 50, 50, 0), Quaternion.identity, this.gameObject.transform));
+            slots.Add(Instantiate(clean, new Vector3((i * inventorySpread) + 50, 50, 0)+relativePosition, Quaternion.identity, this.gameObject.transform));
+            slots[i].transform.localScale *= scale;
         }
     }
 
