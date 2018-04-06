@@ -26,10 +26,6 @@ public class RevolverUIscript : MonoBehaviour
 
     private bool loaded = true;
 
-    public float moveTime = 0.1f;
-
-    private float inverseMoveTime;
-
     // Use this for initialization
     void Start()
     {
@@ -37,13 +33,12 @@ public class RevolverUIscript : MonoBehaviour
         for (int i = 0; i < revolverSize; i++)
         {
             int a = (360 / revolverSize) * i;
-            Vector3 pos = RandomCircle(center, radiusen, a);
+            Vector3 pos = Circle(center, radiusen, a);
             bullets.Add(Instantiate(startingBullet, pos, Quaternion.Euler(0,0,-a), transform));
         }
-        inverseMoveTime = 1f / moveTime;
     }
 
-    Vector3 RandomCircle(Vector3 center, float radius, int a)
+    Vector3 Circle(Vector3 center, float radius, int a)
     {
         float ang = a;
         Vector3 pos;
@@ -100,19 +95,16 @@ public class RevolverUIscript : MonoBehaviour
 
         float startRotation = transform.eulerAngles.z;
         float endRotation = target;
-        if (endRotation < 0.1f)
+        if (target < 0.1f)
         {
-            endRotation = 359.9f;
+            endRotation = 360.0f;
         }
         float t = 0.0f;
-        
         while (t < duration)
         {
             t += Time.deltaTime;
             float zRotation = Mathf.Lerp(startRotation, endRotation, t / duration) % 360.0f;
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, zRotation);
-            if (zRotation > 359.0f)
-                transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0f);
             yield return null;
         }
     }
