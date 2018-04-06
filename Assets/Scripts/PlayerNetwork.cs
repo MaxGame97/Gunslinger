@@ -103,6 +103,7 @@ public class PlayerNetwork : NetworkBehaviour {
     [Command]   //tell server we respawned
     private void CmdRespawn(GameObject _player)
     {
+        _player.GetComponent<PlayerHealth>().RpcGainHealth(100);
         //_player.SetActive(true);
         RpcRespawn(_player);
     }
@@ -110,7 +111,6 @@ public class PlayerNetwork : NetworkBehaviour {
     [ClientRpc] //tell clients we respawned
     private void RpcRespawn(GameObject _player)
     {
-        if(!isClient)
             _player.SetActive(true);
         //Give player a new position?
         if (hasAuthority)

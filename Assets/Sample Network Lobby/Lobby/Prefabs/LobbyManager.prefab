@@ -3054,7 +3054,11 @@ MonoBehaviour:
   m_OfflineScene: Lobby Scene
   m_OnlineScene: 
   m_SpawnPrefabs:
-  - {fileID: 0}
+  - {fileID: 1474508151921844, guid: 53bd949d8822c5f40b0ffa24063a7dd8, type: 2}
+  - {fileID: 1767609458245438, guid: 231f0e614f0183540a1bad027ee97c6b, type: 2}
+  - {fileID: 1182929752886002, guid: d86946d37f26e5a4baf7f60aafefdeb9, type: 2}
+  - {fileID: 194062, guid: 8c27aeead6d968e4ba986702d6b84335, type: 2}
+  - {fileID: 191114, guid: 834c99069a124aa439d5795c3579843b, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -3116,12 +3120,12 @@ MonoBehaviour:
   m_MinPlayers: 1
   m_LobbyPlayerPrefab: {fileID: 11487034, guid: ad727d7e1462ecc4f83c898ecc501997,
     type: 2}
-  m_GamePlayerPrefab: {fileID: 1474508151921844, guid: e5c7e726dc27396479e27536e579fbd5,
+  m_GamePlayerPrefab: {fileID: 1767609458245438, guid: 231f0e614f0183540a1bad027ee97c6b,
     type: 2}
   m_LobbyScene: Lobby Scene
   m_PlayScene: Main
   lobbySlots: []
-  prematchCountdown: 3
+  prematchCountdown: 0
   topPanel: {fileID: 11424994}
   mainMenuPanel: {fileID: 22442386}
   lobbyPanel: {fileID: 22443498}
@@ -3272,7 +3276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

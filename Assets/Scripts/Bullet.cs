@@ -25,24 +25,31 @@ public class Bullet : NetworkBehaviour {
         _player.GetComponent<PlayerHealth>().RpcTakeDamage(_damage);
     }
 
+    [Command]
+    void CmdSpawnParticle(GameObject prefab, Vector3 position, Quaternion rotation)
+    {
+        GameObject effect = Instantiate(bloodEffectPrefab, position, rotation);
+        Destroy(effect, 0.5f);
+        NetworkServer.Spawn(effect);
+        
+    }
+
     void OnCollisionEnter(Collision other)
     {
+        if (!isClient)
+            return;
         particleRotation = Quaternion.FromToRotation(transform.right, other.contacts[0].normal);
-         
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player") )
         {
-            GameObject effect = Instantiate(bloodEffectPrefab, transform.position, particleRotation);
-            NetworkServer.Spawn(effect);
+            CmdSpawnParticle(bloodEffectPrefab, transform.position, particleRotation);
             CmdPlayerHit(bulletDamage, other.gameObject);
             Destroy(gameObject);
-            Destroy(effect, 0.5f);
+          
         }
         else //Play hit particles at other.contacts[0].point? 
         {
-            GameObject effect = Instantiate(dustEffectPrefab, transform.position, particleRotation);
-            NetworkServer.Spawn(effect);
+            CmdSpawnParticle(dustEffectPrefab, transform.position, particleRotation);
             Destroy(gameObject);
-            Destroy(effect, 0.5f);
         }
     }
 }
