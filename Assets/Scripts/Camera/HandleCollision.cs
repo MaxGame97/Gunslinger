@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Script that handles situations where camera collides with geometry.
-// Will probably change to boxcasting.
+// Will probably change to boxcasting when functionality is set.
 
 public class HandleCollision : MonoBehaviour
 {
@@ -59,7 +59,6 @@ public class HandleCollision : MonoBehaviour
         {
             CalculateDesiredPosition ();
             count++;
-            print (currentDistance);
 
         } while (CheckIfColliding (count));
 
@@ -90,7 +89,7 @@ public class HandleCollision : MonoBehaviour
         cameraTransform.localPosition = currentPosition;
     }
 
-    // Checks if colliding, and if that's the case, changes the desired camera position.
+    // Checks if colliding, and if that's the case, modifies the desired camera distance.
     private bool CheckIfColliding (int count)
     {
         bool isColliding = false;
@@ -103,7 +102,7 @@ public class HandleCollision : MonoBehaviour
         {
             currentSmoothing = cameraCollisionSmoothing;
 
-            // If limit of allowed checks not reached, push camera distance forward a little.
+            // If allowed to du another check, push camera distance forward a little.
             if (count < maxCollisionChecks)
             {
                 isColliding = true;
@@ -114,7 +113,7 @@ public class HandleCollision : MonoBehaviour
                     currentDistance = minDistance;
                 }
             }
-            // If limit of allowed checks reached, "teleport" to the position.
+            // If not allowed to do another check, "teleport" to the distance.
             else
             {
                 currentDistance = closestCollision - Camera.main.nearClipPlane;
@@ -154,29 +153,28 @@ public class HandleCollision : MonoBehaviour
         }
         if (Physics.Linecast (from, clipPlanePoints.DownLeft, out hit) && hit.collider.tag != "Player")
         {
-            if (hit.distance > closestDistance || closestDistance == -1)
+            if (hit.distance < closestDistance || closestDistance == -1)
             {
                 closestDistance = hit.distance;
-                desiredPosition = transform.InverseTransformPoint (cameraTransform.position.x, cameraTransform.position.y, hit.point.z);
             }
         }
         if (Physics.Linecast (from, clipPlanePoints.UpRight, out hit) && hit.collider.tag != "Player")
         {
-            if (hit.point.z > closestDistance || closestDistance == -1)
+            if (hit.distance < closestDistance || closestDistance == -1)
             {
                 closestDistance = hit.distance;
             }
         }
         if (Physics.Linecast (from, clipPlanePoints.UpLeft, out hit) && hit.collider.tag != "Player")
         {
-            if (hit.point.z > closestDistance || closestDistance == -1)
+            if (hit.distance < closestDistance || closestDistance == -1)
             {
                 closestDistance = hit.distance;
             }
         }
         if (Physics.Linecast (from, to + transform.forward * Camera.main.nearClipPlane, out hit) && hit.collider.tag != "Player")
         {
-            if (hit.point.z > closestDistance || closestDistance == -1)
+            if (hit.distance < closestDistance || closestDistance == -1)
             {
                 closestDistance = hit.distance;
             }
