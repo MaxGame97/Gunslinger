@@ -6,6 +6,7 @@ public class PlayerWeapon : NetworkBehaviour {
 
     public GameObject bulletPrefab;
     public GameObject muzzle;
+    public RevolverUIscript revolverUI;
 
     [SerializeField]
     private int ammoCount;
@@ -20,6 +21,8 @@ public class PlayerWeapon : NetworkBehaviour {
 
     private GameObject reloadText;
     public NetworkInstanceId owner;  //Identity of the owner
+
+    private bool loaded = true;
 
 
     void Start () {
@@ -42,6 +45,10 @@ public class PlayerWeapon : NetworkBehaviour {
         if(go != null)
         {
             reloadText = go.transform.GetChild(1).gameObject;
+        }
+        if (revolverUI == null)
+        {
+            Debug.Log("Add the revolverUIscript to this behavior");
         }
     }
     public void SetOwner(NetworkInstanceId id)
@@ -66,7 +73,6 @@ public class PlayerWeapon : NetworkBehaviour {
         if (Input.GetButtonDown("Fire2") && isReloading == false && ammoCount != magSize)
         {
             Reload();
-            
         }
         // Start reload timer until isReload is false again. 
         if(isReloading == true)

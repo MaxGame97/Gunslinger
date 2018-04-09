@@ -2952,6 +2952,7 @@ MonoBehaviour:
   radiusen: 50
   scale: 0.4
   relativePosition: {x: -150, y: 150, z: 0}
+  revolveSpeed: 0.2
 --- !u!114 &114166616375094442
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3123,7 +3124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0b84a5638681ea49ad595b8778786b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  disableOnDeath: []
+  owner: {fileID: 0}
   currentHealth: 0
 --- !u!114 &114743093619968250
 MonoBehaviour:
@@ -3160,6 +3161,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1182929752886002, guid: d86946d37f26e5a4baf7f60aafefdeb9,
     type: 2}
   muzzle: {fileID: 1313628014554888}
+  revolverUI: {fileID: 114139994400348408}
   ammoCount: 0
   reloadTime: 0
   reloadTimer: 0
@@ -3223,6 +3225,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91bad73c9b0a7dc4db2e6881c5289862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  revolverPositionOffset: {x: 0, y: 0, z: 0}
+  revolverRotationOffset: {x: 0, y: 0, z: 0}
+  smoothing: 0
 --- !u!114 &114941156160032646
 MonoBehaviour:
   m_ObjectHideFlags: 1

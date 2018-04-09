@@ -24,11 +24,15 @@ public class RevolverUIscript : MonoBehaviour
 
     public float radiusen;
 
-    private bool loaded = true;
+    public bool loaded { get; private set; }
 
     public float scale = 1.0f;
 
     public Vector3 relativePosition = new Vector3(-150, 150, 0);
+
+    public float revolveSpeed = 0.2f;
+
+    public bool waiting;
 
     // Use this for initialization
     void Start()
@@ -42,6 +46,7 @@ public class RevolverUIscript : MonoBehaviour
             bullets.Add(Instantiate(startingBullet, pos, Quaternion.Euler(0,0,-a), transform));
             bullets[i].transform.localScale *= scale;
         }
+        loaded = true;
     }
 
     private Vector3 Circle(Vector3 center, float radius, int a)
@@ -60,7 +65,7 @@ public class RevolverUIscript : MonoBehaviour
         {
             ShootBullet();
         }
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             LoadBullet(startingBallet);
         }
@@ -70,10 +75,11 @@ public class RevolverUIscript : MonoBehaviour
     {
         if (!loaded)
         {
-            bullets[currentSlot % revolverSize].sprite = bulletImage;
+            currentSlot++;
             ChangeCurrentSlot();
-            if (currentSlot % revolverSize == 0)
-                loaded = !loaded;
+            StopAllCoroutines();
+            StartCoroutine(LoadRotate(revolveSpeed, (360 / revolverSize) * (currentSlot % revolverSize), bulletImage));
+            currentSlot = 0;
         }
     }
 
@@ -82,6 +88,7 @@ public class RevolverUIscript : MonoBehaviour
         if (loaded)
         {
             bullets[currentSlot % revolverSize].sprite = emptySloth;
+            currentSlot++;
             ChangeCurrentSlot();
             if (currentSlot % revolverSize == 0)
                 loaded = !loaded;
@@ -90,10 +97,8 @@ public class RevolverUIscript : MonoBehaviour
 
     private void ChangeCurrentSlot()
     {
-        currentSlot++;
         StopAllCoroutines();
-        StartCoroutine(Rotate(0.2f, (360 / revolverSize) * (currentSlot % revolverSize)));
-        //transform.rotation = Quaternion.Euler(0,0, (360 / revolverSize)*(currentSlot%revolverSize));
+        StartCoroutine(Rotate(revolveSpeed, (360 / revolverSize) * (currentSlot % revolverSize)));
     }
 
     IEnumerator Rotate(float duration,float target)
@@ -113,5 +118,29 @@ public class RevolverUIscript : MonoBehaviour
             transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, zRotation);
             yield return null;
         }
+        waiting = false;
+    }
+
+    IEnumerator LoadRotate(float duration, float target, Sprite bulletImage)
+    {
+
+        float startRotation = transform.eulerAngles.z;
+        float endRotation = target;
+        if (target < 0.1f)
+        {
+            endRotation = 360.0f;
+        }
+        for (int i = 0; i < revolverSize; i++)
+        {
+            bullets[i].sprite = bulletImage;
+            StartCoroutine(Rotate(duration, endRotation));
+            waiting = true;
+            while (waiting)
+            {
+                yield return new WaitForSeconds(duration);
+            }
+            endRotation += 60;
+        }
+        loaded = true;
     }
 }
