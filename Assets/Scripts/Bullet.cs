@@ -28,7 +28,7 @@ public class Bullet : NetworkBehaviour {
     [Command]
     void CmdSpawnParticle(GameObject prefab, Vector3 position, Quaternion rotation)
     {
-        GameObject effect = Instantiate(bloodEffectPrefab, position, rotation);
+        GameObject effect = Instantiate(prefab, position, rotation);
         Destroy(effect, 0.5f);
         NetworkServer.Spawn(effect);
         

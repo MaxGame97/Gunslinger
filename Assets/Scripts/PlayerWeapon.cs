@@ -17,6 +17,9 @@ public class PlayerWeapon : NetworkBehaviour {
     private bool isReloading;
     [SerializeField]
     private int magSize = 6;
+    [SerializeField]
+    private int ammoMissing = 0;
+
 
     private GameObject reloadText;
     public NetworkInstanceId owner;  //Identity of the owner
@@ -49,6 +52,7 @@ public class PlayerWeapon : NetworkBehaviour {
         owner = id;
     }
 
+    // updates every frame.
     void Update () {
 
         if (!isLocalPlayer && !hasAuthority)
@@ -60,6 +64,7 @@ public class PlayerWeapon : NetworkBehaviour {
         {
             CmdShoot(muzzle.transform.position, muzzle.transform.rotation, owner);
             ammoCount--;
+            ammoMissing = magSize - ammoCount;
         }
 
         // Reload revolver if not already reloading. 
@@ -82,6 +87,8 @@ public class PlayerWeapon : NetworkBehaviour {
         }
 	}
 
+
+
     // Create the bullet object relative to the muzzle position and add velocity. 
     [Command]
     void CmdShoot(Vector3 _position, Quaternion _rotation, NetworkInstanceId shooter)
@@ -98,6 +105,7 @@ public class PlayerWeapon : NetworkBehaviour {
         isReloading = true;
         reloadTimer = Time.time + reloadTime;
         ammoCount = magSize;
+        ammoMissing = 0;
 
         if (reloadText != null)
             reloadText.SetActive(true);
