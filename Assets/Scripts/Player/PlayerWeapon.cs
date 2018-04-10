@@ -4,26 +4,17 @@ using UnityEngine;
 
 public class PlayerWeapon : NetworkBehaviour {
 
+    public NetworkInstanceId owner;  //Identity of the owner
     public GameObject bulletPrefab;
     public GameObject muzzle;
-
-    [SerializeField]
-    private int ammoCount;
-    [SerializeField]
-    private float reloadTime;
-    [SerializeField]
-    private float reloadTimer;
-    [SerializeField]
-    private bool isReloading;
-    [SerializeField]
-    private int magSize = 6;
-    [SerializeField]
-    private int ammoMissing = 0;
-
-
     private GameObject reloadText;
-    public NetworkInstanceId owner;  //Identity of the owner
+    private float reloadTimer;
 
+    [SerializeField] private int ammoCount;
+    [SerializeField] private float reloadTime;
+    [SerializeField] private bool isReloading;
+    [SerializeField] private int magSize = 6;
+    [SerializeField] private int ammoMissing;
 
     void Start () {
 
@@ -41,10 +32,10 @@ public class PlayerWeapon : NetworkBehaviour {
             this.enabled = false;
         }
         
-        GameObject go = GameObject.Find("Health - Canvas");
-        if(go != null)
+        GameObject healthCanvas = GameObject.Find("Health - Canvas");
+        if(healthCanvas != null)
         {
-            reloadText = go.transform.GetChild(1).gameObject;
+            reloadText = healthCanvas.transform.GetChild(1).gameObject;
         }
     }
     public void SetOwner(NetworkInstanceId id)
@@ -52,14 +43,15 @@ public class PlayerWeapon : NetworkBehaviour {
         owner = id;
     }
 
-    // updates every frame.
+    // Updates every frame.
     void Update () {
 
+        // If it isn't a local player then skip this update function.
         if (!isLocalPlayer && !hasAuthority)
         {
             return;
         }
-        // If player has ammo and is not in reload state: Fire revolver and decrease ammoCount.
+        // If player has ammo and is not in reload state: Fire revolver. Decrease ammoCount and increase missing ammo.
         if (Input.GetButtonDown("Fire1") && ammoCount >= 1 && isReloading == false)
         {
             CmdShoot(muzzle.transform.position, muzzle.transform.rotation, owner);
@@ -94,7 +86,6 @@ public class PlayerWeapon : NetworkBehaviour {
     void CmdShoot(Vector3 _position, Quaternion _rotation, NetworkInstanceId shooter)
     {
         GameObject bullet = Instantiate(bulletPrefab, _position, _rotation);
-        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 250f;
         //bullet.GetComponent<Bullet>().SetOwner(shooter);
         NetworkServer.Spawn(bullet);
     }
