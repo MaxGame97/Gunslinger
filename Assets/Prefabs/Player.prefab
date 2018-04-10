@@ -2025,7 +2025,7 @@ GameObject:
   - component: {fileID: 114504658468808142}
   m_Layer: 0
   m_Name: Player Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2129,6 +2129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4249952673351248}
   - component: {fileID: 114366532935492660}
+  - component: {fileID: 114132501126384076}
   m_Layer: 0
   m_Name: Camera Rig
   m_TagString: Untagged
@@ -7454,6 +7455,22 @@ MonoBehaviour:
   m_MovementThreshold: 0.001
   m_InterpolateRotation: 0.5
   m_InterpolateMovement: 0.5
+--- !u!114 &114132501126384076
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1632011068075766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b682dc5d552ec864da6f6559881af2c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minDistance: 0.3
+  cameraCollisionSmoothing: 0.05
+  cameraResetSmoothing: 0.75
+  maxCollisionChecks: 10
+  collisionDistanceStep: 0.05
 --- !u!114 &114234170546814132
 MonoBehaviour:
   m_ObjectHideFlags: 1
