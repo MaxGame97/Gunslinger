@@ -3,52 +3,64 @@ using UnityEngine;
 
 public class Bullet : NetworkBehaviour {
 
-    private NetworkIdentity owner;
+    [SyncVar] private GameObject owner;
     [SerializeField] private int bulletDamage;
-    [SerializeField] private GameObject bloodEffectPrefab;
-    [SerializeField] private GameObject dustEffectPrefab;
-    private Quaternion particleRotation;
+    [SerializeField] private float bulletDestructionTimer;
+    [SerializeField] private GameObject playerHitEffect;
+    [SerializeField] private GameObject groundHitEffect;
     
-    public void SetOwner(NetworkIdentity id)
+
+    private void Start()
+    {
+        Destroy(gameObject, bulletDestructionTimer);   
+    }
+
+    [ClientRpc]
+    public void RpcSetOwner(GameObject id)  // Set the owner of this object
     {
         owner = id;
     }
 
-    void Update()
+    [Command]   // Function run from client on server
+    void CmdPlayerHit(int _damage, GameObject _player, GameObject shooter)
     {
-        Destroy(gameObject, 5f);
+        // Tell clients that _player takes _damage from shooter
+        _player.GetComponent<PlayerHealth>().RpcTakeDamage(_damage, shooter);
     }
 
-    [Command]
-    void CmdPlayerHit(int _damage, GameObject _player)
-    {
-        _player.GetComponent<PlayerHealth>().RpcTakeDamage(_damage);
-    }
-
-    [Command]
+    [Command]   // Function run from client on server
     void CmdSpawnParticle(GameObject prefab, Vector3 position, Quaternion rotation)
     {
-        GameObject effect = Instantiate(bloodEffectPrefab, position, rotation);
+        // Instantiate the effect on the server
+        GameObject effect = Instantiate(prefab, position, rotation);
+
+        // Set the destruction of the effect
         Destroy(effect, 0.5f);
-        NetworkServer.Spawn(effect);
         
+        // Spawn the bullet on on all clients as well
+        NetworkServer.Spawn(effect);
     }
 
     void OnCollisionEnter(Collision other)
     {
-        if (!isClient)
+        if (!isClient)  //We only want to perfrom collision detection on the shooters client!
             return;
-        particleRotation = Quaternion.FromToRotation(transform.right, other.contacts[0].normal);
-        if (other.gameObject.CompareTag("Player") )
+
+        // Get the desired rotation for the particles
+        Quaternion particleRotation = Quaternion.FromToRotation(transform.right, other.contacts[0].normal);
+        Vector3 collisionPoint = other.contacts[0].point;
+
+        if (other.gameObject.CompareTag("Player"))  // If we hit a player 
         {
-            CmdSpawnParticle(bloodEffectPrefab, transform.position, particleRotation);
-            CmdPlayerHit(bulletDamage, other.gameObject);
+            CmdSpawnParticle(playerHitEffect, transform.position , particleRotation);   //Spawn player hit particles on 
+            CmdPlayerHit(bulletDamage, other.gameObject, owner);
+    
             Destroy(gameObject);
           
         }
-        else //Play hit particles at other.contacts[0].point? 
+        else // if we hit something besides a player
         {
-            CmdSpawnParticle(dustEffectPrefab, transform.position, particleRotation);
+            CmdSpawnParticle(groundHitEffect, transform.position, particleRotation);    //Spawn particles
             Destroy(gameObject);
         }
     }

@@ -303,8 +303,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletDamage: 20
-  bloodEffectPrefab: {fileID: 194062, guid: 8c27aeead6d968e4ba986702d6b84335, type: 2}
-  dustEffectPrefab: {fileID: 191114, guid: 834c99069a124aa439d5795c3579843b, type: 2}
+  bulletDestructionTimer: 5
+  playerHitEffect: {fileID: 194062, guid: 8c27aeead6d968e4ba986702d6b84335, type: 2}
+  groundHitEffect: {fileID: 191114, guid: 834c99069a124aa439d5795c3579843b, type: 2}
 --- !u!114 &114720591494347160
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -357,7 +358,7 @@ MonoBehaviour:
     i14: 222
     i15: 185
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  m_LocalPlayerAuthority: 1
 --- !u!136 &136804057972253662
 CapsuleCollider:
   m_ObjectHideFlags: 1

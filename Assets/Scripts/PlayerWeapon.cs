@@ -19,8 +19,11 @@ public class PlayerWeapon : NetworkBehaviour {
     private int magSize = 6;
 
     private GameObject reloadText;
-    public NetworkInstanceId owner;  //Identity of the owner
-
+    [SerializeField] [SyncVar] private GameObject owner;  //Identity of the owner
+    public GameObject Owner
+    {
+       get { return owner; }
+    }
 
     void Start () {
 
@@ -44,21 +47,16 @@ public class PlayerWeapon : NetworkBehaviour {
             reloadText = go.transform.GetChild(1).gameObject;
         }
     }
-    public void SetOwner(NetworkInstanceId id)
+
+    void Update ()
     {
-        owner = id;
-    }
-
-    void Update () {
-
-        if (!isLocalPlayer && !hasAuthority)
-        {
+        if (!hasAuthority)
             return;
-        }
+       
         // If player has ammo and is not in reload state: Fire revolver and decrease ammoCount.
         if (Input.GetButtonDown("Fire1") && ammoCount >= 1 && isReloading == false)
         {
-            CmdShoot(muzzle.transform.position, muzzle.transform.rotation, owner);
+            CmdShoot(bulletPrefab, muzzle.transform.position, muzzle.transform.rotation, owner);
             ammoCount--;
         }
 
@@ -82,18 +80,8 @@ public class PlayerWeapon : NetworkBehaviour {
         }
 	}
 
-    // Create the bullet object relative to the muzzle position and add velocity. 
-    [Command]
-    void CmdShoot(Vector3 _position, Quaternion _rotation, NetworkInstanceId shooter)
-    {
-        GameObject bullet = Instantiate(bulletPrefab, _position, _rotation);
-        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 250f;
-        //bullet.GetComponent<Bullet>().SetOwner(shooter);
-        NetworkServer.Spawn(bullet);
-    }
-
     // Reload the revolver.
-    void Reload()
+    void Reload()    
     {
         isReloading = true;
         reloadTimer = Time.time + reloadTime;
@@ -101,5 +89,27 @@ public class PlayerWeapon : NetworkBehaviour {
 
         if (reloadText != null)
             reloadText.SetActive(true);
+    }
+
+    // Assign the owner of this weapon
+    public void SetOwner(GameObject id) 
+    {
+        if (id == null)
+            Debug.LogWarning("id is null!");
+        owner = id;
+    }
+
+    /// <summary>
+    /// COMMANDS 
+    /// </summary>
+
+    // Create the bullet object relative to the muzzle position and add velocity. 
+    [Command]
+    void CmdShoot(GameObject _bulletPrefab, Vector3 _position, Quaternion _rotation, GameObject _shooter)
+    {
+        GameObject bullet = Instantiate(bulletPrefab, _position, _rotation);
+        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 250f;
+        NetworkServer.SpawnWithClientAuthority(bullet, _shooter.GetComponent<NetworkIdentity>().connectionToClient);
+        bullet.GetComponent<Bullet>().RpcSetOwner(_shooter);
     }
 }
