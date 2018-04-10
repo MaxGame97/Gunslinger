@@ -16,24 +16,27 @@ public class Bullet : NetworkBehaviour {
         owner = id;
     }
 
+
+    void Start()
+    {
+        // Destroy bullet after x seconds. 
+        Destroy(gameObject, bulletLifeTime);
+    }
+
     // Updates every frame.
     void Update()
     {
         // Let the clients update the bullets instead of server.
-        if (!isClient)
+        if (hasAuthority)
         {
-            return;
+            RaycastHit hit;
+            // First check if the bullet hits anything this frame.
+            if (Physics.Raycast(transform.position, transform.forward, out hit, bulletSpeed * Time.deltaTime))
+            {
+                HitDetection(hit);
+            }
         }
-        RaycastHit hit;
-        // First check if the bullet hits anything this frame.
-        if (Physics.Raycast(transform.position, transform.forward, out hit, bulletSpeed * Time.deltaTime))
-        {
-            HitDetection(hit);
-        }
-        // If no hit this frame. Move bullet forward.
         transform.Translate(Vector3.forward * bulletSpeed * Time.deltaTime);
-        // Destroy bullet after 5 seconds. 
-        Destroy(gameObject, bulletLifeTime);
     }
 
     // Tell the server to update the player that got hit's health.
