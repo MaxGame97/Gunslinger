@@ -18,17 +18,18 @@ public class Bullet : NetworkBehaviour {
 
     // Updates every frame.
     void Update()
-    {   
+    {
         // Let the clients update the bullets instead of server.
         if (!isClient)
+        {
             return;
+        }
         RaycastHit hit;
         // First check if the bullet hits anything this frame.
         if (Physics.Raycast(transform.position, transform.forward, out hit, bulletSpeed * Time.deltaTime))
         {
             HitDetection(hit);
         }
-
         // If no hit this frame. Move bullet forward.
         transform.Translate(Vector3.forward * bulletSpeed * Time.deltaTime);
         // Destroy bullet after 5 seconds. 
@@ -50,20 +51,23 @@ public class Bullet : NetworkBehaviour {
         NetworkServer.Spawn(effect);
         Destroy(effect, 0.5f);
     }
-    void HitDetection(RaycastHit hit)
+
+    // Function for 
+    void HitDetection(RaycastHit _hit)
     {
-        particleRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+        // Create a Quaternion for the creation of the partcle effect.
+        particleRotation = Quaternion.FromToRotation(Vector3.up, _hit.normal);
 
         // If the bullet hits a player. Create blood effect on hit.position.
-        if (hit.collider.gameObject.CompareTag("Player"))
+        if (_hit.collider.gameObject.CompareTag("Player"))
         {
-            CmdSpawnParticle(bloodEffectPrefab, hit.point, particleRotation);
-            CmdPlayerHit(bulletDamage, hit.collider.gameObject);
+            CmdSpawnParticle(bloodEffectPrefab, _hit.point, particleRotation);
+            CmdPlayerHit(bulletDamage, _hit.collider.gameObject);
             Destroy(gameObject);
         }
         else // Otherwise play dust particles on hit.position. 
         {
-            CmdSpawnParticle(dustEffectPrefab, hit.point, particleRotation);
+            CmdSpawnParticle(dustEffectPrefab, _hit.point, particleRotation);
             Destroy(gameObject);
         }
     }
