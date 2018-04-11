@@ -4943,7 +4943,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1937772597434168}
-  m_LocalRotation: {x: 0.7453254, y: 0.00039545383, z: -0.6667006, w: 0.00044231964}
+  m_LocalRotation: {x: 0.74532545, y: 0.00039545386, z: -0.66670066, w: 0.00044231967}
   m_LocalPosition: {x: -0.10819455, y: 0.0484242, z: 0.06866191}
   m_LocalScale: {x: 0.9999997, y: 1, z: 1.0000001}
   m_Children:
@@ -7481,8 +7481,6 @@ MonoBehaviour:
   minDistance: 0.3
   cameraCollisionSmoothing: 0.05
   cameraResetSmoothing: 0.75
-  maxCollisionChecks: 10
-  collisionDistanceStep: 0.05
 --- !u!114 &114234170546814132
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7514,13 +7512,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91bad73c9b0a7dc4db2e6881c5289862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rightHandPositionOffset: {x: 0.05, y: 0.25, z: -0.4}
+  rightHandPositionOffset: {x: 0.05, y: -0.05, z: -0.25}
   rightHandRotationOffset: {x: 15, y: 0, z: -90}
+  disabledDirection: {x: 0.1, y: 0.5, z: 0.4}
   smoothing: 0.5
-  maxAngle: 30
-  minRevolverDepth: 0.1
-  maxRevolverDepth: 0.65
-  revolverDepthCorrection: 0.65
+  maxAngle: 45
+  minWeaponDepth: 0.2
+  maxWeaponDepth: 0.65
+  weaponDepthCorrection: 0.75
 --- !u!114 &114350652109551926
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7532,7 +7531,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb5d099af0fdb9448869242c65b0a982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  positionOffset: {x: 0, y: 1.13, z: 0}
+  positionOffset: {x: 0, y: 1.4, z: 0}
   iKActive: 1
   lookTarget: {fileID: 4351729327596954}
   leftHandTarget: {fileID: 0}
