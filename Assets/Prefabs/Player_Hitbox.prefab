@@ -4919,7 +4919,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1937772597434168}
-  m_LocalRotation: {x: 0.74532545, y: 0.00039545342, z: -0.66670066, w: 0.00044231923}
+  m_LocalRotation: {x: 0.74532545, y: 0.0003954534, z: -0.66670066, w: 0.0004423192}
   m_LocalPosition: {x: -0.10819455, y: 0.0484242, z: 0.06866191}
   m_LocalScale: {x: 0.9999997, y: 1, z: 1.0000001}
   m_Children:
@@ -7598,6 +7598,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 2
+  isHead: 1
 --- !u!114 &114047091688735922
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7686,6 +7687,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 0.5
+  isHead: 0
 --- !u!114 &114132501126384076
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7714,6 +7716,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 0.5
+  isHead: 0
 --- !u!114 &114228328782262616
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7726,6 +7729,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 0.5
+  isHead: 0
 --- !u!114 &114234170546814132
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7757,6 +7761,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 0.5
+  isHead: 0
 --- !u!114 &114256505670529704
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7783,6 +7788,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 0.5
+  isHead: 0
 --- !u!114 &114287593153079214
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7795,6 +7801,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 0.5
+  isHead: 0
 --- !u!114 &114344827655625716
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7807,6 +7814,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 0.5
+  isHead: 0
 --- !u!114 &114350652109551926
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7837,6 +7845,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 0.5
+  isHead: 0
 --- !u!114 &114366532935492660
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7866,6 +7875,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 0.5
+  isHead: 0
 --- !u!114 &114468364729091640
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7891,6 +7901,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 0.5
+  isHead: 0
 --- !u!114 &114504658468808142
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7935,6 +7946,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
+  isHead: 0
 --- !u!114 &114630876652989650
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7998,6 +8010,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 0.5
+  isHead: 0
 --- !u!114 &114762188122320840
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8029,6 +8042,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 0.5
+  isHead: 0
 --- !u!114 &114859416114308548
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -8088,6 +8102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageMultiplier: 1
+  isHead: 0
 --- !u!114 &114981059444622746
 MonoBehaviour:
   m_ObjectHideFlags: 1

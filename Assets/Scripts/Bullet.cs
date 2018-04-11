@@ -62,24 +62,26 @@ public class Bullet : NetworkBehaviour {
 
     // Function for hit detection of players or other objects.
     void HitDetection(RaycastHit _hit)
-    {
-        Debug.Log(_hit.collider.gameObject.name);
-        
+    {        
         // Create a Quaternion for the creation of the partcle effect.
         particleRotation = Quaternion.FromToRotation(Vector3.up, _hit.normal);
 
         // If the bullet hits a player's hitbox. Create blood effect on hit.position.
         if (_hit.collider.CompareTag("Hitbox"))
         {
-            // Create Particle Effects and set its rotation.
-            CmdSpawnParticle(bloodEffectPrefab, _hit.point, particleRotation);
-            
+            if (_hit.collider.GetComponent<PlayerHitbox>().IsHead == true)
+            {
+                    Debug.Log("HEADSHOT!");
+            }
 
             // Damage from bullet is multiplied from the hitbox on player hit.
             CmdPlayerHit(_hit.collider.GetComponent<PlayerHitbox>().DamageMultiplier, _hit.collider.gameObject);
 
             // Destroy to remove particle object from the scene.
             Destroy(gameObject);
+
+            // Create Particle Effects and set its rotation.
+            CmdSpawnParticle(bloodEffectPrefab, _hit.point, particleRotation);
         }
         else 
         {

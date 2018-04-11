@@ -35,6 +35,7 @@ public class PlayerHealth : NetworkBehaviour {
             return;
 
         currentHealth -= _damage;
+
         if (currentHealth <= 0)
         {
             //Die, killed by shooter
