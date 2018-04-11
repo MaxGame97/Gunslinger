@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class ClippPlaneManager
+public static class ClipPlaneManager
 {
     // A struct to hold the coordinates to corners of clipping plane.
     public struct ClipPlanePoints
     {
+        public Vector3 Left;
+        public Vector3 Right;
         public Vector3 UpLeft;
         public Vector3 UpRight;
         public Vector3 DownLeft;
@@ -35,27 +37,35 @@ public static class ClippPlaneManager
         float distance = Camera.main.nearClipPlane;
         
         // Calculates the height from center of the clipping plane.
-        var height = distance * Mathf.Tan (halfFOV);
+        float height = distance * Mathf.Tan (halfFOV);
 
         // Calculates the width from center of the clipping plane.
-        var width = height * aspectRatio;
+        float width = height * aspectRatio;
+
+
+        // Calculate the position of the right and left edges.
+        clipPlanePoints.Left = position - transform.right * width;
+        clipPlanePoints.Left += transform.forward * distance;
+
+        clipPlanePoints.Right = position + transform.right * width;
+        clipPlanePoints.Right += transform.forward * distance;
 
         // Calculates the position of the four corners of the clipping plane.
-        clipPlanePoints.DownRight = position + transform.right * width;
-        clipPlanePoints.DownRight -= transform.up * height;
-        clipPlanePoints.DownRight += transform.forward * distance;
-
-        clipPlanePoints.DownLeft = position - transform.right * width;
-        clipPlanePoints.DownLeft -= transform.up * height;
-        clipPlanePoints.DownLeft += transform.forward * distance;
+        clipPlanePoints.UpLeft = position - transform.right * width;
+        clipPlanePoints.UpLeft += transform.up * height;
+        clipPlanePoints.UpLeft += transform.forward * distance;
 
         clipPlanePoints.UpRight = position + transform.right * width;
         clipPlanePoints.UpRight += transform.up * height;
         clipPlanePoints.UpRight += transform.forward * distance;
 
-        clipPlanePoints.UpLeft = position - transform.right * width;
-        clipPlanePoints.UpLeft += transform.up * height;
-        clipPlanePoints.UpLeft += transform.forward * distance;
+        clipPlanePoints.DownLeft = position - transform.right * width;
+        clipPlanePoints.DownLeft -= transform.up * height;
+        clipPlanePoints.DownLeft += transform.forward * distance;
+
+        clipPlanePoints.DownRight = position + transform.right * width;
+        clipPlanePoints.DownRight -= transform.up * height;
+        clipPlanePoints.DownRight += transform.forward * distance;
 
         return clipPlanePoints;
     }
