@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Inventory
+  - NetworkManager
   layers:
   - Default
   - TransparentFX

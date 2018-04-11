@@ -32,18 +32,18 @@ public class InventoryScript : MonoBehaviour {
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            revUI.LoadBullet(slots[0].sprite);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            revUI.LoadBullet(slots[1].sprite);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            revUI.LoadBullet(slots[2].sprite);
-        }
+        //if (Input.GetKeyDown(KeyCode.Alpha1))
+        //{
+        //    revUI.LoadBullet(slots[0].sprite);
+        //}
+        //if (Input.GetKeyDown(KeyCode.Alpha2))
+        //{
+        //    revUI.LoadBullet(slots[1].sprite);
+        //}
+        //if (Input.GetKeyDown(KeyCode.Alpha3))
+        //{
+        //    revUI.LoadBullet(slots[2].sprite);
+        //}
     }
 
 

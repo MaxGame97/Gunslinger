@@ -61,38 +61,43 @@ public class RevolverUIscript : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            ShootBullet();
-        }
-        if (Input.GetKeyDown(KeyCode.Mouse1))
-        {
-            LoadBullet(startingBallet);
-        }
+        //if (Input.GetKeyDown(KeyCode.Mouse0))
+        //{
+        //    ShootBullet();
+        //}
+        //if (Input.GetKeyDown(KeyCode.Mouse1))
+        //{
+        //    LoadBullet();
+        //}
     }
 
-    public void LoadBullet(Sprite bulletImage)
+    public void LoadBullet(float reloadTime/*Sprite bulletImage*/)
     {
-        if (!loaded)
+        //if (!loaded)
+        //{
+        currentSlot = 1;
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
+        for (int i = 0; i < revolverSize; i++)
         {
-            currentSlot++;
-            ChangeCurrentSlot();
-            StopAllCoroutines();
-            StartCoroutine(LoadRotate(revolveSpeed, (360 / revolverSize) * (currentSlot % revolverSize), bulletImage));
-            currentSlot = 0;
+            bullets[i].sprite = emptySloth;
         }
+        ChangeCurrentSlot();
+        StopAllCoroutines();
+        StartCoroutine(LoadRotate(reloadTime/revolverSize, (360 / revolverSize) * (currentSlot % revolverSize), startingBallet));
+        currentSlot = 0;
+        //}
     }
 
     public void ShootBullet()
     {
-        if (loaded)
-        {
+        //if (loaded)
+        //{
             bullets[currentSlot % revolverSize].sprite = emptySloth;
             currentSlot++;
             ChangeCurrentSlot();
             if (currentSlot % revolverSize == 0)
                 loaded = !loaded;
-        }
+        //}
     }
 
     private void ChangeCurrentSlot()
@@ -142,5 +147,9 @@ public class RevolverUIscript : MonoBehaviour
             endRotation += 60;
         }
         loaded = true;
+    }
+    public void SetRevolverSize(int magSize)
+    {
+        revolverSize = magSize;
     }
 }

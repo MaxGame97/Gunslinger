@@ -21,7 +21,6 @@ public class PlayerWeapon : NetworkBehaviour {
     [SerializeField]
     private int ammoMissing = 0;
 
-
     private GameObject reloadText;
     public NetworkInstanceId owner;  //Identity of the owner
 
@@ -31,7 +30,6 @@ public class PlayerWeapon : NetworkBehaviour {
     void Start () {
 
         ammoCount = magSize;
-        reloadTime = 3f;
         // Find the muzzle object on the player and log error if none is found.
         if (muzzle == null)
         {
@@ -49,9 +47,13 @@ public class PlayerWeapon : NetworkBehaviour {
         {
             reloadText = go.transform.GetChild(1).gameObject;
         }
-        if (revolverUI == null)
+        if (revolverUI != null)
         {
-            Debug.Log("Add the revolverUIscript to this behavior");
+            revolverUI.SetRevolverSize(magSize);
+        }
+        if (reloadTime <= 0)
+        {
+            reloadTime = 2.0f;
         }
     }
     public void SetOwner(NetworkInstanceId id)
@@ -70,6 +72,8 @@ public class PlayerWeapon : NetworkBehaviour {
         if (Input.GetButtonDown("Fire1") && ammoCount >= 1 && isReloading == false)
         {
             CmdShoot(muzzle.transform.position, muzzle.transform.rotation, owner);
+            if (revolverUI != null)
+                revolverUI.ShootBullet();
             ammoCount--;
             ammoMissing = magSize - ammoCount;
         }
@@ -112,6 +116,8 @@ public class PlayerWeapon : NetworkBehaviour {
         reloadTimer = Time.time + reloadTime;
         ammoCount = magSize;
         ammoMissing = 0;
+        if (revolverUI != null)
+            revolverUI.LoadBullet(reloadTime);
 
         if (reloadText != null)
             reloadText.SetActive(true);
