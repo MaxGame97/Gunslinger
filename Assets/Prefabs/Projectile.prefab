@@ -290,6 +290,9 @@ MonoBehaviour:
   dustEffectPrefab: {fileID: 191114, guid: 834c99069a124aa439d5795c3579843b, type: 2}
   bulletSpeed: 300
   bulletLifeTime: 4
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967039
 --- !u!114 &114720591494347160
 MonoBehaviour:
   m_ObjectHideFlags: 1

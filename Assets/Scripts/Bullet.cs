@@ -9,13 +9,14 @@ public class Bullet : NetworkBehaviour {
     [SerializeField] private GameObject dustEffectPrefab;
     [SerializeField] private float bulletSpeed;
     [SerializeField] private float bulletLifeTime;
+    [SerializeField] private LayerMask layerMask;
     private Quaternion particleRotation;
+
 
     public void SetOwner(NetworkIdentity id)
     {
         owner = id;
     }
-
 
     void Start()
     {
@@ -30,23 +31,27 @@ public class Bullet : NetworkBehaviour {
         if (hasAuthority)
         {
             RaycastHit hit;
+
             // First check if the bullet hits anything this frame.
-            if (Physics.Raycast(transform.position, transform.forward, out hit, bulletSpeed * Time.deltaTime))
+            if (Physics.Raycast(transform.position, transform.forward, out hit, bulletSpeed * Time.deltaTime, layerMask))
             {
                 HitDetection(hit);
             }
         }
+
+        // Then move the bullet object after checking for hits.
         transform.Translate(Vector3.forward * bulletSpeed * Time.deltaTime);
     }
 
-    // Tell the server to update the player that got hit's health.
+    // Command to the server to update the player that got hit's health. 
     [Command]
-    void CmdPlayerHit(int _damage, GameObject _player)
+    void CmdPlayerHit(float _damageMultiplier, GameObject _player)
     {
-        _player.GetComponent<PlayerHealth>().RpcTakeDamage(_damage);
+        // Multiply the damage from the hitbox with the bullet's damage. Send damage to PlayerHealth script of the player who got shot.
+        _player.GetComponentInParent<PlayerHealth>().RpcTakeDamage((int)(_damageMultiplier * bulletDamage));
     }
 
-    // Tell the server to spawn a particleeffect on a position with a rotation.
+    // Tell the server to spawn a particleeffect on a position with a rotation. Remove particle object after a few seconds.
     [Command]
     void CmdSpawnParticle(GameObject prefab, Vector3 position, Quaternion rotation)
     {
@@ -55,22 +60,33 @@ public class Bullet : NetworkBehaviour {
         Destroy(effect, 0.5f);
     }
 
-    // Function for 
+    // Function for hit detection of players or other objects.
     void HitDetection(RaycastHit _hit)
     {
+        Debug.Log(_hit.collider.gameObject.name);
+        
         // Create a Quaternion for the creation of the partcle effect.
         particleRotation = Quaternion.FromToRotation(Vector3.up, _hit.normal);
 
-        // If the bullet hits a player. Create blood effect on hit.position.
-        if (_hit.collider.gameObject.CompareTag("Player"))
+        // If the bullet hits a player's hitbox. Create blood effect on hit.position.
+        if (_hit.collider.CompareTag("Hitbox"))
         {
+            // Create Particle Effects and set its rotation.
             CmdSpawnParticle(bloodEffectPrefab, _hit.point, particleRotation);
-            CmdPlayerHit(bulletDamage, _hit.collider.gameObject);
+            
+
+            // Damage from bullet is multiplied from the hitbox on player hit.
+            CmdPlayerHit(_hit.collider.GetComponent<PlayerHitbox>().DamageMultiplier, _hit.collider.gameObject);
+
+            // Destroy to remove particle object from the scene.
             Destroy(gameObject);
         }
-        else // Otherwise play dust particles on hit.position. 
+        else 
         {
+            // Create Particle Effects and set its rotation.
             CmdSpawnParticle(dustEffectPrefab, _hit.point, particleRotation);
+            
+            // Destroy to remove particle object from the scene.
             Destroy(gameObject);
         }
     }
