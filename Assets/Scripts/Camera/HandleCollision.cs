@@ -36,7 +36,7 @@ public class HandleCollision : MonoBehaviour
 
     private void Awake ()
     {
-        cameraTransform = gameObject.transform.Find ("Player Camera");
+        cameraTransform = transform.GetChild(0);
     }
 
     private void Start ()

@@ -1851,7 +1851,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 95262491515647102}
-  m_ParameterSendBits: 15
+  m_ParameterSendBits: 31
   param0: 
   param1: 
   param2: 
@@ -1869,6 +1869,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91bad73c9b0a7dc4db2e6881c5289862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rightHandPositionOffset: {x: 0, y: 0, z: 0}
+  rightHandRotationOffset: {x: 0, y: 0, z: 0}
+  smoothing: 0
+  maxAngle: 0
+  minRevolverDepth: 0
+  maxRevolverDepth: 0
+  revolverDepthCorrection: 0
 --- !u!114 &114314975687130240
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1916,9 +1923,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c70e52590a97c545a352d6b31e7087b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2.25
+  movementSpeed: 6
   jumpSpeed: 8
   gravity: 20
+  smoothing: 0.2
 --- !u!114 &114873662150768416
 MonoBehaviour:
   m_ObjectHideFlags: 1
