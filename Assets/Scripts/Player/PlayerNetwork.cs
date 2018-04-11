@@ -24,7 +24,6 @@ public class PlayerNetwork : NetworkBehaviour {
         {
             return;
         }
-
         //Spawn my player object
         StartCoroutine(LateStart(0.1f));
     }

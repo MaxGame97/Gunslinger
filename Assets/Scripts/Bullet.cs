@@ -53,9 +53,9 @@ public class Bullet : NetworkBehaviour {
 
     // Tell the server to spawn a particleeffect on a position with a rotation. Remove particle object after a few seconds.
     [Command]
-    void CmdSpawnParticle(GameObject prefab, Vector3 position, Quaternion rotation)
+    void CmdSpawnParticle(GameObject _prefab, Vector3 _position, Quaternion _rotation)
     {
-        GameObject effect = Instantiate(prefab, position, rotation);
+        GameObject effect = Instantiate(_prefab, _position, _rotation);
         NetworkServer.Spawn(effect);
         Destroy(effect, 0.5f);
     }
