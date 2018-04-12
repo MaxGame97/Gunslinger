@@ -12,6 +12,7 @@ public class PlayerConnect : NetworkBehaviour {
         // If this player is not the local player
 		if(!hasAuthority)
         {
+            Debug.Log("Has authority = false");
             // Disable all assigned components
             for(int i = 0; i < componentsToDisable.Length; i++)
             {
