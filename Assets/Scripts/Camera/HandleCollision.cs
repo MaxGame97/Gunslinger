@@ -58,7 +58,7 @@ public class HandleCollision : MonoBehaviour
 
     private void LateUpdate ()
     {
-        print ("Current: " + currentEdge + " Default: " + defaultEdge + " Desired: " + desiredEdge);
+        //print ("Current: " + currentEdge + " Default: " + defaultEdge + " Desired: " + desiredEdge);
 
         CalculateDesiredPosition ();
 
@@ -158,12 +158,12 @@ public class HandleCollision : MonoBehaviour
         // Check camera edges.
         if (Physics.Raycast (clipPlanePoints.Left, -transform.right, out hitInfo, 0.2f) && hitInfo.collider.tag != "Player")
         {
-            print ("Hit1");
+            //print ("Hit1");
             edgeCollision = hitInfo.point.x + 0.2f; 
         }
         if (Physics.Raycast (clipPlanePoints.Right, transform.right, out hitInfo, 0.2f) && hitInfo.collider.tag != "Player")
         {
-            print ("Hit2");
+            //print ("Hit2");
             edgeCollision = hitInfo.point.x - 0.2f;
         }
         

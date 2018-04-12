@@ -1,7 +1,59 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+
+    // Private class used to keep track of speed multipliers
+    private class SpeedMultiplier
+    {
+        // The multipliers are stored in two dimensional arrays
+        // Index 0 defines the actual multiplier
+        // Index 1 defines the time when the multiplier runs out
+
+        // Contains the multiplier arrays
+        private List<float[]> multipliers = new List<float[]>();
+        
+        // Adds a new multiplier
+        public void NewMultiplier(float multiplier, float time)
+        {
+            multipliers.Add(new float[2] {multiplier, Time.time + time});
+        }
+
+        // Clears all multipliers
+        public void ClearMultiplier()
+        {
+            multipliers.Clear();
+        }
+
+        // Gets the current multiplier
+        public float GetMultiplier()
+        {
+            // The default multiplier is 1f
+            float multiplier = 1f;
+
+            // Iterate through all multipliers
+            for(int i = 0; i < multipliers.Count; i++)
+            {
+                // If the current multiplier's time has run out
+                if (Time.time > multipliers[i][1])
+                {
+                    // Remove the current multiplier and continue iterating
+                    multipliers.RemoveAt(i);
+                    i--;
+                }
+                else
+                {
+                    // Apply the current multiplier
+                    multiplier *= multipliers[i][0];
+                }
+            }
+
+            // Return the calculated multiplier
+            return multiplier;
+        }
+    }
+
     // ------------------------
     // --- Public variables ---
     // ------------------------
@@ -15,8 +67,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float smoothing = 0.2f;        // Defines the amount of smoothing that affect the player
 
     private CharacterController controller;                 // Defines the player's Character Controller
-    private Vector3 desiredVelocity = Vector3.zero;         // Definfes the player's current velocity
-    private Vector3 currentVelocity = Vector3.zero;         // Definfes the player's current velocity
+    private Vector3 desiredVelocity = Vector3.zero;         // Defines the player's current velocity
+    private Vector3 currentVelocity = Vector3.zero;         // Defines the player's current velocity
+    private SpeedMultiplier speedMultiplier;                // Defines the player's current speed multiplier
 
     // Use this for initialization
     void Start () {
@@ -30,6 +83,9 @@ public class PlayerController : MonoBehaviour
             Debug.LogError("No Character Controller found");
             this.enabled = false;
         }
+
+        // Construct the speed multiplier
+        speedMultiplier = new SpeedMultiplier();
     }
 
     // Update is called once per frame
@@ -44,15 +100,18 @@ public class PlayerController : MonoBehaviour
             // Get the desired velocity from input
             desiredVelocity = new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"));
 
-            // Calculate the magnitude of the desired velocity
-            float magnitude = Mathf.Abs(desiredVelocity.x) + Mathf.Abs(desiredVelocity.z);
-
             // Normalize the desired velocity when necessary
+            float magnitude = Mathf.Abs(desiredVelocity.x) + Mathf.Abs(desiredVelocity.z);
             if (magnitude > 1f)
             {
                 desiredVelocity /= magnitude;
             }
             
+            // Apply speed multipliers to the desired velocity
+            desiredVelocity *= speedMultiplier.GetMultiplier();
+            if (Input.GetButton("Fire3"))
+                desiredVelocity *= 0.5f;
+
             // Apply movement to the desired velocity (in world space)
             desiredVelocity = transform.TransformDirection(desiredVelocity);
             desiredVelocity *= movementSpeed;
@@ -75,5 +134,11 @@ public class PlayerController : MonoBehaviour
 
         // Move the Character Controller based on the player's current velocity
         controller.Move(currentVelocity * Time.deltaTime);
+    }
+
+    // Public method to apply speed multipliers
+    public void NewSpeedMultiplier(float multiplier, float time)
+    {
+
     }
 }
