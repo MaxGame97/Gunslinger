@@ -4,16 +4,19 @@ using System.Collections;
 
 public class PlayerNetwork : NetworkBehaviour {
 
-    [SyncVar ( hook = "OnPlayerNameChanged")] private string playerName;                                          //The players nickname
+    [SyncVar ( hook = "OnPlayerNameChanged")] private string playerName;    //The players nickname
     [SyncVar] private int kills = 0;
     [SyncVar] private int deaths = 0;
     [SyncVar] private int ping = 0;
+    [SyncVar] private bool playerIsDead = false;
+    [SyncVar] private bool playerIsReady = false;
     [SerializeField] private float respawnTime = 3f;
 
-    [SerializeField] private GameObject playerObjectPrefab;             //The player object to spawn
-    private GameObject playerObject;                                    //Reference to the spawned player object
-    private Killfeed killfeed;
-    [SyncVar] private bool playerIsDead = false;
+    [HideInInspector] public string characterName;  // Name of the character we want to use
+    private GameObject playerObject;                // Reference to the spawned player object
+    private Killfeed killfeed;                      // Reference to the killfeed
+    [HideInInspector] public bool canSpawn = false;
+
     private float _timer = 0f;
 
     #region GETTERS 
@@ -44,31 +47,33 @@ public class PlayerNetwork : NetworkBehaviour {
         {
             return;
         }
-
-        //Spawn my player object
-        StartCoroutine(LateStart(0.1f));
+        Application.targetFrameRate = 144;
+        StartCoroutine(LateStart());
     }
 
-    IEnumerator LateStart(float waitTime) //This allows the network to complete set-up before attempting to spawn player.
+    IEnumerator LateStart()
     {
-        yield return new WaitForSeconds(waitTime);
+        yield return new WaitUntil(() => canSpawn);
+
+        //playerObjectPrefab = FindObjectOfType<SpawnMenu>().characterToUse;
 
         //Spawn my player object
-        CmdSpawnPlayerObject(GetComponent<NetworkIdentity>(), playerName);
+        CmdSpawnPlayerObject(GetComponent<NetworkIdentity>());
 
-        yield return new WaitForSeconds(0.2f);    //CHANGE? WaitUntil all players have joined instead?
+        // yield return new WaitForSeconds(0.2f);    //CHANGE? WaitUntil all players have joined instead?
 
         killfeed = Killfeed.instance;
         if (!killfeed)
             Debug.LogWarning("Could not find a Killfeed object!");
 
+        yield return new WaitForSeconds(1);
         // Initialize the playerObject locally
         InitializePlayerObjects();
 
         if (playerObject == null)
-            Debug.LogWarning(gameObject.name + " has no playerObject reference!");   
+            Debug.LogWarning(gameObject.name + " has no playerObject reference!");
+        canSpawn = false;
     }
-
 
     void InitializePlayerObjects()  // Used to initialize values for this local player
     {
@@ -131,17 +136,16 @@ public class PlayerNetwork : NetworkBehaviour {
     /// </summary>
 
     [Command]   //Perfom function on the server
-    private void CmdSpawnPlayerObject(NetworkIdentity id, string _name)
+    private void CmdSpawnPlayerObject(NetworkIdentity _id)
     {
+
+        GameObject _prefab = Resources.Load("Prefabs/Player") as GameObject; 
         //Instantiate the player object on this client
-        GameObject go = Instantiate(playerObjectPrefab);
+        GameObject go = Instantiate(_prefab, _id.transform.position, Quaternion.identity);
     
         //player object now exists on the server, spawn it on all the clients.
-        //We also set this client to have authority of it! (Lets this client have control over the player object)
-        NetworkServer.SpawnWithClientAuthority(go, id.connectionToClient);
-
-       // go.GetComponent<PlayerObject>().SetPlayerObjectName(_name);
-        //go.name = _name;
+        //We also set this client to have authority of it!
+        NetworkServer.SpawnWithClientAuthority(go, _id.connectionToClient);
     }
 
     [Command]   //tell server we respawned
@@ -196,13 +200,21 @@ public class PlayerNetwork : NetworkBehaviour {
     [ClientRpc] //tell clients we respawned
     private void RpcRespawn(GameObject _player)
     {
-        if (_player)
+        if (GameManager.instance)
         {
+            if (deaths >= GameManager.instance.StockAmount)    //Return if player is out of lives
+                return;
+        }
+
+
+            if (_player)
+        {
+            //Give player a new position?
+            // _player.transform.position = GetSpawnPosition();
+
             _player.GetComponent<PlayerHealth>().GainHealth(100);    //Reset the players health when respawning
             _player.SetActive(true);
         }
-
-        //Give player a new position?
 
         if (hasAuthority)
             playerIsDead = false;
