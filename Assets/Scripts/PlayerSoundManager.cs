@@ -60,7 +60,7 @@ public class PlayerSoundManager : MonoBehaviour {
         // If there are assigned footstep sounds
         if (footstepSounds.Length > 0)
             // Play a random footstep sound
-            CreateSound(footstepSounds[Random.Range(0, footstepSounds.Length - 1)]);
+            CreateSound(footstepSounds[Random.Range(0, footstepSounds.Length)]);
     }
 
     // --------------------------------------------------------------------
