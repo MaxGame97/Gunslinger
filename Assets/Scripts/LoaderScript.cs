@@ -5,14 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class LoaderScript : MonoBehaviour {
 
+    //NetworkManager Prefab
+    [Tooltip("Drag the NetworkManagerPrefab here, make sure it's tagged as NetworkManager")]
     [SerializeField]
     private GameObject networkManager;
 
-    private GameObject instance;
+    //The only instance of the NetworkManager in the scene is stored here
+    private static GameObject instance;
 
-	// Use this for initialization
+	//finds the networkManager if there is one, if not create one.
 	void Awake () {
-        instance = GameObject.FindGameObjectWithTag("NetworkManager");
+        LoaderScript.instance = GameObject.FindGameObjectWithTag("NetworkManager");
         if (instance == null)
         {
             instance = Instantiate(networkManager);
