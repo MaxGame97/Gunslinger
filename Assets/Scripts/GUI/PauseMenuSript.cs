@@ -12,6 +12,9 @@ public class PauseMenuSript : MonoBehaviour {
     [SerializeField]
     private PlayerWeapon playerShooting;
 
+    [SerializeField]
+    private CameraController playerCameraController;
+
     public GameObject pausePanel;
 
     private void Update()
@@ -24,9 +27,10 @@ public class PauseMenuSript : MonoBehaviour {
 
     public void TogglePauseMenu()
     {
-        pause = pausePanel.active;
+        pause = pausePanel.activeInHierarchy;
         playerShooting.enabled = pause;
         playerMovement.enabled = pause;
+        playerCameraController.enabled = pause;
         if (pause == false)
         {
             Cursor.lockState = CursorLockMode.None;

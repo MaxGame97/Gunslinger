@@ -3467,6 +3467,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerMovement: {fileID: 114783282662101560}
   playerShooting: {fileID: 114750916538281072}
+  playerCameraController: {fileID: 114615841844891220}
   pausePanel: {fileID: 1260418647700606}
 --- !u!114 &114743093619968250
 MonoBehaviour:

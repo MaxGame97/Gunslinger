@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 
-public class ChangeSceneAndDisconnect : NetworkBehaviour {
+public class ChangeSceneAndDisconnect : MonoBehaviour {
 
     public NetworkIdentity playerNetworkIdentity;
 
