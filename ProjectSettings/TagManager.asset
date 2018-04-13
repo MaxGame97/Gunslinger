@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Inventory
   - Hitbox
+  - NetworkManager
   layers:
   - Default
   - TransparentFX

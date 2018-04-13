@@ -1,6 +1,7 @@
 ﻿using UnityEngine.Networking;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerNetwork : NetworkBehaviour {
 
@@ -8,7 +9,7 @@ public class PlayerNetwork : NetworkBehaviour {
     [SyncVar] private int kills;
     [SyncVar] private int deaths;
     [SyncVar] private int ping;
-    [SerializeField] private float respawnTime = 3f;
+    [SerializeField] private float spawnTime = 3f;
 
     [SerializeField] private GameObject playerObjectPrefab;             //The player object to spawn
     private GameObject playerObject;                                    //Reference to the spawned player object                 
@@ -44,16 +45,27 @@ public class PlayerNetwork : NetworkBehaviour {
 
     private void Update()
     {
-        if (playerIsDead)
+        if(playerIsDead)
         {
-            if (_timer > respawnTime)
+            if(_timer >= spawnTime)
             {
                 //  CmdRespawn(playerObject);
 
-                if (!isClient)
-                    RpcRespawn(playerObject);
-                else
+                // --------------------------------------------------------------------------------------------------------------
+                // ----------------------------------------------- DANGER ZONE --------------------------------------------------
+                if (!isServer) // It doesn't matter which player that dies. Host or Client. It always goes into this IF statement.
+                {
+                    Debug.Log("Client Respawning.");
+                    // Tell the server that we want to respawn.
                     CmdRespawn(playerObject);
+                }
+                else
+                {
+                    // Selects a position to spawn on from the list of spawnPoints.
+                    Transform spawnPoint = CreateRandomSpawnPoint();
+                    RpcRespawn(playerObject, spawnPoint.position, spawnPoint.rotation);
+                }
+                // --------------------------------------------------------------------------------------------------------------
 
                 playerIsDead = false;
                 _timer = 0;
@@ -73,13 +85,15 @@ public class PlayerNetwork : NetworkBehaviour {
     [Command]   //Perfom function on the server
     private void CmdSpawnPlayerObject(NetworkIdentity id)
     {
-        //Instantiate the player object on this client
-        playerObject = Instantiate(playerObjectPrefab);
+        // Selects a random position from the available spawnPosition list.
+        Transform spawnPoint = CreateRandomSpawnPoint();
+
+        // Spawns the player object prefab on a selected position.
+        playerObject = Instantiate(playerObjectPrefab, spawnPoint);
         playerObject.name = "PlayerObject: " + playerName;
         playerObjectState = true;
         playerObject.GetComponent<PlayerHealth>().owner = this;
-       // playerObject.GetComponent<PlayerWeapon>().SetOwner(GetComponent<NetworkIdentity>().netId);
-
+        // playerObject.GetComponent<PlayerWeapon>().SetOwner(GetComponent<NetworkIdentity>().netId).
 
         //player object now exists on the server, propogate it to all the clients.
         //Since we also set this client to have authority of it! (tells it who owns it)
@@ -90,31 +104,56 @@ public class PlayerNetwork : NetworkBehaviour {
        //     FindObjectOfType<Scoreboard>().RpcAddPlayer(GetComponent<NetworkIdentity>());
     }
 
-    [ClientRpc] //tell clients we died
+    [ClientRpc] // Tell clients we died
     public void RpcPlayerDied(GameObject _player)
     {
         _player.SetActive(false);
 
-       // if(hasAuthority)    //If this is the local player, then set the value
-            playerIsDead = true;
+        // if(hasAuthority)    //If this is the local player, then set the value
+        playerIsDead = true;
     }
 
-    [Command]   //tell server we respawned
+    [Command]   // Tell server we respawned
     private void CmdRespawn(GameObject _player)
     {
-        _player.GetComponent<PlayerHealth>().RpcGainHealth(100);
+
+
+        // Selects a position to spawn on from the list of spawnPoints.
+        Transform spawnPoint = CreateRandomSpawnPoint();
+
         //_player.SetActive(true);
-        RpcRespawn(_player);
+        RpcRespawn(_player, spawnPoint.position, spawnPoint.rotation);
     }
 
-    [ClientRpc] //tell clients we respawned
-    private void RpcRespawn(GameObject _player)
+    [ClientRpc] // Tell clients we respawned
+    private void RpcRespawn(GameObject _player, Vector3 _spawnPosition, Quaternion _spawnRotation)
     {
+        if (_player)
+        {
+            _player.GetComponent<PlayerHealth>().GainHealth(100);
+            // Sets the player gameobject to active. (Respawn). 
             _player.SetActive(true);
+
+            // Sets the new position for the player from the spawn position.
+            _player.transform.position = _spawnPosition;
+            _player.transform.rotation = _spawnRotation;
+        }
         //Give player a new position?
         if (hasAuthority)
         {
             playerIsDead = false;
         }
+    }
+
+    // Function to create a random position from the list of available spawns from the NetworkManager/LobbyManager. 
+    private Transform CreateRandomSpawnPoint()
+    {
+        // Gets the list of available startpoints from the NetworkManager/LobbyManager. 
+        List<Transform> spawnPoints = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManager>().startPositions;
+
+        // Select one random to use for spawning from the list.
+        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
+
+        return spawnPoint;
     }
 }

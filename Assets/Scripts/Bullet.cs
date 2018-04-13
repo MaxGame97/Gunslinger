@@ -12,7 +12,6 @@ public class Bullet : NetworkBehaviour {
     [SerializeField] private LayerMask layerMask;
     private Quaternion particleRotation;
 
-
     public void SetOwner(NetworkIdentity id)
     {
         owner = id;
@@ -32,7 +31,7 @@ public class Bullet : NetworkBehaviour {
         {
             RaycastHit hit;
 
-            // First check if the bullet hits anything this frame.
+            // First check if the bullet hits anything this frame. If it did, Detect what kind of object that was hit.
             if (Physics.Raycast(transform.position, transform.forward, out hit, bulletSpeed * Time.deltaTime, layerMask))
             {
                 HitDetection(hit);
@@ -51,7 +50,7 @@ public class Bullet : NetworkBehaviour {
         _player.GetComponentInParent<PlayerHealth>().RpcTakeDamage((int)(_damageMultiplier * bulletDamage));
     }
 
-    // Tell the server to spawn a particleeffect on a position with a rotation. Remove particle object after a few seconds.
+    // Tell the server to spawn a particleeffect on a position with a rotation. Remove particle object after x few seconds.
     [Command]
     void CmdSpawnParticle(GameObject _prefab, Vector3 _position, Quaternion _rotation)
     {
@@ -69,6 +68,7 @@ public class Bullet : NetworkBehaviour {
         // If the bullet hits a player's hitbox. Create blood effect on hit.position.
         if (_hit.collider.CompareTag("Hitbox"))
         {
+            // If the hitbox is set to isHead then log headshot in console.
             if (_hit.collider.GetComponent<PlayerHitbox>().IsHead == true)
             {
                     Debug.Log("HEADSHOT!");
@@ -77,7 +77,7 @@ public class Bullet : NetworkBehaviour {
             // Damage from bullet is multiplied from the hitbox on player hit.
             CmdPlayerHit(_hit.collider.GetComponent<PlayerHitbox>().DamageMultiplier, _hit.collider.gameObject);
 
-            // Destroy to remove particle object from the scene.
+            // Destroy to remove bullet object from the scene.
             Destroy(gameObject);
 
             // Create Particle Effects and set its rotation.
@@ -88,7 +88,7 @@ public class Bullet : NetworkBehaviour {
             // Create Particle Effects and set its rotation.
             CmdSpawnParticle(dustEffectPrefab, _hit.point, particleRotation);
             
-            // Destroy to remove particle object from the scene.
+            // Destroy to remove bullet object from the scene.
             Destroy(gameObject);
         }
     }

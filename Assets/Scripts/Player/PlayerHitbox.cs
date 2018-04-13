@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PlayerHitbox : MonoBehaviour {
 
-    // Damage multiplier that can be tweaked on different hitboxes of a character etc. 
-    [SerializeField] private float damageMultiplier = 1;
-    [SerializeField] private bool isHead;
+    
+    [SerializeField] private float damageMultiplier = 1;    // Damage multiplier that can be tweaked on different hitboxes of a character etc. 
+    [SerializeField] private bool isHead;                   // isHead is used to check for headshots.
 
     public float DamageMultiplier { get { return damageMultiplier; } }
     public bool IsHead { get { return isHead; } }

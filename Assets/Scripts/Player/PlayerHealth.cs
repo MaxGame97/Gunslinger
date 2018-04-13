@@ -54,8 +54,7 @@ public class PlayerHealth : NetworkBehaviour {
        // Debug.Log(killer + " killed " + gameObject.name);   //Display who killed who here?
     }
 
-    [ClientRpc] //Performed on every client
-    public void RpcGainHealth(int _amount)
+    public void GainHealth(int _amount)
     {
         currentHealth += _amount;
         if (currentHealth > maxHealth)
