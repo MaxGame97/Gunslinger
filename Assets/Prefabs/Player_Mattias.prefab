@@ -4890,7 +4890,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1937772597434168}
-  m_LocalRotation: {x: 0.7453254, y: 0.00039545394, z: -0.6667006, w: 0.00044231975}
+  m_LocalRotation: {x: 0.7453254, y: 0.0003954539, z: -0.6667006, w: 0.00044231972}
   m_LocalPosition: {x: -0.10819455, y: 0.0484242, z: 0.06866191}
   m_LocalScale: {x: 0.9999997, y: 1, z: 1.0000001}
   m_Children:
@@ -7694,11 +7694,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b682dc5d552ec864da6f6559881af2c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minDistance: 0.3
-  cameraCollisionSmoothing: 0.05
-  cameraResetSmoothing: 0.75
-  maxCollisionChecks: 10
-  collisionDistanceStep: 0.5
+  minDistance: 0.25
+  cameraCollisionSmoothing: 0.025
+  cameraResetSmoothing: 0.5
 --- !u!114 &114981059444622746
 MonoBehaviour:
   m_ObjectHideFlags: 1
