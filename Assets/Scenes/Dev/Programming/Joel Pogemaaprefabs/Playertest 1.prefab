@@ -3094,7 +3094,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNetworkIdentity: {fileID: 114036416890987618}
-  test: 0
 --- !u!114 &114246253973735360
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3536,7 +3535,7 @@ MonoBehaviour:
   reloadTime: 2
   reloadTimer: 0
   isReloading: 0
-  magSize: 6
+  magSize: 12
   ammoMissing: 0
 --- !u!114 &114783282662101560
 MonoBehaviour:

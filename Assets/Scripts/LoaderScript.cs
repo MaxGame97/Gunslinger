@@ -15,7 +15,7 @@ public class LoaderScript : MonoBehaviour {
 
 	//finds the networkManager if there is one, if not create one.
 	void Awake () {
-        LoaderScript.instance = GameObject.FindGameObjectWithTag("NetworkManager");
+        instance = GameObject.FindGameObjectWithTag("NetworkManager");
         if (instance == null)
         {
             instance = Instantiate(networkManager);

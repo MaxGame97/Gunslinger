@@ -11,14 +11,11 @@ public class RevolverUIscript : MonoBehaviour
     //Prafab for the starting image wich is supposed to be a loaded bullet
     public Image startingBullet;
 
-    //Prafab for an empty slot bullet image
-    public Image emptySlot;
-
     //The sprite for the empty bullet
-    public Sprite emptySloth;
+    public Sprite emptySlot;
 
     //the sprite for the loaded bullet
-    public Sprite startingBallet;
+    public Sprite startingBulletSprite;
 
     //The list containing the bullet images
     List<Image> bullets = new List<Image>();
@@ -26,13 +23,10 @@ public class RevolverUIscript : MonoBehaviour
     //Variable determining the cuurent slot that is at the top
     private int currentSlot = 0;
 
-    //not used????
-    public int b = 0;
-
     //The radius of the circle
-    public float radiusen;
+    public float radius;
 
-    //The size o the images (between 0 and 1).
+    //The size of the images (between 0 and 1).
     public float scale = 1.0f;
 
     //The relative position of the center of the circle and the bottom right corner of the screen
@@ -60,7 +54,7 @@ public class RevolverUIscript : MonoBehaviour
             int a = (360 / revolverSize) * i;
 
             //Temp variable to store the position of the image for initialization
-            Vector3 pos = Circle(center, radiusen, a);
+            Vector3 pos = Circle(center, radius, a);
 
             //Instatiate the images
             bullets.Add(Instantiate(startingBullet, pos, Quaternion.Euler(0,0,-a), transform));
@@ -106,7 +100,7 @@ public class RevolverUIscript : MonoBehaviour
         //emptys out the gun before reaload (Sets all the sprites to the empty sprite
         for (int i = 0; i < revolverSize; i++)
         {
-            bullets[i].sprite = emptySloth;
+            bullets[i].sprite = emptySlot;
         }
         
         //Make sure no other corutines are running (only for this behavior, no others are affected)
@@ -115,7 +109,7 @@ public class RevolverUIscript : MonoBehaviour
         //Starts the reloading corutine, the duration parameter is eaqual to the whole reload time divided by the number of bullets
         //The target parameter is eaqual to 360 divided by the number of bullets
         //The bulletImage parameter is the sprite of the bullet that is to be loaded
-        StartCoroutine(LoadRotate(reloadTime/revolverSize, (360 / revolverSize), startingBallet));
+        StartCoroutine(LoadRotate(reloadTime/revolverSize, (360 / revolverSize), startingBulletSprite));
 
         //Set the current position to 0
         currentSlot = 0;
@@ -125,7 +119,7 @@ public class RevolverUIscript : MonoBehaviour
     public void ShootBullet()
     {
         //Switches the current sprite for the empty sprite
-        bullets[currentSlot % revolverSize].sprite = emptySloth;
+        bullets[currentSlot % revolverSize].sprite = emptySlot;
 
         //Increases current slot
         currentSlot++;
@@ -208,8 +202,8 @@ public class RevolverUIscript : MonoBehaviour
             //Wait for the rotation to finnish
             while (waiting)
             {
-                //Not the best time to wait for since if it has to wait agian it takes twice as long to reload that slot
-                yield return new WaitForSeconds(duration);
+                //Waits for a small time before checking again
+                yield return new WaitForSeconds(0.05f);
             }
 
             //Set the next target for the rotation
