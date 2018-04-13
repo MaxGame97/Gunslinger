@@ -55,7 +55,6 @@ public class PlayerNetwork : NetworkBehaviour {
                 // ----------------------------------------------- DANGER ZONE --------------------------------------------------
                 if (!isServer) // It doesn't matter which player that dies. Host or Client. It always goes into this IF statement.
                 {
-                    Debug.Log("Client Respawning.");
                     // Tell the server that we want to respawn.
                     CmdRespawn(playerObject);
                 }
