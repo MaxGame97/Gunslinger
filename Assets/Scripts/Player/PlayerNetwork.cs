@@ -49,10 +49,7 @@ public class PlayerNetwork : NetworkBehaviour {
         {
             if(_timer >= spawnTime)
             {
-                //  CmdRespawn(playerObject);
 
-                // --------------------------------------------------------------------------------------------------------------
-                // ----------------------------------------------- DANGER ZONE --------------------------------------------------
                 if (!isServer) // It doesn't matter which player that dies. Host or Client. It always goes into this IF statement.
                 {
                     // Tell the server that we want to respawn.
@@ -64,7 +61,7 @@ public class PlayerNetwork : NetworkBehaviour {
                     Transform spawnPoint = CreateRandomSpawnPoint();
                     RpcRespawn(playerObject, spawnPoint.position, spawnPoint.rotation);
                 }
-                // --------------------------------------------------------------------------------------------------------------
+              
 
                 playerIsDead = false;
                 _timer = 0;
@@ -115,8 +112,6 @@ public class PlayerNetwork : NetworkBehaviour {
     [Command]   // Tell server we respawned
     private void CmdRespawn(GameObject _player)
     {
-
-
         // Selects a position to spawn on from the list of spawnPoints.
         Transform spawnPoint = CreateRandomSpawnPoint();
 

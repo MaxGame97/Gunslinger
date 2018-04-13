@@ -46,8 +46,17 @@ public class Bullet : NetworkBehaviour {
     [Command]
     void CmdPlayerHit(float _damageMultiplier, GameObject _player)
     {
+        // To make sure a player always takes atleast 1 damage from a bullet when we convert from Float to Integer.
+        float damage = _damageMultiplier * bulletDamage;
+
+        // If damageMultiplier * bulletDamage is less than 1, set damage to 1.
+        if (damage < 1f)
+        {
+            damage = 1f;
+        }
+
         // Multiply the damage from the hitbox with the bullet's damage. Send damage to PlayerHealth script of the player who got shot.
-        _player.GetComponentInParent<PlayerHealth>().RpcTakeDamage((int)(_damageMultiplier * bulletDamage));
+        _player.GetComponentInParent<PlayerHealth>().RpcTakeDamage((int)damage);
     }
 
     // Tell the server to spawn a particleeffect on a position with a rotation. Remove particle object after x few seconds.
@@ -69,9 +78,9 @@ public class Bullet : NetworkBehaviour {
         if (_hit.collider.CompareTag("Hitbox"))
         {
             // If the hitbox is set to isHead then log headshot in console.
-            if (_hit.collider.GetComponent<PlayerHitbox>().IsHead == true)
+            if (_hit.collider.GetComponent<PlayerHitbox>().IsHead)
             {
-                    Debug.Log("HEADSHOT!");
+                    // Add headshot specific things here: ----------------
             }
 
             // Damage from bullet is multiplied from the hitbox on player hit.
