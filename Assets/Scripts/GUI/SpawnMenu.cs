@@ -9,7 +9,6 @@ public class SpawnMenu : NetworkBehaviour {
     [SerializeField] [SyncVar] private float countdownTimer = 5f;
 
     [SerializeField] private Button[] selectButtons;
-    //[SerializeField] private GameObject[] characterPrefabs;
     [HideInInspector] public string characterToUse;
 
     PlayerNetwork myPlayer;
@@ -19,14 +18,8 @@ public class SpawnMenu : NetworkBehaviour {
     private void Start()
     {
         spawnManuObject = transform.GetChild(0).gameObject;
-        StartCoroutine(LateStart(1f));  // Temp solution. Perhaps add players to list when joined?
-    }
-
-    IEnumerator LateStart(float _time)
-    {
-        yield return new WaitForSeconds(_time);
+     
         PlayerNetwork[] players = FindObjectsOfType<PlayerNetwork>();   // Get reference to all NetworkPlayers
-        Debug.Log(players.Length);
         for (int i = 0; i < players.Length; i++)
         {
             if (players[i].GetComponent<NetworkIdentity>().isLocalPlayer)   // Get reference to this clients NetworkPlayer
@@ -37,25 +30,22 @@ public class SpawnMenu : NetworkBehaviour {
     // This function is run from a button, and decides what playerObject/character to spawn.
     public void SelectCharacter(int _id)
     {
-        Debug.Log("Selected character: " + (_id + 1).ToString());
-        //myPlayer.playerObjectPrefab = characterPrefabs[_id];  // CORRECT WAY
-
         switch (_id)
         {
             case 0:
-                characterToUse = "Player - Blue";
+                characterToUse = "Character 1";
                 break;
             case 1:
-                characterToUse = "Player - Green";
+                characterToUse = "Character 2";
                 break;
             case 2:
-                characterToUse = "Player - Red";
+                characterToUse = "Character 3";
                 break;
             case 3:
-                characterToUse = "Player - Yellow";
+                characterToUse = "Character 4";
                 break;
             default:
-                characterToUse = "Player - Blue";
+                characterToUse = "Character 1";
                 break;
         }
     }
@@ -69,16 +59,16 @@ public class SpawnMenu : NetworkBehaviour {
 
             if (countdownTimer <= 0)
             {
-                // Match has started
                 countdownTimer = 0;
                 if (characterToUse == null)        // If a character has not been selected, default it to character 1
                     characterToUse = "Player - Blue";
-                myPlayer.characterName = characterToUse;
-                myPlayer.canSpawn = true;
-                hasStarted = true;
-                spawnManuObject.SetActive(false);
+
+                myPlayer.characterName = characterToUse;    // Tell player what character we want to use
+                myPlayer.canSpawn = true;                   // Tell player he can spawn his object
+                hasStarted = true;                          // say match has started
+                spawnManuObject.SetActive(false);           // Disable the spawn menu
             }
-            countdownTimerText.text = "Match starts in " + Mathf.RoundToInt(countdownTimer) + "s";
+            countdownTimerText.text = "Match starts in " + Mathf.RoundToInt(countdownTimer) + "s";  // Update the countdown timer
         }
     }
 }

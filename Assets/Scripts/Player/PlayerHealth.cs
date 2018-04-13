@@ -38,6 +38,11 @@ public class PlayerHealth : NetworkBehaviour {
             currentHealth = maxHealth;
     }
 
+    public void ResetHealth()
+    {
+        currentHealth = maxHealth;
+    }
+
     public void SetOwner(GameObject _owner) // Used to assign the owner (PlayerNetwork that spawned this playerObject)
     {
         owner = _owner;

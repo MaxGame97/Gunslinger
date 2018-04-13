@@ -66,12 +66,12 @@ public class PlayerNetwork : NetworkBehaviour {
         if (!killfeed)
             Debug.LogWarning("Could not find a Killfeed object!");
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.1f);
         // Initialize the playerObject locally
         InitializePlayerObjects();
 
         if (playerObject == null)
-            Debug.LogWarning(gameObject.name + " has no playerObject reference!");
+            Debug.LogError(gameObject.name + " has no playerObject reference!");
         canSpawn = false;
     }
 
@@ -97,7 +97,7 @@ public class PlayerNetwork : NetworkBehaviour {
                 initializedSuccessfully = true;                                             // Mark this as a successfull initialization
             }
         }
-        Debug.Log((isServer ? "Server " : "Client ") + (initializedSuccessfully ? "initialized successfully" : "did not initialize successfully"));
+        //Debug.Log((isServer ? "Server " : "Client ") + (initializedSuccessfully ? "initialized successfully" : "did not initialize successfully"));
     }
 
     void OnPlayerNameChanged(string _name)  // If the playerName is changed across server, update this locally
@@ -194,7 +194,10 @@ public class PlayerNetwork : NetworkBehaviour {
         if (!killfeed)
             killfeed = FindObjectOfType<Killfeed>();    // NOT THE BEST WAY TO HANDLE THIS. FIX?
 
-        killfeed.Spawnfeed(playersName, killersName, false);
+        if (!killfeed)
+            Debug.LogError("No killfeed in scene!");
+        else
+            killfeed.Spawnfeed(playersName, killersName, false);
     }
 
     [ClientRpc] //tell clients we respawned
@@ -207,12 +210,12 @@ public class PlayerNetwork : NetworkBehaviour {
         }
 
 
-            if (_player)
+        if (_player)
         {
             //Give player a new position?
             // _player.transform.position = GetSpawnPosition();
 
-            _player.GetComponent<PlayerHealth>().GainHealth(100);    //Reset the players health when respawning
+            _player.GetComponent<PlayerHealth>().ResetHealth();    //Reset the players health when respawning
             _player.SetActive(true);
         }
 
