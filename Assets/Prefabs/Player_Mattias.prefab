@@ -4579,7 +4579,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1632011068075766}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4193281727022492}
@@ -4943,7 +4943,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1937772597434168}
-  m_LocalRotation: {x: 0.74532545, y: 0.0003954538, z: -0.66670066, w: 0.0004423196}
+  m_LocalRotation: {x: 0.7453254, y: 0.0003954537, z: -0.6667006, w: 0.00044231952}
   m_LocalPosition: {x: -0.10819455, y: 0.0484242, z: 0.06866191}
   m_LocalScale: {x: 0.9999997, y: 1, z: 1.0000001}
   m_Children:
@@ -7479,7 +7479,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 0}
-  minDistance: 0.3
+  minDistance: 0.25
   collisionSmoothing: 0.01
   resetSmoothing: 0.5
 --- !u!114 &114234170546814132
@@ -7517,6 +7517,9 @@ MonoBehaviour:
   rightHandRotationOffset: {x: 15, y: 0, z: -90}
   disabledDirection: {x: 0.1, y: 0.5, z: 0.4}
   smoothing: 0.5
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 0
   maxAngle: 45
   minWeaponDepth: 0.2
   maxWeaponDepth: 0.65
@@ -7550,7 +7553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27f796df11ecf564ca59bb66fd0a3e05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0.8, y: 0.8, z: -1}
+  offset: {x: 0.8, y: 0.3, z: -1}
   sensitivity: 2
   damping: 2
   minAngle: -70
