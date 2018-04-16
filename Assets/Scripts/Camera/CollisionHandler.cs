@@ -116,6 +116,7 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] private float minDistance;
 
     [SerializeField] private float collisionSmoothing;
+    [SerializeField] private float switchShoulderSmoothing;
     [SerializeField] private float resetSmoothing;
 
 
@@ -152,135 +153,147 @@ public class CollisionHandler : MonoBehaviour
         zAxis.SmoothingVelocity = 0.0f;
     }
 
+    private void Update ()
+    {
+        if (Input.GetKeyDown (KeyCode.Q))
+        {
+            SwitchShoulder ();
+        }
+    }
+
     private void LateUpdate ()
     {
+        // Checks each axis for collisions, and decides it's coordinate based on that information.
         CheckIfColliding ();
 
+        // Calculates a new position based on the values found in CheckIfColliding ().
         CalculateDesiredPosition ();
 
+        // Updates the cameras local position with position from CalculateDesiredPosition ().
         UpdatePosition ();
     }
 
-    private void CalculateDesiredPosition ()
+    private void SwitchShoulder ()
     {
-        //ResetCamera ();
+        //xAxis.SmoothingSpeed = switchShoulderSmoothing;
+        offset.x = -offset.x;
+    }
 
-        xAxis.CurrentValue = Mathf.SmoothDamp (xAxis.CurrentValue, xAxis.DesiredValue, ref xAxis.SmoothingVelocity, xAxis.SmoothingSpeed);
-        yAxis.CurrentValue = Mathf.SmoothDamp (yAxis.CurrentValue, yAxis.DesiredValue, ref yAxis.SmoothingVelocity, yAxis.SmoothingSpeed);
-        zAxis.CurrentValue = Mathf.SmoothDamp (zAxis.CurrentValue, zAxis.DesiredValue, ref zAxis.SmoothingVelocity, zAxis.SmoothingSpeed);
-
-        cameraPosition.DesiredPosition = new Vector3 (xAxis.CurrentValue, yAxis.CurrentValue, -zAxis.CurrentValue);
-    }
-    
-    /*
-    private Vector3 CalculatePosition (float localXCoordinate, float localYCoordinate, float localZDistance)
-    {
-        return new Vector3 (localXCoordinate, localYCoordinate, -localZDistance);
-    }
-    */
-
-    private void UpdatePosition ()
-    {
-        cameraPosition.CurrentPosition = Vector3.SmoothDamp (cameraPosition.CurrentPosition, cameraPosition.DesiredPosition, ref cameraPosition.SmoothingVelocity, cameraPosition.SmoothingSpeed);
-        cameraTransform.localPosition = cameraPosition.CurrentPosition;
-    }
-    /*
-    private void ResetCamera ()
-    { 
-        
-    }
-    */
     private void CheckIfColliding ()
     {
-        // Check y-axis.
-        cameraPosition.CastingStartPosition = new Vector3 (0.0f, 0.0f, 0.0f);
+        // CHECK Y-AXIS.
+        // Set origin of boxcasting on y-axis to camera rig position.
+        cameraPosition.CastingStartPosition = Vector3.zero;
 
+        // Check for collisions on y-axis from this position, and store coordinate in allowedYValue.
         float allowedYValue = CheckCollisions (transform.TransformPoint (cameraPosition.CastingStartPosition), transform.up, offset.y);
 
-        if (allowedYValue < offset.y)
-        {
-            yAxis.SmoothingSpeed = collisionSmoothing;
-        }
-        else
+        if (allowedYValue == offset.y)
         {
             yAxis.SmoothingSpeed = resetSmoothing;
         }
+        else
+        {
+            yAxis.SmoothingSpeed = collisionSmoothing;
+        }
 
+        // Set DesiredValue for y-axis to the value found.
         yAxis.DesiredValue = allowedYValue;
-        
-        // Check x-axis.
+
+        // CHECK X-AXIS.
+        // Set origin of boxcasting on x-axis to end position of previous cast.
         cameraPosition.CastingStartPosition = new Vector3 (0.0f, allowedYValue, 0.0f);
 
+        // Check for collisions on x-axis from this position, and store coordinate in allowedXValue.
         float allowedXValue = CheckCollisions (transform.TransformPoint (cameraPosition.CastingStartPosition), transform.right, offset.x);
 
-        if (allowedXValue < offset.x)
-        {
-            xAxis.SmoothingSpeed = collisionSmoothing;
-        }
-        else
+        if (allowedXValue == offset.x)
         {
             xAxis.SmoothingSpeed = resetSmoothing;
         }
+        else
+        {
+            xAxis.SmoothingSpeed = collisionSmoothing;
+        }
         
+        // Set DesiredValue for x-axis to the value found.
         xAxis.DesiredValue = allowedXValue;
-
-        // Check z-axis.
+        
+        // CHECK Z-AXIS.
+        // Set origin of boxcasting on z-axis to end position of previous cast.
         cameraPosition.CastingStartPosition = new Vector3 (allowedXValue, allowedYValue, 0.0f);
 
+        // Check for collisions on z-axis from this position, and store coordinate in allowedZValue.
         float allowedZValue = CheckCollisions (transform.TransformPoint (cameraPosition.CastingStartPosition), -transform.forward, offset.z);
 
-        if (allowedZValue < offset.z)
+        if (allowedZValue == offset.z)
         {
-            zAxis.SmoothingSpeed = collisionSmoothing;
+            xAxis.SmoothingSpeed = resetSmoothing;
         }
         else
         {
-            zAxis.SmoothingSpeed = resetSmoothing;
+            xAxis.SmoothingSpeed = collisionSmoothing;
         }
-        
+
+        // Set DesiredValue for z-axis to the value found.
         zAxis.DesiredValue = allowedZValue;
 
+        // If this value is closer than minimum distance, change it to minimum distance.
         if (zAxis.DesiredValue < minDistance)
         {
             zAxis.DesiredValue = minDistance;
         }
     }
 
+    // 
     private float CheckCollisions (Vector3 from, Vector3 direction, float distance)
     {
-        const float PADDING = 0.1f;
+        const float PADDING = 0.0f;
 
         RaycastHit hitInfo;
 
+        // Set the default value to be returned to the maximum offset distance.
         float coordinateDistance = distance;
 
+        // Calculates size and position of near frustum plane.
         ClipPlaneManager.ClipPlanePoints clipPlanePoints = ClipPlaneManager.ClipPlaneAtNear (transform.TransformPoint (cameraPosition.CurrentPosition));
 
-        // Draw lines to visualize the clipping plane.
+        // Draws lines to visualize the near frustum plane.
         Debug.DrawLine (clipPlanePoints.UpLeft, clipPlanePoints.UpRight, Color.blue);
         Debug.DrawLine (clipPlanePoints.DownLeft, clipPlanePoints.DownRight, Color.blue);
         Debug.DrawLine (clipPlanePoints.UpLeft, clipPlanePoints.DownLeft, Color.blue);
         Debug.DrawLine (clipPlanePoints.UpRight, clipPlanePoints.DownRight, Color.blue);
 
-        // Cast box in size of near frustum to check for camera collisions.
+        // Cast box in size of near frustum plane in the direction and distance given by parameters.
         if (Physics.BoxCast (from, clipPlanePoints.Size, direction, out hitInfo, cameraTransform.rotation, distance + PADDING) && hitInfo.collider.tag != "Player" && hitInfo.collider.tag != "Hitbox")
         {
-            coordinateDistance = hitInfo.distance;
+            // If collision found, change coordinateDistance from maximum offset value to this new distance.
+            coordinateDistance = hitInfo.distance - 0.02f;
         }
 
         return coordinateDistance;
     }
 
-    private float PointToPlaneDistance (Vector3 pointPosition, Vector3 planePosition, Vector3 planeNormal)
+    // Calculates new desired position from the desired values.
+    private void CalculateDesiredPosition ()
     {
-        float sb, sn, sd;
+        // Transition smoothly between current values to new desired value on each axis.
+        xAxis.CurrentValue = Mathf.SmoothDamp (xAxis.CurrentValue, xAxis.DesiredValue, ref xAxis.SmoothingVelocity, xAxis.SmoothingSpeed);
+        yAxis.CurrentValue = Mathf.SmoothDamp (yAxis.CurrentValue, yAxis.DesiredValue, ref yAxis.SmoothingVelocity, yAxis.SmoothingSpeed);
+        zAxis.CurrentValue = Mathf.SmoothDamp (zAxis.CurrentValue, zAxis.DesiredValue, ref zAxis.SmoothingVelocity, zAxis.SmoothingSpeed);
 
-        sn = -Vector3.Dot (planeNormal, (pointPosition - planePosition));
-        sd = Vector3.Dot (planeNormal, planeNormal);
-        sb = sn / sd;
+        // Set these values as the new desired position this frame.
+        cameraPosition.DesiredPosition = new Vector3 (xAxis.CurrentValue, yAxis.CurrentValue, -zAxis.CurrentValue);
+    }
 
-        Vector3 result = pointPosition + sb * planeNormal;
-        return Vector3.Distance (pointPosition, result);
+    // Calculates and sets a new local position from the desired position. 
+    private void UpdatePosition ()
+    {
+        // Transition smoothly between the current position of the camera to the new desired position.
+        cameraPosition.CurrentPosition = Vector3.SmoothDamp (cameraPosition.CurrentPosition, cameraPosition.DesiredPosition, ref cameraPosition.SmoothingVelocity, cameraPosition.SmoothingSpeed);
+
+        // Set this position as the new local position for the camera.
+        cameraTransform.localPosition = cameraPosition.CurrentPosition;
     }
 }
 

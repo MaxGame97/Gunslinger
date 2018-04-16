@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Calculate information on the near frustum plane.
 public static class ClipPlaneManager
 {
-    // A struct to hold the coordinates to corners of clipping plane.
     public struct ClipPlanePoints
     {
-        public Vector3 Position;
         public Vector3 Size;
-        public Vector3 Left;
-        public Vector3 Right;
         public Vector3 UpLeft;
         public Vector3 UpRight;
         public Vector3 DownLeft;
@@ -44,18 +41,8 @@ public static class ClipPlaneManager
         // Calculates the width from center of the clipping plane.
         float width = height * aspectRatio;
 
-        // Position of center of near frustum plane.
-        clipPlanePoints.Position += transform.forward * distance; 
-
         // Size of near frustum plane.
-        clipPlanePoints.Size = new Vector3 (width, height, 0.1f);
-
-        // Calculate the position of the right and left edges.
-        clipPlanePoints.Left = position - transform.right * width;
-        clipPlanePoints.Left += transform.forward * distance;
-
-        clipPlanePoints.Right = position + transform.right * width;
-        clipPlanePoints.Right += transform.forward * distance;
+        clipPlanePoints.Size = new Vector3 (width, height, 0.15f);
 
         // Positions of frustum corners, for visualization.
         clipPlanePoints.UpLeft = position - transform.right * width;
