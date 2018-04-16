@@ -91,6 +91,7 @@ public class PlayerNetwork : NetworkBehaviour {
             {
                 players[i].name = playerName;                                               // Change the objects name
                 playerObject = players[i];                                                  // Set the reference to our playerObject
+                GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PauseMenuSript>().SetOwner(players[i]);
                 players[i].GetComponent<PlayerHealth>().SetOwner(gameObject);               // Set this to be the owner
                 players[i].GetComponent<PlayerWeapon>().SetOwner(gameObject);               // Set this to be the owner
                 players[i].GetComponent<PlayerObject>().SetPlayerObjectName(playerName);    // Set the name of the playerObject
