@@ -9,16 +9,17 @@ public class CameraController : MonoBehaviour
     public Vector3 AimingPosition { get { return aimingPosition; } }
 
 
-    public Vector3 offset;                      // Defines the camera's offset
+    public Vector3 offset;                          // Defines the camera's offset
 
-    [SerializeField] private float sensitivity; // Defines the amount of camera sensitivity
-    [SerializeField] private float damping;     // Defines the amount of camera damping
-    [SerializeField] private float minAngle;    // Defines the camera's lowest angle
-    [SerializeField] private float maxAngle;    // Defines the camera's highest angle
-    
-    private Vector2 mouseInput;                 // Contains the raw mouse input
-    private Vector2 smoothV;                    // 
-    private Vector2 mouseLook;                  // 
+    [SerializeField] private float sensitivity;     // Defines the amount of camera sensitivity
+    [SerializeField] private float damping;         // Defines the amount of camera damping
+    [SerializeField] private float minAngle;        // Defines the camera's lowest angle
+    [SerializeField] private float maxAngle;        // Defines the camera's highest angle
+    [SerializeField] private LayerMask layerMask;   // Defines what layers that can be raycasted
+
+    private Vector2 mouseInput;                     // Contains the raw mouse input
+    private Vector2 smoothV;                        // 
+    private Vector2 mouseLook;                      // 
 
 
     [SerializeField] private float raycastDistance = 100f;  // Defines the longest raycast distance
@@ -93,7 +94,7 @@ public class CameraController : MonoBehaviour
         RaycastHit hit;
 
         // If the raycast intersects with a collider in front of the camera
-        if (Physics.Raycast(cameraChild.position, cameraChild.forward, out hit, raycastDistance))
+        if (Physics.Raycast(cameraChild.position, cameraChild.forward, out hit, raycastDistance, layerMask))
         {
             // Draw a debug ray indicating a successful raycast
             Debug.DrawRay(cameraChild.position, cameraChild.forward * hit.distance, Color.green);

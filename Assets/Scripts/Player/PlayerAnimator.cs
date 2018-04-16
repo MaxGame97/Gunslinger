@@ -6,7 +6,8 @@ public class PlayerAnimator : MonoBehaviour {
     [SerializeField] private Vector3 rightHandPositionOffset;   // Offsets the right hand's position (To align with weapon)
     [SerializeField] private Vector3 rightHandRotationOffset;   // Offsets the right hand's rotation (To align with weapon)
     [SerializeField] private Vector3 disabledDirection;         // The direction that the weapon will point towards when aiming is disabled
-    [SerializeField] private float smoothing;                   // Deines the amount of aim smoothing
+    [SerializeField] private float smoothing;                   // Defines the amount of aim smoothing
+    [SerializeField] private LayerMask layerMask;               // Defines what layers that can be raycasted
 
     [Header("Aiming restriction settings")]
     [SerializeField] private float maxAngle;                    // The max angle that the player is able to aim towards
@@ -129,7 +130,7 @@ public class PlayerAnimator : MonoBehaviour {
         float distance = maxWeaponDepth + weaponDepthCorrection;
 
         // CASE 1 - No obstruction (Weapon is far from a wall)
-        if (!Physics.Raycast(origin, direction, out hit, distance))
+        if (!Physics.Raycast(origin, direction, out hit, distance, layerMask))
         {
             // Draw a debug line indicating no obstruction
             Debug.DrawLine(origin, weaponRig.position + direction * distance, Color.green);

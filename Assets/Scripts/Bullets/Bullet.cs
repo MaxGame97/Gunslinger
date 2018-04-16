@@ -5,15 +5,12 @@ public class Bullet : NetworkBehaviour {
 
     [SyncVar] private GameObject owner;
     [SerializeField] private int bulletDamage;
-    [SerializeField] private float bulletDestructionTimer;
-    [SerializeField] private GameObject playerHitEffect;
-    [SerializeField] private GameObject groundHitEffect;
-    
-
-    private void Start()
-    {
-        Destroy(gameObject, bulletDestructionTimer);   
-    }
+    [SerializeField] private GameObject bloodEffectPrefab;
+    [SerializeField] private GameObject dustEffectPrefab;
+    [SerializeField] private float bulletSpeed;
+    [SerializeField] private float bulletLifeTime;
+    [SerializeField] private LayerMask layerMask;
+    private Quaternion particleRotation;
 
     [ClientRpc]
     public void RpcSetOwner(GameObject id)  // Set the owner of this object
@@ -21,47 +18,87 @@ public class Bullet : NetworkBehaviour {
         owner = id;
     }
 
-    [Command]   // Function run from client on server
-    void CmdPlayerHit(int _damage, GameObject _player, GameObject shooter)
+    void Start()
     {
-        // Tell clients that _player takes _damage from shooter
-        _player.GetComponent<PlayerHealth>().RpcTakeDamage(_damage, shooter);
+        // Destroy bullet after x seconds. 
+        Destroy(gameObject, bulletLifeTime);
     }
 
-    [Command]   // Function run from client on server
-    void CmdSpawnParticle(GameObject prefab, Vector3 position, Quaternion rotation)
+    // Updates every frame.
+    void Update()
     {
-        // Instantiate the effect on the server
-        GameObject effect = Instantiate(prefab, position, rotation);
+        // Let the clients update the bullets instead of server.
+        if (hasAuthority)
+        {
+            RaycastHit hit;
 
-        // Set the destruction of the effect
-        Destroy(effect, 0.5f);
-        
-        // Spawn the bullet on on all clients as well
+            // First check if the bullet hits anything this frame. If it did, Detect what kind of object that was hit.
+            if (Physics.Raycast(transform.position, transform.forward, out hit, bulletSpeed * Time.deltaTime, layerMask))
+            {
+                HitDetection(hit);
+            }
+        }
+
+        // Then move the bullet object after checking for hits.
+        transform.Translate(Vector3.forward * bulletSpeed * Time.deltaTime);
+    }
+
+    // Command to the server to update the player that got hit's health. 
+    [Command]
+    void CmdPlayerHit(float _damageMultiplier, GameObject _player, GameObject _shooter)
+    {
+        // Make sure the damage is always atleast 1 when converting from Float to Integer
+        float damage = _damageMultiplier * bulletDamage;
+
+        // If damageMultiplier * bulletDamage is less than 1, set damage to 1.
+        if (damage < 1f)
+        {
+            damage = 1f;
+        }
+        // Multiply the damage from the hitbox with the bullet's damage. Send damage to PlayerHealth script of the player who got shot.
+        _player.GetComponent<PlayerHealth>().RpcTakeDamage((int)damage, _shooter);
+    }
+
+    // Tell the server to spawn a particleeffect on a position with a rotation. Remove particle object after x few seconds.
+    [Command]
+    void CmdSpawnParticle(string _prefab, Vector3 _position, Quaternion _rotation)
+    {
+        Debug.Log("Spawn particles");
+        GameObject _go = Resources.Load("Particles/" + _prefab) as GameObject; 
+        GameObject effect = Instantiate(_go, _position, _rotation);
         NetworkServer.Spawn(effect);
+        Destroy(effect, 0.5f);
+       
     }
 
-    void OnCollisionEnter(Collision other)
+    // Function for hit detection of players or other objects.
+    void HitDetection(RaycastHit _hit)
     {
-        if (!isClient)  //We only want to perfrom collision detection on the shooters client!
-            return;
+        string _particle = "";
+        // Create a Quaternion for the creation of the partcle effect.
+        particleRotation = Quaternion.FromToRotation(Vector3.up, _hit.normal);
 
-        // Get the desired rotation for the particles
-        Quaternion particleRotation = Quaternion.FromToRotation(transform.right, other.contacts[0].normal);
-        Vector3 collisionPoint = other.contacts[0].point;
-
-        if (other.gameObject.CompareTag("Player"))  // If we hit a player 
+        // If the bullet hits a player's hitbox. Create blood effect on hit.position.
+        if (_hit.collider.CompareTag("Hitbox"))
         {
-            CmdSpawnParticle(playerHitEffect, transform.position , particleRotation);   //Spawn player hit particles on 
-            CmdPlayerHit(bulletDamage, other.gameObject, owner);
-    
-            Destroy(gameObject);
-          
+            // If the hitbox is set to isHead then log headshot in console.
+            if (_hit.collider.GetComponent<PlayerHitbox>().IsHead)
+            {
+                    // Add headshot specific things here:
+            }
+            // Damage from bullet is multiplied from the hitbox on player hit.
+            CmdPlayerHit(_hit.collider.GetComponent<PlayerHitbox>().DamageMultiplier, _hit.collider.transform.root.gameObject, owner);
+            _particle = "FX_BloodSplatter";
+            // Create Particle Effects and set its rotation.
+            //    CmdSpawnParticle(_particle, _hit.point, particleRotation);
         }
-        else // if we hit something besides a player
+        else 
         {
-            CmdSpawnParticle(groundHitEffect, transform.position, particleRotation);    //Spawn particles
-            Destroy(gameObject);
+            _particle = "FX_DirtSplatter";
         }
+        // Create Particle Effects and set its rotation.
+        CmdSpawnParticle(_particle, _hit.point, particleRotation);
+        Destroy(gameObject);
     }
+
 }
