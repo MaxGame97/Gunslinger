@@ -22,7 +22,7 @@ public class PlayerWeapon : NetworkBehaviour {
     private int ammoMissing = 0;
 
     private GameObject reloadText;
-    public NetworkInstanceId owner;  //Identity of the owner
+    public GameObject owner;  //Identity of the owner
 
     private bool loaded = true;
 
@@ -56,7 +56,7 @@ public class PlayerWeapon : NetworkBehaviour {
             reloadTime = 2.0f;
         }
     }
-    public void SetOwner(NetworkInstanceId id)
+    public void SetOwner(GameObject id)
     {
         owner = id;
     }
@@ -101,12 +101,12 @@ public class PlayerWeapon : NetworkBehaviour {
 
     // Create the bullet object relative to the muzzle position and add velocity. 
     [Command]
-    void CmdShoot(Vector3 _position, Quaternion _rotation, NetworkInstanceId shooter)
+    void CmdShoot(Vector3 _position, Quaternion _rotation, GameObject shooter)
     {
         GameObject bullet = Instantiate(bulletPrefab, _position, _rotation);
-        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 250f;
-        //bullet.GetComponent<Bullet>().SetOwner(shooter);
-        NetworkServer.Spawn(bullet);
+        //bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 250f;
+        NetworkServer.SpawnWithClientAuthority(bullet, shooter.GetComponent<NetworkIdentity>().connectionToClient);
+        bullet.GetComponent<Bullet>().SetOwner(shooter);
     }
 
     // Reload the revolver.

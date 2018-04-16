@@ -12,8 +12,7 @@ public class Bullet : NetworkBehaviour {
     [SerializeField] private LayerMask layerMask;
     private Quaternion particleRotation;
 
-    [ClientRpc]
-    public void RpcSetOwner(GameObject id)  // Set the owner of this object
+    public void SetOwner(GameObject id)  // Set the owner of this object
     {
         owner = id;
     }
@@ -45,7 +44,7 @@ public class Bullet : NetworkBehaviour {
 
     // Command to the server to update the player that got hit's health. 
     [Command]
-    void CmdPlayerHit(float _damageMultiplier, GameObject _player, GameObject _shooter)
+    void CmdPlayerHit(float _damageMultiplier, GameObject _player, GameObject _shooter, bool _headshot)
     {
         // Make sure the damage is always atleast 1 when converting from Float to Integer
         float damage = _damageMultiplier * bulletDamage;
@@ -56,14 +55,13 @@ public class Bullet : NetworkBehaviour {
             damage = 1f;
         }
         // Multiply the damage from the hitbox with the bullet's damage. Send damage to PlayerHealth script of the player who got shot.
-        _player.GetComponent<PlayerHealth>().RpcTakeDamage((int)damage, _shooter);
+        _player.GetComponent<PlayerHealth>().RpcTakeDamage((int)damage, _shooter, _headshot);
     }
 
     // Tell the server to spawn a particleeffect on a position with a rotation. Remove particle object after x few seconds.
     [Command]
     void CmdSpawnParticle(string _prefab, Vector3 _position, Quaternion _rotation)
     {
-        Debug.Log("Spawn particles");
         GameObject _go = Resources.Load("Particles/" + _prefab) as GameObject; 
         GameObject effect = Instantiate(_go, _position, _rotation);
         NetworkServer.Spawn(effect);
@@ -84,10 +82,15 @@ public class Bullet : NetworkBehaviour {
             // If the hitbox is set to isHead then log headshot in console.
             if (_hit.collider.GetComponent<PlayerHitbox>().IsHead)
             {
-                    // Add headshot specific things here:
+                // Add headshot specific things here:
+                CmdPlayerHit(_hit.collider.GetComponent<PlayerHitbox>().DamageMultiplier, _hit.collider.transform.root.gameObject, owner, true);
+            }
+            else
+            {
+                CmdPlayerHit(_hit.collider.GetComponent<PlayerHitbox>().DamageMultiplier, _hit.collider.transform.root.gameObject, owner, false);
             }
             // Damage from bullet is multiplied from the hitbox on player hit.
-            CmdPlayerHit(_hit.collider.GetComponent<PlayerHitbox>().DamageMultiplier, _hit.collider.transform.root.gameObject, owner);
+           
             _particle = "FX_BloodSplatter";
             // Create Particle Effects and set its rotation.
             //    CmdSpawnParticle(_particle, _hit.point, particleRotation);

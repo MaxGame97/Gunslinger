@@ -101,7 +101,7 @@ public class GameManager : NetworkBehaviour
             {
                 players.Remove(deadPlayers[i]);
             }
-            Debug.Log("Winner is: " + players[0]);
+            //Debug.Log("Winner is: " + players[0]);
 
             if (players[0].playerObject)
                 Destroy(players[0].playerObject);

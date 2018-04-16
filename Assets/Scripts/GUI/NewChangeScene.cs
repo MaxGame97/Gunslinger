@@ -27,8 +27,8 @@ namespace Prototype.NetworkLobby
                 lob.backDelegate();
                 pausePanel.SetActive(false);
             }
-            else
-                Debug.Log("still doesn't work");
+            //else
+                //Debug.Log("still doesn't work");
         }
     }
 }

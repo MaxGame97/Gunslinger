@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 222094778868648438}
   - component: {fileID: 114712090429437962}
   - component: {fileID: 114789836364843090}
-  - component: {fileID: 114325137128154614}
+  - component: {fileID: 114387416845699356}
   m_Layer: 0
   m_Name: ExitButton
   m_TagString: Untagged
@@ -239,7 +239,7 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114325137128154614
+--- !u!114 &114387416845699356
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -247,10 +247,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1667596289507698}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 20b8cd42f44053a4aae1fc97c768aee0, type: 3}
+  m_Script: {fileID: 11500000, guid: cbbb4805945ce0d46b223bea60d30423, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNetworkIdentity: {fileID: 0}
+  lob: {fileID: 0}
+  pausePanel: {fileID: 1660762747955578}
 --- !u!114 &114535781059559404
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -350,7 +351,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114325137128154614}
+      - m_Target: {fileID: 0}
         m_MethodName: ChangeAndDC
         m_Mode: 3
         m_Arguments:
