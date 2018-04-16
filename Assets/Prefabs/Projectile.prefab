@@ -23,8 +23,8 @@ GameObject:
   - component: {fileID: 114783006031102928}
   - component: {fileID: 114720591494347160}
   - component: {fileID: 136804057972253662}
-  - component: {fileID: 114710984308812118}
   - component: {fileID: 96160493541866366}
+  - component: {fileID: 114806780726051400}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Untagged
@@ -291,20 +291,6 @@ TrailRenderer:
     generateLightingData: 0
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
---- !u!114 &114710984308812118
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1182929752886002}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b0fb5bddcfeaf145b40690318b509c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bulletDamage: 20
-  bloodEffectPrefab: {fileID: 194062, guid: 8c27aeead6d968e4ba986702d6b84335, type: 2}
-  dustEffectPrefab: {fileID: 191114, guid: 834c99069a124aa439d5795c3579843b, type: 2}
 --- !u!114 &114720591494347160
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -357,7 +343,26 @@ MonoBehaviour:
     i14: 222
     i15: 185
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  m_LocalPlayerAuthority: 1
+--- !u!114 &114806780726051400
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1182929752886002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bca911bc57ef22489478d999d2b3f94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletDamage: 20
+  bloodEffectPrefab: {fileID: 194062, guid: 8c27aeead6d968e4ba986702d6b84335, type: 2}
+  dustEffectPrefab: {fileID: 191114, guid: 834c99069a124aa439d5795c3579843b, type: 2}
+  bulletSpeed: 300
+  bulletLifeTime: 4
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967039
 --- !u!136 &136804057972253662
 CapsuleCollider:
   m_ObjectHideFlags: 1

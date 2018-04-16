@@ -12,6 +12,6 @@ public class NetworkLobbyHook : LobbyHook
 
         //Assign name in script and to gameObject
         player.AssignPlayerName(lobby.playerName);
-        gamePlayer.name = "Player: " + lobby.playerName;
+        gamePlayer.name = "Network: " + lobby.playerName;
     }
 }
