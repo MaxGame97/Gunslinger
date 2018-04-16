@@ -650,12 +650,12 @@ Prefab:
     - target: {fileID: 224069353779829630, guid: 8cb3dc4fcd1e5a5489b996f41f79f9d5,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 370
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 224069353779829630, guid: 8cb3dc4fcd1e5a5489b996f41f79f9d5,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 208
+      value: 72
       objectReference: {fileID: 0}
     - target: {fileID: 224069353779829630, guid: 8cb3dc4fcd1e5a5489b996f41f79f9d5,
         type: 2}
@@ -1332,12 +1332,12 @@ Prefab:
     - target: {fileID: 224946890412038476, guid: 613f7a80a5bd963429fc894779dd4038,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 370
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 224946890412038476, guid: 613f7a80a5bd963429fc894779dd4038,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 208
+      value: 72
       objectReference: {fileID: 0}
     - target: {fileID: 224946890412038476, guid: 613f7a80a5bd963429fc894779dd4038,
         type: 2}
@@ -2204,12 +2204,12 @@ Prefab:
     - target: {fileID: 224467974487098430, guid: 3b7ca6371b75908429cea063616b397a,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 370
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 224467974487098430, guid: 3b7ca6371b75908429cea063616b397a,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 208
+      value: 72
       objectReference: {fileID: 0}
     - target: {fileID: 224467974487098430, guid: 3b7ca6371b75908429cea063616b397a,
         type: 2}
@@ -4168,12 +4168,12 @@ Prefab:
     - target: {fileID: 224864149442373550, guid: 4e5e1fe3124e5754483f8a217fb88255,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 370
+      value: 128
       objectReference: {fileID: 0}
     - target: {fileID: 224864149442373550, guid: 4e5e1fe3124e5754483f8a217fb88255,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 208
+      value: 72
       objectReference: {fileID: 0}
     - target: {fileID: 224864149442373550, guid: 4e5e1fe3124e5754483f8a217fb88255,
         type: 2}

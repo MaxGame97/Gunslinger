@@ -52,19 +52,19 @@ public class PlayerHealth : NetworkBehaviour {
     /// COMMANDs
     /// </summary>
     [Command]
-    void CmdDie(GameObject _owner, GameObject _playerObject, GameObject killer)
+    void CmdDie(GameObject _owner, GameObject _playerObject, GameObject _killer)
     {
         currentHealth = 0;      // If we died, set the health to 0.
 
         if (_owner != null)
-            _owner.GetComponent<PlayerNetwork>().CmdPlayerDied(_owner, _playerObject, killer);  //Tell the owner that this playerObject died.
+            _owner.GetComponent<PlayerNetwork>().CmdPlayerDied(_owner, _playerObject, _killer);  //Tell the owner that this playerObject died.
     }
 
     /// <summary>
     /// CLIENTRPCs
     /// </summary>
     [ClientRpc]
-    public void RpcTakeDamage(int _damage, GameObject killer)
+    public void RpcTakeDamage(int _damage, GameObject _killer)
     {
         if (hasAuthority)
         {
@@ -74,7 +74,7 @@ public class PlayerHealth : NetworkBehaviour {
                 if (currentHealth < 0)
                     currentHealth = 0;
                 //if(isClient)
-                CmdDie(owner, gameObject, killer);  // Tell the server that we died, who our owner is and who killed us.
+                CmdDie(owner, gameObject, _killer);  // Tell the server that we died, who our owner is and who killed us.
             }
         }
     }
