@@ -9,8 +9,6 @@ public class CameraController : MonoBehaviour
     public Vector3 AimingPosition { get { return aimingPosition; } }
 
 
-    public Vector3 offset;                                          // Defines the camera's offset
-
     [SerializeField] private float sensitivity;                     // Defines the amount of camera sensitivity
     [SerializeField] private float damping;                         // Defines the amount of camera damping
     [SerializeField] private float minAngle;                        // Defines the camera's lowest angle

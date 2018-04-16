@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Script that handles situations where camera collides with geometry.
-// Will change general collision detection to boxcasting when functionality is stable.
 
 public class CollisionHandler : MonoBehaviour
 {
     public Transform cameraTransform;
+
+    [SerializeField] private Vector3 offset;
 
     private struct CameraPosition
     {
@@ -47,19 +48,6 @@ public class CollisionHandler : MonoBehaviour
             set
             {
                 desiredPosition = value;
-            }
-        }
-
-        private Vector3 defaultPosition;
-        public Vector3 DefaultPosition
-        {
-            get
-            {
-                return defaultPosition;
-            }
-            set
-            {
-                defaultPosition = value;
             }
         }
 
@@ -108,19 +96,6 @@ public class CollisionHandler : MonoBehaviour
             }
         }
 
-        private float defaultValue;
-        public float DefaultValue
-        {
-            get
-            {
-                return defaultValue;
-            }
-            set
-            {
-                defaultValue = value;
-            }
-        }
-
         private float smoothingSpeed;
         public float SmoothingSpeed
         {
@@ -139,9 +114,7 @@ public class CollisionHandler : MonoBehaviour
     Axis xAxis, yAxis, zAxis;
 
     [SerializeField] private float minDistance;
-    private float maxDistance;
 
-    
     [SerializeField] private float collisionSmoothing;
     [SerializeField] private float resetSmoothing;
 
@@ -153,31 +126,28 @@ public class CollisionHandler : MonoBehaviour
 
     private void Start ()
     {
+        offset = new Vector3 (offset.x, offset.y, Mathf.Abs (offset.z));
+
         cameraPosition.CastingStartPosition = new Vector3 (0.0f, 0.0f, 0.0f);
-        cameraPosition.DefaultPosition = cameraTransform.localPosition;
         cameraPosition.CurrentPosition = Vector3.zero;
         cameraPosition.DesiredPosition = Vector3.zero;
         cameraPosition.SmoothingSpeed = 0.0f;
         cameraPosition.SmoothingVelocity = Vector3.zero;
 
-        maxDistance = Mathf.Abs (cameraTransform.localPosition.z);
-        minDistance = Mathf.Clamp (minDistance, 0.0f, maxDistance);
+        minDistance = Mathf.Clamp (minDistance, 0.0f, offset.z);
 
-        xAxis.DefaultValue = cameraTransform.localPosition.x;
-        xAxis.CurrentValue = xAxis.DefaultValue;
-        xAxis.DesiredValue = xAxis.DefaultValue;
+        xAxis.CurrentValue = offset.x;
+        xAxis.DesiredValue = 0.0f;
         xAxis.SmoothingSpeed = 0.0f;
         xAxis.SmoothingVelocity = 0.0f;
 
-        yAxis.DefaultValue = cameraTransform.localPosition.y;
-        yAxis.CurrentValue = yAxis.DefaultValue;
-        yAxis.DesiredValue = xAxis.DefaultValue;
+        yAxis.CurrentValue = offset.y;
+        yAxis.DesiredValue = 0.0f;
         yAxis.SmoothingSpeed = 0.0f;
         yAxis.SmoothingVelocity = 0.0f;
 
-        zAxis.DefaultValue = Mathf.Abs (cameraTransform.localPosition.z);
-        zAxis.CurrentValue = zAxis.DefaultValue;
-        zAxis.DesiredValue = zAxis.DefaultValue;
+        zAxis.CurrentValue = offset.z;
+        zAxis.DesiredValue = 0.0f;
         zAxis.SmoothingSpeed = 0.0f;
         zAxis.SmoothingVelocity = 0.0f;
     }
@@ -199,35 +169,35 @@ public class CollisionHandler : MonoBehaviour
         yAxis.CurrentValue = Mathf.SmoothDamp (yAxis.CurrentValue, yAxis.DesiredValue, ref yAxis.SmoothingVelocity, yAxis.SmoothingSpeed);
         zAxis.CurrentValue = Mathf.SmoothDamp (zAxis.CurrentValue, zAxis.DesiredValue, ref zAxis.SmoothingVelocity, zAxis.SmoothingSpeed);
 
-        cameraPosition.DesiredPosition = CalculatePosition (xAxis.CurrentValue, yAxis.CurrentValue, zAxis.CurrentValue);
+        cameraPosition.DesiredPosition = new Vector3 (xAxis.CurrentValue, yAxis.CurrentValue, -zAxis.CurrentValue);
     }
-
+    
+    /*
     private Vector3 CalculatePosition (float localXCoordinate, float localYCoordinate, float localZDistance)
     {
         return new Vector3 (localXCoordinate, localYCoordinate, -localZDistance);
     }
+    */
 
     private void UpdatePosition ()
     {
         cameraPosition.CurrentPosition = Vector3.SmoothDamp (cameraPosition.CurrentPosition, cameraPosition.DesiredPosition, ref cameraPosition.SmoothingVelocity, cameraPosition.SmoothingSpeed);
         cameraTransform.localPosition = cameraPosition.CurrentPosition;
     }
-
+    /*
     private void ResetCamera ()
     { 
         
     }
-
+    */
     private void CheckIfColliding ()
     {
         // Check y-axis.
         cameraPosition.CastingStartPosition = new Vector3 (0.0f, 0.0f, 0.0f);
 
-        float allowedYValue = CheckCollisions (transform.TransformPoint (cameraPosition.CastingStartPosition), yAxis, transform.up);
+        float allowedYValue = CheckCollisions (transform.TransformPoint (cameraPosition.CastingStartPosition), transform.up, offset.y);
 
-        Debug.DrawLine (transform.TransformPoint (cameraPosition.CastingStartPosition), transform.TransformPoint (new Vector3 (0.0f, allowedYValue, 0.0f)), Color.red);
-        
-        if (allowedYValue < yAxis.DefaultValue)
+        if (allowedYValue < offset.y)
         {
             yAxis.SmoothingSpeed = collisionSmoothing;
         }
@@ -241,11 +211,9 @@ public class CollisionHandler : MonoBehaviour
         // Check x-axis.
         cameraPosition.CastingStartPosition = new Vector3 (0.0f, allowedYValue, 0.0f);
 
-        float allowedXValue = CheckCollisions (transform.TransformPoint (cameraPosition.CastingStartPosition), xAxis, transform.right);
+        float allowedXValue = CheckCollisions (transform.TransformPoint (cameraPosition.CastingStartPosition), transform.right, offset.x);
 
-        Debug.DrawLine (transform.TransformPoint (cameraPosition.CastingStartPosition), transform.TransformPoint (new Vector3 (allowedXValue, allowedYValue, 0.0f)), Color.green);
-        
-        if (allowedXValue < xAxis.DefaultValue)
+        if (allowedXValue < offset.x)
         {
             xAxis.SmoothingSpeed = collisionSmoothing;
         }
@@ -259,11 +227,9 @@ public class CollisionHandler : MonoBehaviour
         // Check z-axis.
         cameraPosition.CastingStartPosition = new Vector3 (allowedXValue, allowedYValue, 0.0f);
 
-        float allowedZValue = CheckCollisions (transform.TransformPoint (cameraPosition.CastingStartPosition), zAxis, -transform.forward);
+        float allowedZValue = CheckCollisions (transform.TransformPoint (cameraPosition.CastingStartPosition), -transform.forward, offset.z);
 
-        Debug.DrawLine (transform.TransformPoint (cameraPosition.CastingStartPosition), transform.TransformPoint (new Vector3 (allowedXValue, allowedYValue, -allowedZValue)), Color.yellow);
-        
-        if (allowedZValue < zAxis.DefaultValue)
+        if (allowedZValue < offset.z)
         {
             zAxis.SmoothingSpeed = collisionSmoothing;
         }
@@ -280,14 +246,14 @@ public class CollisionHandler : MonoBehaviour
         }
     }
 
-    private float CheckCollisions (Vector3 from, Axis axis, Vector3 direction)
+    private float CheckCollisions (Vector3 from, Vector3 direction, float distance)
     {
         const float PADDING = 0.1f;
 
         RaycastHit hitInfo;
 
-        float coordinateDistance = axis.DefaultValue;
-        
+        float coordinateDistance = distance;
+
         ClipPlaneManager.ClipPlanePoints clipPlanePoints = ClipPlaneManager.ClipPlaneAtNear (transform.TransformPoint (cameraPosition.CurrentPosition));
 
         // Draw lines to visualize the clipping plane.
@@ -297,7 +263,7 @@ public class CollisionHandler : MonoBehaviour
         Debug.DrawLine (clipPlanePoints.UpRight, clipPlanePoints.DownRight, Color.blue);
 
         // Cast box in size of near frustum to check for camera collisions.
-        if (Physics.BoxCast (from, clipPlanePoints.Size, direction, out hitInfo, cameraTransform.rotation, axis.DefaultValue + PADDING) && hitInfo.collider.tag != "Player" && hitInfo.collider.tag != "Hitbox")
+        if (Physics.BoxCast (from, clipPlanePoints.Size, direction, out hitInfo, cameraTransform.rotation, distance + PADDING) && hitInfo.collider.tag != "Player" && hitInfo.collider.tag != "Hitbox")
         {
             coordinateDistance = hitInfo.distance;
         }
