@@ -20,7 +20,7 @@ public class RevolverUIscript : MonoBehaviour
     //The list containing the bullet images
     List<Image> bullets = new List<Image>();
 
-    //Variable determining the cuurent slot that is at the top
+    //Variable determining the curent slot that is at the top
     private int currentSlot = 0;
 
     //The radius of the circle
@@ -44,7 +44,7 @@ public class RevolverUIscript : MonoBehaviour
         //Places the center of the revolverUI relative to the bottom right corner
         transform.position += relativePosition;
 
-        //Temporary variable to store the transfprm position
+        //Temporary variable to store the transform position
         Vector3 center = transform.position;
 
         //Spawn the images in a circle around the center
@@ -200,11 +200,7 @@ public class RevolverUIscript : MonoBehaviour
             StartCoroutine(Rotate(duration, endRotation));
 
             //Wait for the rotation to finnish
-            while (waiting)
-            {
-                //Waits for a small time before checking again
-                yield return new WaitForSeconds(0.05f);
-            }
+            yield return new WaitUntil(() => waiting == false);
 
             //Set the next target for the rotation
             endRotation += 360/revolverSize;
