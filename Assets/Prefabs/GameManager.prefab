@@ -52,6 +52,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b5606d9618c9d4428ae11a35101332c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameMode: 0
+  stockAmount: 1
   stockInput: {fileID: 0}
   gameModeInput: {fileID: 0}
 --- !u!114 &114524872583046488
@@ -84,5 +86,5 @@ MonoBehaviour:
     i13: 165
     i14: 59
     i15: 57
-  m_ServerOnly: 1
+  m_ServerOnly: 0
   m_LocalPlayerAuthority: 0

@@ -31,6 +31,17 @@ public class PlayerConnect : NetworkBehaviour {
         }
 	}
 
+    public void DisableComponents() // Used for disabling the winning players components
+    {
+        // Disable all assigned components
+        for (int i = 0; i < componentsToDisable.Length; i++)
+        {
+            componentsToDisable[i].enabled = false;
+        }
+        if(sceneCamera)
+            sceneCamera.SetActive(true);
+    }
+
     // OnDisable is run when this object is disabled
     void OnDisable()
     {

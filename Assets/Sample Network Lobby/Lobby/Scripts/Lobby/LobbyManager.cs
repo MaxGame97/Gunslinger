@@ -88,8 +88,6 @@ namespace Prototype.NetworkLobby
                         if (conn.playerControllers[0].unetView.isClient)
                         {
                             backDelegate = StopHostClbk;
-                            if (GameManager.instance)
-                                GameManager.instance.SetIsHost(false);
                         }
                         else
                         {
@@ -192,8 +190,6 @@ namespace Prototype.NetworkLobby
             else
             {
                 StopHost();
-                if (GameManager.instance)
-                    GameManager.instance.SetIsHost(false);
             }
 
             ChangeTo(mainMenuPanel);
@@ -241,8 +237,6 @@ namespace Prototype.NetworkLobby
             backDelegate = StopHostClbk;
             SetServerInfo("Hosting", networkAddress);
 
-            if (GameManager.instance)
-                GameManager.instance.SetIsHost(true);
         }
 
         public override void OnMatchCreate(bool success, string extendedInfo, MatchInfo matchInfo)
@@ -258,8 +252,7 @@ namespace Prototype.NetworkLobby
             {
                 StopMatchMaker();
                 StopHost();
-                if (GameManager.instance)
-                    GameManager.instance.SetIsHost(false);
+                
             }
         }
 
@@ -407,6 +400,7 @@ namespace Prototype.NetworkLobby
                 backDelegate = StopClientClbk;
                 SetServerInfo("Client", networkAddress);
             }
+          
         }
 
         public override void OnClientDisconnect(NetworkConnection conn)

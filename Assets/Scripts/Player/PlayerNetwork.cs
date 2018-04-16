@@ -12,11 +12,11 @@ public class PlayerNetwork : NetworkBehaviour {
     [SyncVar] private bool playerIsReady = false;
     [SerializeField] private float respawnTime = 3f;
 
-    [HideInInspector] public string characterName;  // Name of the character we want to use
-    private GameObject playerObject;                // Reference to the spawned player object
-    private Killfeed killfeed;                      // Reference to the killfeed
+    [HideInInspector] public string characterName;          // Name of the character we want to use
+    [HideInInspector] public GameObject playerObject;       // Reference to the spawned player object
     [HideInInspector] public bool canSpawn = false;
 
+    private Killfeed killfeed;                              // Reference to the killfeed
     private float _timer = 0f;
 
     #region GETTERS 
@@ -205,8 +205,12 @@ public class PlayerNetwork : NetworkBehaviour {
     {
         if (GameManager.instance)
         {
-            if (deaths >= GameManager.instance.StockAmount)    //Return if player is out of lives
+            if (deaths >= GameManager.instance.StockAmount)
+            {
+                //Return if player is out of lives
+                GameManager.instance.CmdPlayerDied(gameObject);
                 return;
+            }
         }
 
 

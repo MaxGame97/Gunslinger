@@ -1,8 +1,9 @@
-﻿using UnityEngine.Networking;
+﻿using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using UnityEngine.Networking;
+using System.Collections;
 using UnityEngine.UI;
 using UnityEngine;
-
-// Script that automatically creates a static gameobject that can hold references to other scripts.
 
 public class GameManager : NetworkBehaviour
 {
@@ -21,24 +22,117 @@ public class GameManager : NetworkBehaviour
 
         DontDestroyOnLoad(gameObject);
     }
-#endregion
+    #endregion
+
+    #region OnLevelLoaded
+    void OnEnable()
+    {
+        //Tell our 'OnLevelFinishedLoading' function to start listening for a scene change as soon as this script is enabled.
+        SceneManager.sceneLoaded += OnLevelFinishedLoading;
+    }
+
+    void OnDisable()
+    {
+        //Tell our 'OnLevelFinishedLoading' function to stop listening for a scene change as soon as this script is disabled. Remember to always have an unsubscription for every delegate you subscribe to!
+        SceneManager.sceneLoaded -= OnLevelFinishedLoading;
+    }
+
+    void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
+    {
+        if (SceneManager.GetActiveScene().name != "Lobby Scene")
+        {
+            // If we're not in the lobby scene, we're probably in the game (change to check for game scene names instead perhaps?
+            StartCoroutine(GetPlayersInScene(1f));
+        }
+    }
+    #endregion
 
     public enum GameMode { FFA, DM };
-    [SyncVar (hook = "OnGameModeChanged")] public GameMode gameMode = GameMode.FFA;
-    [SyncVar (hook = "OnStockAmountChanged")] private int stockAmount;      // Amount of lives each player starts with in the FFA game mode.
+    [SyncVar(hook = "OnGameModeChanged")] public GameMode gameMode = GameMode.FFA;
+    [SerializeField] [SyncVar(hook = "OnStockAmountChanged")] private int stockAmount = 1;      // Amount of lives each player starts with in the FFA game mode.
     [SerializeField] private Dropdown stockInput;
     [SerializeField] private Dropdown gameModeInput;
-    public bool isHost = false;
+    [SyncVar] [HideInInspector] public bool gameHasEnded = false;
+
+    private List<PlayerNetwork> players = new List<PlayerNetwork>();
+    private List<PlayerNetwork> deadPlayers = new List<PlayerNetwork>();
+
+    private IEnumerator GetPlayersInScene(float _delay)
+    {
+        yield return new WaitForSeconds(_delay);
+        players.AddRange(FindObjectsOfType<PlayerNetwork>());
+    }
 
     public int StockAmount
     {
         get { return stockAmount; }
     }
 
-    // Updates the stock amount on non-hosts
+    private void Update()
+    {
+        // Lobby Code
+        if (SceneManager.GetActiveScene().name == "Lobby Scene") // If this is the lobby scene
+        {
+            if (isServer && (!stockInput.interactable || !gameModeInput.interactable))    // If we're the SERVER, make sure we CAN adjust game mode and stock amount
+            {
+                stockInput.interactable = true;
+                gameModeInput.interactable = true;
+            }
+            else if (!isServer && (stockInput.interactable || gameModeInput.interactable))// If we're the CLIENT, make sure we CAN'T adjust game mode and stock amount
+            {
+                stockInput.interactable = false;
+                gameModeInput.interactable = false;
+            }
+        }
+
+        // Game Code
+
+    }
+
+    [Command]
+    public void CmdPlayerDied(GameObject _player)
+    {
+        if (!deadPlayers.Contains(_player.GetComponent<PlayerNetwork>()))
+            deadPlayers.Add(_player.GetComponent<PlayerNetwork>());
+
+        if (deadPlayers.Count == players.Count - 1) // If there is one player alive
+        {
+            for (int i = 0; i < deadPlayers.Count; i++)
+            {
+                players.Remove(deadPlayers[i]);
+            }
+            Debug.Log("Winner is: " + players[0]);
+
+            if (players[0].playerObject)
+                Destroy(players[0].playerObject);
+            RpcPostGame();
+        }
+    }
+
+    [ClientRpc]
+    private void RpcPostGame()
+    {
+        gameHasEnded = true;    // Mark the game as ended
+        GameObject scoreboardCanvas = GameObject.Find("Scoreboard - Canvas");
+        GameObject healthCanvas = GameObject.Find("Health - Canvas");
+
+        if (healthCanvas)
+            healthCanvas.SetActive(false);
+        if (scoreboardCanvas)
+            scoreboardCanvas.transform.GetChild(0).gameObject.SetActive(true);
+
+        if (players[0].playerObject)
+            Destroy(players[0].playerObject);
+            
+
+        FindObjectOfType<Scoreboard>().gameObject.SetActive(true);  // Enable the scoreboard
+    }
+
+    // --- LOBBY FUNCTIONS --- \\
+
+    // Updates the stock amount on clients
     void OnStockAmountChanged(int _newValue)
     {
-        Debug.Log("stockvalue changed! " + _newValue);
         stockAmount = _newValue;
         switch (stockAmount)
         {
@@ -61,14 +155,14 @@ public class GameManager : NetworkBehaviour
                 stockInput.value = 5;
                 break;
             default:
-                Debug.LogWarning("stockamount invalid!");
+                Debug.LogWarning("invalid stockamount!");
                 break;
         }
         gameModeInput.Select();
         gameModeInput.RefreshShownValue();
     }
 
-    // Updates the game mode on non-hosts
+    // Updates the game mode on clients
     void OnGameModeChanged(GameMode _gameMode)
     {
         switch (_gameMode)
@@ -90,25 +184,6 @@ public class GameManager : NetworkBehaviour
         gameModeInput.value = (int)gameMode;
         gameModeInput.Select();
         gameModeInput.RefreshShownValue();
-    }
-
-    // Determine if we are hosting the lobby
-    public void SetIsHost(bool _value)  
-    {
-        Debug.Log("Runs!");
-        isHost = _value;
-        if (!isHost)
-        {
-            Debug.Log("Is client");
-            stockInput.interactable = false;
-            gameModeInput.interactable = false;
-        }
-        else
-        {
-            Debug.Log("Is host");
-            stockInput.interactable = true;
-            gameModeInput.interactable = true;
-        }
     }
 
     // Sets the game mode
@@ -148,6 +223,5 @@ public class GameManager : NetworkBehaviour
                     break;
             }
         }
-        //stockInput.text = stockAmount.ToString();
     }
 }
