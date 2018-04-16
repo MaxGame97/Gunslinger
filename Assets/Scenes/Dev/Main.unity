@@ -2274,6 +2274,7 @@ GameObject:
   - component: {fileID: 787362092}
   - component: {fileID: 787362091}
   - component: {fileID: 787362090}
+  - component: {fileID: 787362094}
   m_Layer: 0
   m_Name: Scene Camera
   m_TagString: MainCamera
@@ -2343,6 +2344,38 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 15, y: 0, z: 0}
+--- !u!114 &787362094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 787362089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59ef5a22b289b034eb39ce1443f27dbf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panoramas:
+  - startPosition: {x: -15, y: 15, z: -55}
+    endPosition: {x: 15, y: 15, z: -55}
+    startRotation: {x: 15, y: 10, z: 0}
+    endRotation: {x: 15, y: -10, z: 0}
+    panormaTime: 7.5
+  - startPosition: {x: -50, y: 15, z: 0}
+    endPosition: {x: -60, y: 30, z: 0}
+    startRotation: {x: 5, y: 90, z: 0}
+    endRotation: {x: 25, y: 90, z: 0}
+    panormaTime: 5
+  - startPosition: {x: 25, y: 5, z: -5}
+    endPosition: {x: 25, y: 5, z: 5}
+    startRotation: {x: 2.5, y: -80, z: 0}
+    endRotation: {x: 2.5, y: -100, z: 0}
+    panormaTime: 5
+  - startPosition: {x: -40, y: 2.5, z: -10}
+    endPosition: {x: -30, y: 2.5, z: 10}
+    startRotation: {x: 0, y: 85, z: 0}
+    endRotation: {x: 0, y: 95, z: 0}
+    panormaTime: 10
 --- !u!1 &849515917
 GameObject:
   m_ObjectHideFlags: 0
