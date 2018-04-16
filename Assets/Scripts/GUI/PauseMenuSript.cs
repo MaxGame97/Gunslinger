@@ -7,20 +7,20 @@ public class PauseMenuSript : MonoBehaviour {
     //Determines if the game is curently paused
     private bool pause = false;
 
-    //Needed to disable the movement while paused
-    [Tooltip("Drag in the player")]
-    [SerializeField]
-    private PlayerController playerMovement;
+    ////Needed to disable the movement while paused
+    //[Tooltip("Drag in the player")]
+    //[SerializeField]
+    //private PlayerController playerMovement;
 
-    //Needed to disable the shoting while paused
-    [Tooltip("Drag in the player")]
-    [SerializeField]
-    private PlayerWeapon playerShooting;
+    ////Needed to disable the shoting while paused
+    //[Tooltip("Drag in the player")]
+    //[SerializeField]
+    //private PlayerWeapon playerShooting;
 
-    //Needed to disable the camera while paused
-    [Tooltip("Drag in the playerCamera")]
-    [SerializeField]
-    private CameraController playerCameraController;
+    ////Needed to disable the camera while paused
+    //[Tooltip("Drag in the playerCamera")]
+    //[SerializeField]
+    //private CameraController playerCameraController;
 
     //The gameObject which holds the pausemenu
     public GameObject pausePanel;
@@ -40,9 +40,9 @@ public class PauseMenuSript : MonoBehaviour {
         pause = pausePanel.activeInHierarchy;
 
         //Sets the movement behaviors to the current state of the menu
-        playerShooting.enabled = pause;
-        playerMovement.enabled = pause;
-        playerCameraController.enabled = pause;
+        //playerShooting.enabled = pause;
+        //playerMovement.enabled = pause;
+        //playerCameraController.enabled = pause;
 
         //Unlocks the mouse if the menu is active and locks it again if it is inactive
         if (!pause)

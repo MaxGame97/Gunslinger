@@ -24,7 +24,7 @@ public class RevolverUIscript : MonoBehaviour
     private int currentSlot = 0;
 
     //The radius of the circle
-    public float radius;
+    public float radius = 60;
 
     //The size of the images (between 0 and 1).
     public float scale = 1.0f;

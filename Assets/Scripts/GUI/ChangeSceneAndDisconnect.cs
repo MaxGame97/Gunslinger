@@ -4,11 +4,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 
+
 public class ChangeSceneAndDisconnect : MonoBehaviour {
 
     //This is used to find out if the player is host or not
     [Tooltip("Drag the player prefab here")]
     public NetworkIdentity playerNetworkIdentity;
+    
 
     //Changes the scene, disconnects the player and destroys the NetworkManager. you have to destroy the NetworkManager or 
     //else it will asume that you can still connect while your in the wrong scene
@@ -38,7 +40,7 @@ public class ChangeSceneAndDisconnect : MonoBehaviour {
             }
 
             //Destroy the NetworkManager, it will be created by the loader if it is needed again
-            Destroy(networkManagerGameobject);
+            //Destroy(networkManagerGameobject);
 
             //Loads the new scene
             SceneManager.LoadScene(scene);
