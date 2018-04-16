@@ -61,9 +61,7 @@ public class SpawnMenu : NetworkBehaviour {
             {
                 countdownTimer = 0;
                 if (characterToUse == null)        // If a character has not been selected, default it to character 1
-                    characterToUse = "Player - Blue";
-
-                print ("reached");
+                    characterToUse = "Character 1";
                 myPlayer.characterName = characterToUse;    // Tell player what character we want to use
                 myPlayer.canSpawn = true;                   // Tell player he can spawn his object
                 hasStarted = true;                          // say match has started

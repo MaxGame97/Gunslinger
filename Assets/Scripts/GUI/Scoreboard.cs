@@ -45,6 +45,11 @@ public class Scoreboard : MonoBehaviour {
                 children.Add(info); // Add the info to the list
             }
         }
+
+        if (GameManager.instance.gameHasEnded)
+        {
+            transform.GetChild(2).gameObject.SetActive(true);
+        }
     }
 
     public void UpdateScoreboard(Transform _child)
@@ -71,25 +76,18 @@ public class Scoreboard : MonoBehaviour {
         }
     }
     
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+   
+    public void ReturnToLobby()
+    {
+        
+    }
 
-    // ---WILL BE USED FOR WIN-CONDITIONS---
-
-    //void CheckGameState()
-    //{
-    //    List<ScoreboardInfo> deadPlayers = new List<ScoreboardInfo>();
-    //    for (int i = 0; i < children.Count; i++)
-    //    {
-    //        if (!children[i].IsDead)
-    //            deadPlayers.Add(children[i]);
-    //    }
-
-    //    if (deadPlayers.Count == children.Count - 1) // Game is only over after all but one is dead.
-    //    {
-    //        for (int i = 0; i < deadPlayers.Count; i++)
-    //        {
-    //            children.Remove(deadPlayers[i]);
-    //        }
-    //        Debug.Log("The game has ended! " + children[0].PlayerName + " won!");
-    //    }
-    //}
+    public void ExitToMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    }
 }

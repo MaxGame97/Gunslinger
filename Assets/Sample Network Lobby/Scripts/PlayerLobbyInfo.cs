@@ -26,7 +26,6 @@ public class PlayerLobbyInfo : NetworkBehaviour
 
     private void Update()
     {
-        Debug.Log("???");
         //playerPing = NetworkManager.singleton.client.GetRTT();
         playerPingText.text = playerPing.ToString();
     }

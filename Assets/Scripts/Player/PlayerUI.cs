@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerUI : MonoBehaviour {
 
@@ -19,13 +17,16 @@ public class PlayerUI : MonoBehaviour {
 
     void ScoreboardInput()
     {
-        if (Input.GetKeyDown(KeyCode.Tab))   //Enable scoreboard if Tab is pressed
+        if(!GameManager.instance.gameHasEnded)  // Perform ONLY if the game has not ended yet.
         {
-            scoreboard.SetActive(true);
-        }
-        else if (Input.GetKeyUp(KeyCode.Tab))   //Disable scoreboard if Tab is released
-        {
-            scoreboard.SetActive(false);
+            if (Input.GetKeyDown(KeyCode.Tab))   //Enable scoreboard if Tab is pressed
+            {
+                scoreboard.SetActive(true);
+            }
+            else if (Input.GetKeyUp(KeyCode.Tab))   //Disable scoreboard if Tab is released
+            {
+                scoreboard.SetActive(false);
+            }
         }
     }
 }

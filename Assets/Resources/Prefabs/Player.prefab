@@ -4121,7 +4121,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1115431091132876}
-  m_LocalRotation: {x: 0.74532545, y: 0.00039545313, z: -0.66670066, w: 0.00044231894}
+  m_LocalRotation: {x: 0.74532545, y: 0.0003954531, z: -0.66670066, w: 0.0004423189}
   m_LocalPosition: {x: -0.10819455, y: 0.0484242, z: 0.06866191}
   m_LocalScale: {x: 0.9999997, y: 1, z: 1.0000001}
   m_Children:
@@ -7745,10 +7745,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraTransform: {fileID: 0}
-  offset: {x: 0.7, y: 0.4, z: -1.2}
+  offset: {x: 0.25, y: 0.4, z: 1.2}
   minDistance: 0.25
   collisionSmoothing: 0.01
-  resetSmoothing: 0.5
+  resetSmoothing: 0.75
 --- !u!114 &114188240673348970
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7776,11 +7776,13 @@ MonoBehaviour:
   bulletPrefab: {fileID: 1182929752886002, guid: d86946d37f26e5a4baf7f60aafefdeb9,
     type: 2}
   muzzle: {fileID: 1240186541943602}
+  revolverUI: {fileID: 0}
   ammoCount: 0
   reloadTime: 0
   reloadTimer: 0
   isReloading: 0
   magSize: 6
+  ammoMissing: 0
   owner: {fileID: 1474508151921844}
 --- !u!114 &114256505670529704
 MonoBehaviour:
@@ -8214,6 +8216,7 @@ MonoBehaviour:
   - {fileID: 20406750080565802}
   - {fileID: 81796575048932428}
   - {fileID: 114234170546814132}
+  gameObjectsToDisable: []
 --- !u!114 &114982987668023568
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -1,6 +1,7 @@
 ﻿using UnityEngine.Networking;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class PlayerNetwork : NetworkBehaviour {
 
@@ -12,11 +13,11 @@ public class PlayerNetwork : NetworkBehaviour {
     [SyncVar] private bool playerIsReady = false;
     [SerializeField] private float respawnTime = 3f;
 
-    [HideInInspector] public string characterName;  // Name of the character we want to use
-    private GameObject playerObject;                // Reference to the spawned player object
-    private Killfeed killfeed;                      // Reference to the killfeed
+    [HideInInspector] public string characterName;          // Name of the character we want to use
+    [HideInInspector] public GameObject playerObject;       // Reference to the spawned player object
     [HideInInspector] public bool canSpawn = false;
 
+    private Killfeed killfeed;                              // Reference to the killfeed
     private float _timer = 0f;
 
     #region GETTERS 
@@ -58,7 +59,7 @@ public class PlayerNetwork : NetworkBehaviour {
         //playerObjectPrefab = FindObjectOfType<SpawnMenu>().characterToUse;
 
         //Spawn my player object
-        CmdSpawnPlayerObject(GetComponent<NetworkIdentity>());
+        CmdSpawnPlayerObject(GetComponent<NetworkIdentity>(), playerName);
 
         // yield return new WaitForSeconds(0.2f);    //CHANGE? WaitUntil all players have joined instead?
 
@@ -83,21 +84,6 @@ public class PlayerNetwork : NetworkBehaviour {
 
         if (gameObject.name != ("Network: " + playerName))  // If the gameObjects name is not correct, update it
             gameObject.name = "Network: " + playerName;
-
-        //PlayerNetwork[] playersNetwork = new PlayerNetwork[players.Length];
-        for (int i = 0; i < players.Length; i++)
-        {
-            if (players[i].GetComponent<NetworkIdentity>().clientAuthorityOwner == myID.connectionToClient) //If this client has authority over this object, then it is our player object
-            {
-                players[i].name = playerName;                                               // Change the objects name
-                playerObject = players[i];                                                  // Set the reference to our playerObject
-                players[i].GetComponent<PlayerHealth>().SetOwner(gameObject);               // Set this to be the owner
-                players[i].GetComponent<PlayerWeapon>().SetOwner(gameObject);               // Set this to be the owner
-                players[i].GetComponent<PlayerObject>().SetPlayerObjectName(playerName);    // Set the name of the playerObject
-                initializedSuccessfully = true;                                             // Mark this as a successfull initialization
-            }
-        }
-        //Debug.Log((isServer ? "Server " : "Client ") + (initializedSuccessfully ? "initialized successfully" : "did not initialize successfully"));
     }
 
     void OnPlayerNameChanged(string _name)  // If the playerName is changed across server, update this locally
@@ -111,8 +97,18 @@ public class PlayerNetwork : NetworkBehaviour {
         {               
             if (_timer > respawnTime)
             {
-                CmdRespawn(playerObject);   //Respawn player if we have the authority
-                playerIsDead = false;
+                if (!isServer)
+                {
+                    CmdRespawn(playerObject);   //Respawn player if we have the authority
+                }
+                else
+                {
+                    // Selects a position to spawn on from the list of spawnPoints.
+                    Transform spawnPoint = CreateRandomSpawnPoint();
+                    RpcRespawn(playerObject, spawnPoint.position, spawnPoint.rotation);
+                }
+                if(hasAuthority)
+                    playerIsDead = false;
                 _timer = 0;
             }
             else
@@ -131,12 +127,24 @@ public class PlayerNetwork : NetworkBehaviour {
             killfeed.Spawnfeed(_killer, playerName, _headshot);
     }
 
-    /// <summary>
-    /// COMMANDs
-    /// </summary>
+    // Function to create a random position from the list of available spawns from the NetworkManager/LobbyManager. 
+    private Transform CreateRandomSpawnPoint()
+    {
+        // Gets the list of available startpoints from the NetworkManager/LobbyManager. 
+        List<Transform> spawnPoints = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkManager>().startPositions;
+
+        // Select one random to use for spawning from the list.
+        Transform spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Count)];
+
+        return spawnPoint;
+    }
+
+/// <summary>
+/// COMMANDs
+/// </summary>
 
     [Command]   //Perfom function on the server
-    private void CmdSpawnPlayerObject(NetworkIdentity _id)
+    private void CmdSpawnPlayerObject(NetworkIdentity _id, string _playerName)
     {
 
         GameObject _prefab = Resources.Load("Prefabs/Player") as GameObject; 
@@ -146,18 +154,41 @@ public class PlayerNetwork : NetworkBehaviour {
         //player object now exists on the server, spawn it on all the clients.
         //We also set this client to have authority of it!
         NetworkServer.SpawnWithClientAuthority(go, _id.connectionToClient);
+
+        RpcSetPlayerObject(go, _playerName);
+    }
+
+    [ClientRpc]
+    private void RpcSetPlayerObject(GameObject _playerObject, string _playerName)
+    {
+        if (isLocalPlayer)
+        {
+            playerObject = _playerObject;                                                 // Set the reference to our playerObject
+            playerObject.name = playerName;                                               // Change the objects name
+            playerObject.GetComponent<PlayerHealth>().SetOwner(gameObject);               // Set this to be the owner
+            playerObject.GetComponent<PlayerWeapon>().SetOwner(gameObject);               // Set this to be the owner
+            playerObject.GetComponent<PlayerObject>().SetPlayerObjectName(playerName);    // Set the name of the playerObject
+            GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<PauseMenuSript>().SetOwner(playerObject);
+        }
+        else
+        {
+            _playerObject.name = _playerName;
+        }
+            
     }
 
     [Command]   //tell server we respawned
     private void CmdRespawn(GameObject _player)
     {
-        RpcRespawn(_player);    //Respawn players on all clients
+        Transform spawnPoint = CreateRandomSpawnPoint();
+
+        RpcRespawn(_player, spawnPoint.position, spawnPoint.rotation);
     }
 
     [Command]
-    public void CmdPlayerDied(GameObject _playerObjectsOwner, GameObject _playerObject, GameObject _killer)
+    public void CmdPlayerDied(GameObject _playerObjectsOwner, GameObject _playerObject, GameObject _killer, bool _headshot)
     {
-        RpcPlayerDied(_playerObjectsOwner, _playerObject, _killer);
+        RpcPlayerDied(_playerObjectsOwner, _playerObject, _killer, _headshot);
     }
 
     /// <summary>
@@ -170,7 +201,7 @@ public class PlayerNetwork : NetworkBehaviour {
     }
 
     [ClientRpc] //tell clients we died
-    public void RpcPlayerDied(GameObject _playerObjectsOwner, GameObject _player, GameObject _killer)
+    public void RpcPlayerDied(GameObject _playerObjectsOwner, GameObject _player, GameObject _killer, bool _headshot)
     {
         string killersName = "Unknown";
         string playersName = "Unknown";
@@ -181,6 +212,8 @@ public class PlayerNetwork : NetworkBehaviour {
             killerNetwork.kills++;
             killersName = killerNetwork.Name;
         }
+        else
+            Debug.LogError("No killer reference!");
 
         if(_player)
         {
@@ -190,6 +223,8 @@ public class PlayerNetwork : NetworkBehaviour {
             playerNetwork.deaths++;                     // Incease players death count
             _player.SetActive(false);   // Disable playerObject
         }
+        else
+            Debug.LogError("No player reference!");
 
         if (!killfeed)
             killfeed = FindObjectOfType<Killfeed>();    // NOT THE BEST WAY TO HANDLE THIS. FIX?
@@ -197,16 +232,20 @@ public class PlayerNetwork : NetworkBehaviour {
         if (!killfeed)
             Debug.LogError("No killfeed in scene!");
         else
-            killfeed.Spawnfeed(playersName, killersName, false);
+            killfeed.Spawnfeed(playersName, killersName, _headshot);
     }
 
     [ClientRpc] //tell clients we respawned
-    private void RpcRespawn(GameObject _player)
+    private void RpcRespawn(GameObject _player, Vector3 _spawnPosition, Quaternion _spawnRotation)
     {
         if (GameManager.instance)
         {
-            if (deaths >= GameManager.instance.StockAmount)    //Return if player is out of lives
+            if (deaths >= GameManager.instance.StockAmount)
+            {
+                //Return if player is out of lives
+                GameManager.instance.CmdPlayerDied(gameObject);
                 return;
+            }
         }
 
 
@@ -214,12 +253,19 @@ public class PlayerNetwork : NetworkBehaviour {
         {
             //Give player a new position?
             // _player.transform.position = GetSpawnPosition();
+            // Sets the new position for the player from the spawn position.
+            _player.transform.position = _spawnPosition;
+            _player.transform.rotation = _spawnRotation;
 
             _player.GetComponent<PlayerHealth>().ResetHealth();    //Reset the players health when respawning
             _player.SetActive(true);
         }
+        else
+        {
+            Debug.LogError("NO PLAYER OBJECT REFERENCE");
+        }
 
-        if (hasAuthority)
-            playerIsDead = false;
+        //if (hasAuthority)
+            //playerIsDead = false;
     }
 }
